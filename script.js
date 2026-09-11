@@ -63,7 +63,7 @@ const mapEl = document.getElementById('hawkerMap');
 if (mapEl && window.L) {
   const SG_CENTER = [1.3226, 103.8636];
   const SG_ZOOM = 12;
-  const STALL_ZOOM = 18;
+  const STALL_ZOOM = 16;
 
   const hawkerCentres = [
     {
@@ -124,10 +124,9 @@ if (mapEl && window.L) {
 
   const map = L.map(mapEl, { scrollWheelZoom: false }).setView(SG_CENTER, SG_ZOOM);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    maxZoom: 19,
-    subdomains: 'abcd',
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Esri, HERE, Garmin, FAO, NOAA, USGS &copy; OpenStreetMap contributors',
+    maxZoom: 16,
   }).addTo(map);
   map.attributionControl.setPrefix(false);
 
