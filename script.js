@@ -124,10 +124,12 @@ if (mapEl && window.L) {
 
   const map = L.map(mapEl, { scrollWheelZoom: false }).setView(SG_CENTER, SG_ZOOM);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
     maxZoom: 19,
+    subdomains: 'abcd',
   }).addTo(map);
+  map.attributionControl.setPrefix(false);
 
   const hcIcon = L.divIcon({ className: '', html: '<div class="hc-pin"></div>', iconSize: [18, 18] });
   const stallIcon = L.divIcon({ className: '', html: '<div class="stall-pin"></div>', iconSize: [10, 10] });
@@ -154,38 +156,109 @@ if (mapEl && window.L) {
 
   let activeStallLayer = null;
 
+  function openHawkerCentre(hc, focusStallName) {
+    map.flyTo([hc.lat, hc.lng], STALL_ZOOM, { duration: 0.9 });
+
+    if (activeStallLayer) {
+      map.removeLayer(activeStallLayer);
+      activeStallLayer = null;
+    }
+
+    const group = L.layerGroup();
+    hc.stalls.forEach((stall) => {
+      const stallMarker = L.marker([hc.lat + stall.dlat, hc.lng + stall.dlng], { icon: stallIcon });
+      stallMarker.bindTooltip(stall.name, { direction: 'top', offset: [0, -6] });
+      stallMarker.on('click', (event) => {
+        L.DomEvent.stopPropagation(event);
+        showStallPreview(stall);
+      });
+      group.addLayer(stallMarker);
+      if (focusStallName && stall.name === focusStallName) {
+        setTimeout(() => stallMarker.openTooltip(), 950);
+      }
+    });
+    group.addTo(map);
+    activeStallLayer = group;
+
+    if (mapBack) mapBack.hidden = false;
+    if (mapTitle) mapTitle.textContent = hc.name;
+
+    const focusStall = focusStallName && hc.stalls.find((s) => s.name === focusStallName);
+    if (focusStall) {
+      showStallPreview(focusStall);
+    } else {
+      resetStallPanel();
+    }
+  }
+
   hawkerCentres.forEach((hc) => {
     const marker = L.marker([hc.lat, hc.lng], { icon: hcIcon }).addTo(map);
     marker.bindPopup(`
       <span class="popup-title">${hc.name}</span>
       <span class="popup-meta">${hc.address}<br />${hc.stallCount} cooked food stalls · NEA, data.gov.sg</span>
     `);
+    marker.on('click', () => openHawkerCentre(hc));
+  });
 
-    marker.on('click', () => {
-      map.flyTo([hc.lat, hc.lng], STALL_ZOOM, { duration: 0.9 });
+  // --- Search box: find a hawker centre or stall by name, fly to it -------
+  const searchInput = document.getElementById('mapSearchInput');
+  const searchResults = document.getElementById('mapSearchResults');
 
-      if (activeStallLayer) {
-        map.removeLayer(activeStallLayer);
-        activeStallLayer = null;
+  function renderSearchResults(query) {
+    if (!searchResults) return;
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      searchResults.hidden = true;
+      searchResults.innerHTML = '';
+      return;
+    }
+
+    const matches = [];
+    hawkerCentres.forEach((hc) => {
+      if (hc.name.toLowerCase().includes(q)) {
+        matches.push({ type: 'centre', label: hc.name, sub: 'Hawker centre', hc });
       }
-
-      const group = L.layerGroup();
       hc.stalls.forEach((stall) => {
-        const stallMarker = L.marker([hc.lat + stall.dlat, hc.lng + stall.dlng], { icon: stallIcon });
-        stallMarker.bindTooltip(stall.name, { direction: 'top', offset: [0, -6] });
-        stallMarker.on('click', (event) => {
-          L.DomEvent.stopPropagation(event);
-          showStallPreview(stall);
-        });
-        group.addLayer(stallMarker);
+        if (stall.name.toLowerCase().includes(q)) {
+          matches.push({ type: 'stall', label: stall.name, sub: hc.name, hc, stall });
+        }
       });
-      group.addTo(map);
-      activeStallLayer = group;
-
-      if (mapBack) mapBack.hidden = false;
-      if (mapTitle) mapTitle.textContent = hc.name;
-      resetStallPanel();
     });
+
+    if (!matches.length) {
+      searchResults.innerHTML = '<div class="map-search-empty">No matches yet — try a hawker centre or stall name.</div>';
+      searchResults.hidden = false;
+      return;
+    }
+
+    searchResults.innerHTML = matches
+      .slice(0, 6)
+      .map(
+        (m, i) => `<button type="button" class="map-search-item" data-index="${i}">
+          <strong>${m.label}</strong><span>${m.sub}</span>
+        </button>`
+      )
+      .join('');
+    searchResults.hidden = false;
+
+    Array.from(searchResults.querySelectorAll('.map-search-item')).forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        const m = matches[i];
+        openHawkerCentre(m.hc, m.type === 'stall' ? m.stall.name : undefined);
+        searchResults.hidden = true;
+        if (searchInput) searchInput.value = m.label;
+      });
+    });
+  }
+
+  searchInput?.addEventListener('input', (e) => renderSearchResults(e.target.value));
+  searchInput?.addEventListener('focus', (e) => {
+    if (e.target.value) renderSearchResults(e.target.value);
+  });
+  document.addEventListener('click', (e) => {
+    if (searchResults && !searchResults.contains(e.target) && e.target !== searchInput) {
+      searchResults.hidden = true;
+    }
   });
 
   function resetMap() {
@@ -196,6 +269,8 @@ if (mapEl && window.L) {
     }
     if (mapBack) mapBack.hidden = true;
     if (mapTitle) mapTitle.textContent = 'Tap a hawker centre to see its stalls.';
+    if (searchInput) searchInput.value = '';
+    if (searchResults) searchResults.hidden = true;
     resetStallPanel();
   }
 
