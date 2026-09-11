@@ -42,7 +42,7 @@ h3{font-size:22px;letter-spacing:.015em}
 
 .map-frame{position:relative;background:#fff;border:1px solid var(--line);overflow:hidden}
 #hawkerMap{width:100%;height:460px;background:var(--paper-dark)}
-#hawkerMap .leaflet-tile-pane{filter:saturate(.85) sepia(.06)}
+#hawkerMap .leaflet-tile-pane{filter:grayscale(.45) saturate(.85) contrast(1.05) brightness(1.04)}
 .map-credit{font-size:11px;color:var(--ink-soft);margin:8px 2px 0}
 
 .map-back{position:absolute;top:16px;left:16px;z-index:500;background:var(--ink);color:var(--paper);border:0;padding:9px 16px;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer}
