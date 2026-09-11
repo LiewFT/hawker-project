@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Makan Trail — honest hawker and restaurant reviews from Singapore, tasted and filmed by our team." />
+  <title>Makan Trail｜Singapore Hawker &amp; Restaurant Reviews</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%23C23B22'/%3E%3Ctext x='50' y='66' font-size='46' font-family='Georgia,serif' font-weight='700' fill='%23F5F1E4' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">M</span>
+      <span class="brand-word">MAKAN TRAIL</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="#browse">Browse</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#process">How we review</a>
+      <a class="nav-signin" href="#">Sign in</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
+  </header>
+
+  <main>
+    <section class="map-section">
+      <div class="map-heading">
+        <p class="tag">Explore the island</p>
+        <h2 id="mapTitle">Tap a hawker centre to see its stalls.</h2>
+      </div>
+
+      <div class="map-frame">
+        <button class="map-back" id="mapBack" hidden>← Back to Singapore</button>
+        <div id="hawkerMap"></div>
+
+        <div class="stall-panel" id="stallPanel">
+          <p class="map-hint">Click a stall marker to preview its review.</p>
+        </div>
+      </div>
+      <p class="map-credit">Hawker centre locations: NEA, data.gov.sg (Open Data Licence). Map data © OpenStreetMap contributors.</p>
+    </section>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="ticket">QUEUE No. 001</p>
+        <h1>Singapore,<br />one stall at a time.</h1>
+        <p class="hero-text">We queue, we taste, we film — then we tell you straight whether it's worth the walk. Hawker stalls and restaurants, reviewed by our team and rated by yours.</p>
+        <div class="button-row">
+          <a class="button button-primary" href="#reviews">See the latest tastings</a>
+          <a class="button button-quiet" href="#browse">Browse by neighbourhood</a>
+        </div>
+      </div>
+      <div class="hero-board">
+        <div class="polaroid p1"><div class="polaroid-photo ph-1"></div><span>Chilli Crab, East Coast</span></div>
+        <div class="polaroid p2"><div class="polaroid-photo ph-2"></div><span>Wanton Mee, Chinatown</span></div>
+        <div class="polaroid p3"><div class="polaroid-photo ph-3"></div><span>Roti Prata, Geylang</span></div>
+      </div>
+    </section>
+
+    <section class="ticker">
+      <div class="ticker-inner">
+        <span>HAWKER STALLS</span><span>KOPITIAM</span><span>RESTAURANTS</span><span>CAFES</span><span>HALAL</span><span>LATE NIGHT</span><span>CHEAP EATS</span>
+      </div>
+    </section>
+
+    <section id="browse" class="browse-section">
+      <div class="section-heading">
+        <h2>Find your next<br />makan.</h2>
+        <p>Filter by what you're actually deciding between — where you are, what you're craving, or who you're eating with.</p>
+      </div>
+      <div class="chip-row">
+        <span class="chip chip-active">All</span>
+        <span class="chip">Hawker</span>
+        <span class="chip">Kopitiam</span>
+        <span class="chip">Restaurant</span>
+        <span class="chip">Cafe</span>
+      </div>
+      <div class="chip-row chip-row-muted">
+        <span class="chip">Cheap eats</span>
+        <span class="chip">Halal</span>
+        <span class="chip">Late night</span>
+        <span class="chip">Solo lunch</span>
+        <span class="chip">Big group</span>
+      </div>
+    </section>
+
+    <section id="reviews" class="reviews-section">
+      <div class="section-heading">
+        <h2>Latest<br />tastings.</h2>
+        <p>Filmed and reviewed by the Makan Trail team this month.</p>
+      </div>
+      <div class="review-grid">
+        <article class="review-card feature">
+          <div class="review-photo photo-a"><span class="video-badge">▶ Video</span></div>
+          <div class="review-body">
+            <p class="tag">Chinatown Complex · Hawker</p>
+            <h3>Ah Heng's Wanton Mee is still the one to beat</h3>
+            <div class="stars" aria-label="4.5 out of 5 stars">★★★★☆</div>
+            <p class="review-excerpt">Springy noodles, a chilli oil that lingers, and char siew grilled fresh over charcoal. Forty-year queue, and it still checks out.</p>
+            <a class="text-link" href="stall.html">Read the full review →</a>
+          </div>
+        </article>
+        <article class="review-card">
+          <div class="review-photo photo-b"></div>
+          <div class="review-body">
+            <p class="tag">Tiong Bahru · Cafe</p>
+            <h3>A kopitiam breakfast set that doesn't cut corners</h3>
+            <div class="stars" aria-label="4 out of 5 stars">★★★★☆</div>
+            <a class="text-link" href="stall.html">Read the full review →</a>
+          </div>
+        </article>
+        <article class="review-card">
+          <div class="review-photo photo-c"><span class="video-badge">▶ Video</span></div>
+          <div class="review-body">
+            <p class="tag">Geylang · Restaurant</p>
+            <h3>Frog leg bee hoon worth the late-night trip</h3>
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <a class="text-link" href="stall.html">Read the full review →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="process" class="process-section">
+      <div class="section-heading light">
+        <h2>How we<br />review.</h2>
+        <p>Every stall on Makan Trail goes through the same three steps before it's published.</p>
+      </div>
+      <div class="process-grid">
+        <div class="process-step">
+          <span class="step-number">01</span>
+          <h3>We queue and taste</h3>
+          <p>Same as any other customer — full price, no heads-up to the stall, no free samples.</p>
+        </div>
+        <div class="process-step">
+          <span class="step-number">02</span>
+          <h3>We film and photograph</h3>
+          <p>Every dish is shot on site. Video for the ones worth watching someone cook.</p>
+        </div>
+        <div class="process-step">
+          <span class="step-number">03</span>
+          <h3>We publish it straight</h3>
+          <p>The good, the average, and the "don't bother" — all get a review, not just the wins.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="community-section">
+      <div class="section-heading">
+        <h2>What readers<br />are saying.</h2>
+        <p>Signed-in reviews from people who've eaten there too.</p>
+      </div>
+      <div class="community-grid">
+        <article class="community-card">
+          <div class="community-top">
+            <span class="avatar">JT</span>
+            <div>
+              <strong>Jaslyn T.</strong>
+              <div class="stars small" aria-label="5 out of 5 stars">★★★★★</div>
+            </div>
+          </div>
+          <p>Went based on this review and the queue was so worth it. Chilli oil really is next level.</p>
+        </article>
+        <article class="community-card">
+          <div class="community-top">
+            <span class="avatar">RK</span>
+            <div>
+              <strong>Ridzwan K.</strong>
+              <div class="stars small" aria-label="4 out of 5 stars">★★★★☆</div>
+            </div>
+          </div>
+          <p>Good but portion has gotten smaller since last year. Still tasty though.</p>
+        </article>
+        <a class="review-cta" href="stall.html">
+          <strong>Tried a stall on here?</strong>
+          <span>Sign in to leave your own rating and review →</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="brand">
+        <span class="brand-mark">M</span>
+        <span class="brand-word">MAKAN TRAIL</span>
+      </div>
+      <nav class="footer-nav">
+        <a href="#browse">Browse</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#process">How we review</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Contact</a>
+      </nav>
+      <p class="footer-note">© 2026 Makan Trail. Draft concept — placeholder content and images.</p>
+    </div>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
