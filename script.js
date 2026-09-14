@@ -47,16 +47,6 @@ const nav = document.getElementById('mainNav');
 function setMenuOpen(open) {
   if (!nav) return;
   nav.dataset.open = String(open);
-  nav.style.display = open ? 'flex' : '';
-  nav.style.position = open ? 'absolute' : '';
-  nav.style.top = open ? '76px' : '';
-  nav.style.right = open ? '17px' : '';
-  nav.style.background = open ? '#F5F1E4' : '';
-  nav.style.border = open ? '1px solid #D8D0BC' : '';
-  nav.style.padding = open ? '18px' : '';
-  nav.style.flexDirection = open ? 'column' : '';
-  nav.style.alignItems = open ? 'flex-start' : '';
-  nav.style.gap = open ? '16px' : '';
   menuButton?.setAttribute('aria-expanded', String(open));
 }
 
@@ -96,10 +86,11 @@ shareBtn?.addEventListener('click', async () => {
 // --- Interactive hawker map (Leaflet + real NEA GPS data) ----------------
 // Hawker centre coordinates below are sourced from NEA's "Hawker Centres"
 // dataset on data.gov.sg (Open Data Licence, free for commercial use).
-// Stall-level points are still placeholder/editorial — no public dataset
-// exists at the individual-stall level, so each stall is offset a small,
-// realistic distance (tens of metres) from its hawker centre's real GPS
-// point, purely to demonstrate the drill-down interaction.
+// Stall-level points and names are placeholder/editorial — no public dataset
+// exists at the individual-stall level. Stall names below are intentionally
+// fictional (not real, identifiable stalls) since they carry demo ratings
+// and reviews; each stall is offset a small, realistic distance (tens of
+// metres) from its hawker centre's real GPS point to demonstrate drill-down.
 const mapEl = document.getElementById('hawkerMap');
 
 if (mapEl && window.L) {
@@ -112,17 +103,17 @@ if (mapEl && window.L) {
       id: 'chinatown', name: 'Chinatown Complex', lat: 1.2823, lng: 103.8428802,
       address: '335 Smith Street, Singapore 050335', stallCount: 226,
       stalls: [
-        { name: "Ah Heng's Wanton Mee", cuisine: 'Noodles', rating: 4.5, dlat: 0.00035, dlng: -0.00030 },
-        { name: 'Zhen Zhen Porridge', cuisine: 'Porridge', rating: 4.2, dlat: -0.00020, dlng: 0.00025 },
-        { name: 'Outram Park Fried Kway Teow', cuisine: 'Fried Kway Teow', rating: 4.6, dlat: 0.00020, dlng: 0.00040 },
+        { name: 'Golden Ladle Wanton Mee', cuisine: 'Noodles', rating: 4.5, dlat: 0.00035, dlng: -0.00030 },
+        { name: 'Silver Bowl Porridge', cuisine: 'Porridge', rating: 4.2, dlat: -0.00020, dlng: 0.00025 },
+        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', rating: 4.6, dlat: 0.00020, dlng: 0.00040 },
       ],
     },
     {
       id: 'tiongbahru', name: 'Tiong Bahru Market', lat: 1.28468299, lng: 103.832428,
       address: '30 Seng Poh Road, Singapore 168898', stallCount: 83,
       stalls: [
-        { name: 'Jian Bo Shui Kueh', cuisine: 'Teochew', rating: 4.4, dlat: 0.00025, dlng: -0.00020 },
-        { name: 'Tiong Bahru Fried Hokkien Mee', cuisine: 'Hokkien Mee', rating: 4.3, dlat: -0.00030, dlng: 0.00015 },
+        { name: 'Teochew Corner Shui Kueh', cuisine: 'Teochew', rating: 4.4, dlat: 0.00025, dlng: -0.00020 },
+        { name: 'Market Wok Hokkien Mee', cuisine: 'Hokkien Mee', rating: 4.3, dlat: -0.00030, dlng: 0.00015 },
         { name: 'Lor Mee Corner', cuisine: 'Lor Mee', rating: 4.1, dlat: 0.00010, dlng: 0.00035 },
       ],
     },
@@ -130,26 +121,26 @@ if (mapEl && window.L) {
       id: 'maxwell', name: 'Maxwell Food Centre', lat: 1.28055096, lng: 103.8444595,
       address: '1 Kadayanallur Street, Singapore 069184', stallCount: 103,
       stalls: [
-        { name: 'Tian Tian Hainanese Chicken Rice', cuisine: 'Chicken Rice', rating: 4.5, dlat: 0.00020, dlng: -0.00025 },
-        { name: 'Maxwell Fuzhou Oyster Cake', cuisine: 'Snacks', rating: 4.0, dlat: -0.00025, dlng: 0.00020 },
-        { name: 'Zhong Guo La Mian Xiao Long Bao', cuisine: 'Noodles', rating: 4.3, dlat: 0.00030, dlng: 0.00030 },
+        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', rating: 4.5, dlat: 0.00020, dlng: -0.00025 },
+        { name: 'Harbour Fuzhou Oyster Cake', cuisine: 'Snacks', rating: 4.0, dlat: -0.00025, dlng: 0.00020 },
+        { name: 'Northern Style La Mian & Xiao Long Bao', cuisine: 'Noodles', rating: 4.3, dlat: 0.00030, dlng: 0.00030 },
       ],
     },
     {
       id: 'geylang', name: 'Geylang Serai Market', lat: 1.31688809, lng: 103.8974075,
       address: '1 Geylang Serai, Singapore 402001', stallCount: 63,
       stalls: [
-        { name: 'Frog Leg Bee Hoon', cuisine: 'Bee Hoon', rating: 4.8, dlat: 0.00030, dlng: -0.00020 },
-        { name: 'Geylang Serai Nasi Padang', cuisine: 'Malay', rating: 4.4, dlat: -0.00020, dlng: 0.00030 },
-        { name: 'Haig Road Putu Piring', cuisine: 'Dessert', rating: 4.2, dlat: 0.00015, dlng: 0.00035 },
+        { name: "Uncle Kok's Frog Leg Bee Hoon", cuisine: 'Bee Hoon', rating: 4.8, dlat: 0.00030, dlng: -0.00020 },
+        { name: 'Kampung Flavours Nasi Padang', cuisine: 'Malay', rating: 4.4, dlat: -0.00020, dlng: 0.00030 },
+        { name: 'Sweet Steam Putu Piring', cuisine: 'Dessert', rating: 4.2, dlat: 0.00015, dlng: 0.00035 },
       ],
     },
     {
       id: 'oldairport', name: '51 Old Airport Road Food Centre', lat: 1.30827999, lng: 103.8858414,
       address: 'Blk 51, Old Airport Road, Singapore 390051', stallCount: 168,
       stalls: [
-        { name: 'Xing Ji Rou Cuo Mian', cuisine: 'Mee Pok', rating: 4.6, dlat: 0.00025, dlng: -0.00030 },
-        { name: 'Nam Sing Hokkien Fried Mee', cuisine: 'Hokkien Mee', rating: 4.7, dlat: -0.00020, dlng: 0.00025 },
+        { name: 'Golden Wok Rou Cuo Mian', cuisine: 'Mee Pok', rating: 4.6, dlat: 0.00025, dlng: -0.00030 },
+        { name: 'Harbourfront Hokkien Fried Mee', cuisine: 'Hokkien Mee', rating: 4.7, dlat: -0.00020, dlng: 0.00025 },
         { name: 'Fruit Rojak Corner', cuisine: 'Snacks', rating: 4.1, dlat: 0.00030, dlng: 0.00020 },
       ],
     },
@@ -157,9 +148,9 @@ if (mapEl && window.L) {
       id: 'newton', name: 'Newton Food Centre', lat: 1.3122250, lng: 103.8397293,
       address: '500 Clemenceau Avenue North, Singapore 229495', stallCount: 83,
       stalls: [
-        { name: 'Newton Circus BBQ Seafood', cuisine: 'Seafood', rating: 4.3, dlat: 0.00025, dlng: -0.00025 },
-        { name: 'Alliance Satay', cuisine: 'Satay', rating: 4.5, dlat: -0.00030, dlng: 0.00015 },
-        { name: 'Hup Kee Fried Oyster Omelette', cuisine: 'Local', rating: 4.2, dlat: 0.00015, dlng: 0.00030 },
+        { name: 'Circus Lights BBQ Seafood', cuisine: 'Seafood', rating: 4.3, dlat: 0.00025, dlng: -0.00025 },
+        { name: 'Charcoal Trail Satay', cuisine: 'Satay', rating: 4.5, dlat: -0.00030, dlng: 0.00015 },
+        { name: 'Golden Pan Fried Oyster Omelette', cuisine: 'Local', rating: 4.2, dlat: 0.00015, dlng: 0.00030 },
       ],
     },
   ];
@@ -174,15 +165,22 @@ if (mapEl && window.L) {
   }).setView(SG_CENTER, SG_ZOOM);
   map.setMaxBounds(SG_BOUNDS);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
+  // OneMap (Singapore Land Authority) basemap tiles -- Singapore-specific
+  // detail and no third-party usage-policy limits, replacing the generic
+  // OpenStreetMap public tile server used during early drafting.
+  L.tileLayer('https://www.onemap.gov.sg/maps/tiles/Default/{z}/{x}/{y}.png', {
+    attribution: '<a href="https://www.onemap.gov.sg/" target="_blank" rel="noopener">OneMap</a> &copy; contributors | Powered by SLA',
     maxZoom: 19,
+    detectRetina: true,
   }).addTo(map);
   map.attributionControl.setPrefix(false);
 
-  const hcIcon = L.divIcon({ className: '', html: '<div class="hc-pin"></div>', iconSize: [18, 18] });
-  const stallIcon = L.divIcon({ className: '', html: '<div class="stall-pin"></div>', iconSize: [10, 10] });
-  const dirIcon = L.divIcon({ className: '', html: '<div class="dir-pin"></div>', iconSize: [12, 12] });
+  // Icons: each has a small visible dot plus generous invisible padding so
+  // the tappable area clears the ~40px mobile touch-target guideline even
+  // though the visual mark stays small enough not to clutter the map.
+  const hcIcon = L.divIcon({ className: '', html: '<div class="pin-tap"><div class="hc-pin"></div></div>', iconSize: [40, 40], iconAnchor: [20, 20] });
+  const stallIcon = L.divIcon({ className: '', html: '<div class="pin-tap"><div class="stall-pin"></div></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
+  const dirIcon = L.divIcon({ className: '', html: '<div class="pin-tap"><div class="dir-pin"></div></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
 
   // Full hawker centre directory (name, lat, lng, short address, food stall
   // count) sourced from NEA's official dataset (data.gov.sg, snapshot Nov
@@ -311,11 +309,19 @@ if (mapEl && window.L) {
     ['Berseh Food Centre', 1.30734411, 103.85688878, '166 Jalan Besar', 66],
   ];
 
-  const directoryCluster = L.markerClusterGroup({ maxClusterRadius: 50 });
+  // Wider cluster radius + disableClusteringAtZoom keeps the city-wide view
+  // to a small, readable number of grouped bubbles instead of 100+ dots on
+  // top of each other; individual pins only appear once zoomed in close
+  // enough that they're naturally spaced apart.
+  const directoryCluster = L.markerClusterGroup({ maxClusterRadius: 70, disableClusteringAtZoom: 16 });
   directoryCentres.forEach(([name, lat, lng, address, stalls]) => {
     const marker = L.marker([lat, lng], { icon: dirIcon });
     const stallLabel = stalls > 0 ? `${stalls} cooked food stalls` : 'Market stalls only';
-    marker.bindPopup(`<span class="popup-title">${name}</span><span class="popup-meta">${address}<br />${stallLabel} · NEA, data.gov.sg</span>`);
+    marker.bindPopup(`
+      <span class="popup-title">${name}</span>
+      <span class="popup-meta">${address}<br />${stallLabel} · NEA, data.gov.sg</span>
+      <a class="popup-btn" href="stall.html">View stall page →</a>
+    `);
     directoryCluster.addLayer(marker);
   });
   map.addLayer(directoryCluster);
@@ -337,6 +343,7 @@ if (mapEl && window.L) {
       <p class="tag">${stall.cuisine}</p>
       <h3>${stall.name}</h3>
       <div class="stars small" aria-label="${stall.rating} out of 5 stars">${'★'.repeat(ratingNum)}${'☆'.repeat(5 - ratingNum)}</div>
+      <a class="popup-btn" href="stall.html">View full review →</a>
     `;
   }
 
@@ -379,10 +386,7 @@ if (mapEl && window.L) {
 
   hawkerCentres.forEach((hc) => {
     const marker = L.marker([hc.lat, hc.lng], { icon: hcIcon }).addTo(map);
-    marker.bindPopup(`
-      <span class="popup-title">${hc.name}</span>
-      <span class="popup-meta">${hc.address}<br />${hc.stallCount} cooked food stalls · NEA, data.gov.sg</span>
-    `);
+    marker.bindTooltip(hc.name, { direction: 'top', offset: [0, -16] });
     marker.on('click', () => openHawkerCentre(hc));
   });
 
@@ -474,116 +478,88 @@ if (mapEl && window.L) {
   mapBack?.addEventListener('click', resetMap);
 }
 
-// --- Sign-in + review submission (demo/session-only) ----------------------
-// TODO(dev team): this simulates login and review storage entirely in the
-// browser so the full UX flow is demonstrable. Nothing here is persisted or
-// sent anywhere. Once a real backend is chosen (e.g. Firebase, Supabase),
-// replace `mockSignIn` with real Google/Facebook OAuth, and replace
-// `submitReview` with an actual API call that saves to a database.
-const writeReviewBtn = document.getElementById('writeReviewBtn');
-const headerSignIn = document.getElementById('headerSignIn');
-const authPanel = document.getElementById('authPanel');
-const authNameInput = document.getElementById('authNameInput');
-const authContinueBtn = document.getElementById('authContinueBtn');
-const reviewForm = document.getElementById('reviewForm');
-const reviewingAsNote = document.getElementById('reviewingAsNote');
-const starPicker = document.getElementById('starPicker');
-const reviewText = document.getElementById('reviewText');
-const reviewPhotoInput = document.getElementById('reviewPhotoInput');
-const userReviewsList = document.getElementById('userReviewsList');
+// --- Language toggle (EN / 中文) --------------------------------------
+// A simple dictionary-driven swap over elements tagged with data-i18n.
+// Covers site chrome (nav, hero, section headings, buttons, map UI,
+// footer) so non-English-speaking users can navigate and understand the
+// core flows; long-form editorial review text stays English-only for now.
+const I18N = {
+  navBrowse: { en: 'Browse', zh: '浏览' },
+  navReviews: { en: 'Reviews', zh: '评价' },
+  navProcess: { en: 'How we review', zh: '评测方式' },
+  navAbout: { en: 'About', zh: '关于我们' },
+  mapTag: { en: 'Explore the island', zh: '探索全岛' },
+  mapTitleDefault: { en: 'Tap a hawker centre to see its stalls.', zh: '点击小贩中心查看摊位。' },
+  legendReviewed: { en: 'Reviewed by our team', zh: '我们团队已评测' },
+  legendDirectory: { en: 'Full NEA directory (124 centres)', zh: '全国环境局完整名录（124 个中心）' },
+  mapBack: { en: '← Back to Singapore', zh: '← 返回新加坡全岛' },
+  mapSearchPlaceholder: { en: 'Search a hawker centre or stall…', zh: '搜索小贩中心或摊位…' },
+  mapHint: { en: 'Click a stall marker to preview its review.', zh: '点击摊位标记查看评价预览。' },
+  mapCredit: { en: 'Hawker centre locations: NEA, data.gov.sg (Open Data Licence). Map data © OneMap, SLA. Centres still under construction aren’t plotted yet.', zh: '小贩中心位置数据来源：国家环境局 NEA, data.gov.sg（开放数据许可）。地图数据 © OneMap, SLA。仍在施工中的中心尚未标出。' },
+  heroTicket: { en: 'QUEUE No. 001', zh: '排队号 001' },
+  heroTitle: { en: 'Singapore,<br />one stall at a time.', zh: '新加坡，<br />一个摊位一个故事。' },
+  heroText: { en: "We queue, we taste, we film — then we tell you straight whether it's worth the walk. Hawker stalls, food courts, and kopitiams, reviewed by our team and rated by yours.", zh: '我们排队、试吃、拍摄——然后直接告诉你值不值得跑一趟。小贩摊位、美食广场与咖啡店，由我们团队评测，也欢迎你来评分。' },
+  heroBtnReviews: { en: 'See the latest tastings', zh: '查看最新试吃' },
+  heroBtnBrowse: { en: 'Browse by neighbourhood', zh: '按地区浏览' },
+  browseHeading: { en: 'Find your next<br />makan.', zh: '找到你的<br />下一餐。' },
+  browseText: { en: "Filter by what you're actually deciding between — where you are, what you're craving, or who you're eating with.", zh: '按你真正在意的条件筛选——所在地区、想吃什么，或和谁一起吃。' },
+  chipAll: { en: 'All', zh: '全部' },
+  chipHawker: { en: 'Hawker', zh: '小贩中心' },
+  chipKopitiam: { en: 'Kopitiam', zh: '咖啡店' },
+  chipCafe: { en: 'Cafe', zh: '咖啡馆' },
+  chipCheapEats: { en: 'Cheap eats', zh: '平价美食' },
+  chipHalal: { en: 'Halal', zh: '清真' },
+  chipLateNight: { en: 'Late night', zh: '深夜营业' },
+  chipSoloLunch: { en: 'Solo lunch', zh: '单人午餐' },
+  chipBigGroup: { en: 'Big group', zh: '多人聚餐' },
+  filterEmpty: { en: "No reviews match that filter yet — check back soon.", zh: '暂无符合该分类的评价，请稍后再看。' },
+  reviewsHeading: { en: 'Latest<br />tastings.', zh: '最新<br />试吃。' },
+  reviewsText: { en: 'Filmed and reviewed by the Makan Trail team this month.', zh: '本月由 Makan Trail 团队拍摄评测。' },
+  loadMore: { en: 'Load more reviews', zh: '加载更多评价' },
+  processHeading: { en: 'How we<br />review.', zh: '我们的<br />评测方式。' },
+  processText: { en: 'Every stall on Makan Trail goes through the same three steps before it’s published.', zh: '每个摊位在发布前都会经过相同的三个步骤。' },
+  processStep1Title: { en: 'We queue and taste', zh: '排队试吃' },
+  processStep1Text: { en: 'Same as any other customer — full price, no heads-up to the stall, no free samples.', zh: '和普通顾客一样——全额付费，不事先通知摊主，不接受免费试吃。' },
+  processStep2Title: { en: 'We film and photograph', zh: '拍摄记录' },
+  processStep2Text: { en: 'Every dish is shot on site. Video for the ones worth watching someone cook.', zh: '每道菜都在现场拍摄，值得一看的烹饪过程会录成视频。' },
+  processStep3Title: { en: 'We publish it straight', zh: '如实发布' },
+  processStep3Text: { en: 'The good, the average, and the "don\'t bother" — all get a review, not just the wins.', zh: '好的、普通的、不推荐的——都会写评价，不只报道好的一面。' },
+  communityHeading: { en: 'What readers<br />are saying.', zh: '读者<br />怎么说。' },
+  communityText: { en: "Signed-in reviews from people who've eaten there too.", zh: '来自其他到访过的读者的评价。' },
+  reviewCtaTitle: { en: 'Tried a stall on here?', zh: '吃过这里的摊位吗？' },
+  reviewCtaText: { en: 'Read reader reviews and leave your own rating →', zh: '查看读者评价，也可以留下你的评分 →' },
+  footerPrivacy: { en: 'Privacy Policy', zh: '隐私政策' },
+  footerContact: { en: 'Contact', zh: '联系我们' },
+  footerNote: { en: '© 2026 Makan Trail. Draft concept — placeholder content and images.', zh: '© 2026 Makan Trail。草稿概念——内容与图片均为占位。' },
+};
 
-let currentUserName = null;
-let selectedRating = 0;
+const LANG_KEY = 'makanTrailLang';
 
-function openAuthOrReviewFlow() {
-  if (currentUserName) {
-    reviewForm.hidden = false;
-    authPanel.hidden = true;
-    reviewForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  } else {
-    authPanel.hidden = false;
-    reviewForm.hidden = true;
-    authPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    authNameInput?.focus();
-  }
-}
-
-writeReviewBtn?.addEventListener('click', openAuthOrReviewFlow);
-headerSignIn?.addEventListener('click', (event) => {
-  event.preventDefault();
-  if (authPanel) openAuthOrReviewFlow();
-});
-
-authContinueBtn?.addEventListener('click', () => {
-  const name = (authNameInput?.value || '').trim();
-  if (!name) {
-    authNameInput?.focus();
-    return;
-  }
-  currentUserName = name;
-  authPanel.hidden = true;
-  reviewForm.hidden = false;
-  if (reviewingAsNote) reviewingAsNote.textContent = `Posting as ${currentUserName} (demo session).`;
-  if (headerSignIn) headerSignIn.textContent = currentUserName;
-  reviewForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-});
-
-// Star picker: click a star to select 1-5, filling all stars up to it.
-starPicker?.querySelectorAll('button').forEach((starBtn) => {
-  starBtn.addEventListener('click', () => {
-    selectedRating = parseInt(starBtn.dataset.value, 10);
-    starPicker.querySelectorAll('button').forEach((b) => {
-      b.classList.toggle('star-filled', parseInt(b.dataset.value, 10) <= selectedRating);
-    });
+function applyLanguage(lang) {
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const entry = I18N[el.dataset.i18n];
+    if (!entry) return;
+    el.innerHTML = entry[lang] || entry.en;
   });
-});
-
-function initials(name) {
-  return name
-    .split(' ')
-    .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+    const entry = I18N[el.dataset.i18nPlaceholder];
+    if (!entry) return;
+    el.placeholder = entry[lang] || entry.en;
+  });
+  document.documentElement.lang = lang === 'zh' ? 'zh-SG' : 'en';
+  document.querySelectorAll('.lang-toggle').forEach((btn) => {
+    btn.textContent = lang === 'zh' ? 'EN' : '中文';
+    btn.setAttribute('aria-label', lang === 'zh' ? 'Switch to English' : 'Switch to Chinese');
+  });
+  localStorage.setItem(LANG_KEY, lang);
+  window.__makanTrailLang = lang;
 }
 
-reviewForm?.addEventListener('submit', (event) => {
-  event.preventDefault();
-  if (!selectedRating) {
-    alert('Please select a star rating before posting.');
-    return;
-  }
-  const text = reviewText.value.trim();
-  if (!text) {
-    reviewText.focus();
-    return;
-  }
+const savedLang = localStorage.getItem(LANG_KEY) === 'zh' ? 'zh' : 'en';
+applyLanguage(savedLang);
 
-  const card = document.createElement('div');
-  card.className = 'user-review';
-  const ratingStars = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
-
-  let photoHtml = '';
-  const file = reviewPhotoInput?.files?.[0];
-  if (file) {
-    const url = URL.createObjectURL(file);
-    photoHtml = `<div class="user-review-photo" style="background-image:url('${url}');background-size:cover;background-position:center"></div>`;
-  }
-
-  card.innerHTML = `
-    <span class="avatar">${initials(currentUserName)}</span>
-    <div>
-      <strong>${currentUserName}</strong>
-      <div class="stars small" aria-label="${selectedRating} out of 5 stars">${ratingStars}</div>
-      <p>${text}</p>
-      ${photoHtml}
-    </div>
-  `;
-  userReviewsList?.prepend(card);
-
-  reviewText.value = '';
-  reviewPhotoInput.value = '';
-  selectedRating = 0;
-  starPicker.querySelectorAll('button').forEach((b) => b.classList.remove('star-filled'));
-  reviewForm.hidden = true;
+document.querySelectorAll('.lang-toggle').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    applyLanguage(window.__makanTrailLang === 'zh' ? 'en' : 'zh');
+  });
 });

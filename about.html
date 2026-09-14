@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="About Makan Trail — who we are and how we review Singapore's hawker stalls and restaurants." />
+  <meta name="description" content="About Makan Trail — who we are and how we review Singapore's hawker stalls." />
   <title>About Us｜Makan Trail</title>
   <meta property="og:type" content="website" />
   <meta property="og:title" content="About Makan Trail" />
-  <meta property="og:description" content="Who we are and how we review Singapore's hawker stalls and restaurants." />
+  <meta property="og:description" content="Who we are and how we review Singapore's hawker stalls." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%23C23B22'/%3E%3Ctext x='50' y='66' font-size='46' font-family='Georgia,serif' font-weight='700' fill='%23F5F1E4' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -18,10 +18,11 @@
       <span class="brand-word">MAKAN TRAIL</span>
     </a>
     <nav class="main-nav" id="mainNav">
-      <a href="index.html#browse">Browse</a>
-      <a href="index.html#reviews">Reviews</a>
-      <a href="about.html">About</a>
-      <a class="nav-signin" href="#" id="headerSignIn">Sign in</a>
+      <a href="index.html#browse" data-i18n="navBrowse">Browse</a>
+      <a href="index.html#reviews" data-i18n="navReviews">Reviews</a>
+      <a href="index.html#process" data-i18n="navProcess">How we review</a>
+      <a href="about.html" data-i18n="navAbout">About</a>
+      <button type="button" class="lang-toggle" aria-label="Switch to Chinese">中文</button>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
   </header>
@@ -35,10 +36,10 @@
         <p>We wanted something closer to what a well-fed friend would tell you — someone who's actually queued at the stall, paid full price, and will tell you honestly if it's not worth the wait.</p>
 
         <h2>What we do</h2>
-        <p>Our team visits hawker stalls and restaurants across Singapore, orders like any other customer, photographs and films the food on site, and writes up an honest verdict — good, average, or skip it. Every review carries a byline and a publish date, so you always know it's current and who stands behind it.</p>
+        <p>Our team visits hawker stalls, food courts, and kopitiams across Singapore, orders like any other customer, photographs and films the food on site, and writes up an honest verdict — good, average, or skip it. Every review carries a byline and a publish date, so you always know it's current and who stands behind it.</p>
 
         <h2>Reader reviews</h2>
-        <p>Alongside our own editorial reviews, signed-in readers can leave their own star rating, a note, and an optional photo. We require sign-in for reviews (not full anonymity) to keep ratings honest and traceable to a real person, rather than open to manipulation.</p>
+        <p>Alongside our own editorial reviews, we plan to let readers leave their own star rating, a note, and an optional photo. That feature needs real accounts and a database to work honestly, so it's not live on this draft yet — for now you're seeing editorial reviews and sample reader comments only.</p>
 
         <h2>What we don't do</h2>
         <ul>
@@ -60,13 +61,14 @@
         <span class="brand-word">MAKAN TRAIL</span>
       </div>
       <nav class="footer-nav">
-        <a href="index.html#browse">Browse</a>
-        <a href="index.html#reviews">Reviews</a>
-        <a href="about.html">About</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="#">Contact</a>
+        <a href="index.html#browse" data-i18n="navBrowse">Browse</a>
+        <a href="index.html#reviews" data-i18n="navReviews">Reviews</a>
+        <a href="index.html#process" data-i18n="navProcess">How we review</a>
+        <a href="about.html" data-i18n="navAbout">About</a>
+        <a href="privacy.html" data-i18n="footerPrivacy">Privacy Policy</a>
+        <a href="#" data-i18n="footerContact">Contact</a>
       </nav>
-      <p class="footer-note">© 2026 Makan Trail. Draft concept — placeholder content and images.</p>
+      <p class="footer-note" data-i18n="footerNote">© 2026 Makan Trail. Draft concept — placeholder content and images.</p>
     </div>
   </footer>
   <script src="script.js"></script>
