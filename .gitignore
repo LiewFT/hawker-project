@@ -1,0 +1,3 @@
+# Local-only test assets (e.g. photos pulled from the web to preview layout).
+# Never commit these -- unknown copyright/license, kept local for preview only.
+local-assets/

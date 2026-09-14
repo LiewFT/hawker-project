@@ -347,7 +347,11 @@ if (mapEl && window.L) {
   function showStallPreview(stall) {
     if (!stallPanel) return;
     const ratingNum = Math.round(stall.rating);
+    const photoHtml = stall.photo
+      ? `<img class="stall-panel-photo" src="${stall.photo}" alt="${stall.name}" />`
+      : '';
     stallPanel.innerHTML = `
+      ${photoHtml}
       <p class="tag">${stall.cuisine}</p>
       <h3>${stall.name}</h3>
       <div class="stars small" aria-label="${stall.rating} out of 5 stars">${'★'.repeat(ratingNum)}${'☆'.repeat(5 - ratingNum)}</div>
