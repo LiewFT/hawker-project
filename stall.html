@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="index.html">
       <span class="brand-mark">M</span>
@@ -31,27 +32,27 @@
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="stall-hero">
-      <p class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#browse">Hawker</a> / Golden Ladle Wanton Mee</p>
+      <p class="breadcrumb"><a href="index.html" data-i18n="stallBreadcrumbHome">Home</a> / <a href="index.html#browse" data-i18n="chipHawker">Hawker</a> / Golden Ladle Wanton Mee</p>
       <div class="stall-title-row">
         <div>
-          <p class="tag">Chinatown Complex · Hawker · Noodles</p>
+          <p class="tag" data-i18n="stallTag">Chinatown Complex · Hawker · Noodles</p>
           <h1 style="font-family:'Work Sans';font-weight:700;font-size:clamp(30px,4vw,44px);letter-spacing:0;">Golden Ladle Wanton Mee</h1>
           <div class="stall-meta">
-            <span>📍 335 Smith St, #02-111, Singapore (placeholder unit)</span>
-            <span>🕐 Open 10am–8pm, closed Mon</span>
-            <span>💵 $4–$6 per pax</span>
+            <span data-i18n="stallAddress">📍 335 Smith St, #02-111, Singapore (placeholder unit)</span>
+            <span data-i18n="stallHours">🕐 Open 10am–8pm, closed Mon</span>
+            <span data-i18n="stallPrice">💵 $4–$6 per pax</span>
           </div>
         </div>
         <div class="stall-rating">
           <div class="stars" aria-label="4.5 out of 5 stars">★★★★☆</div>
-          <small>4.5 editorial score · 128 reader reviews</small>
+          <small data-i18n="stallRatingSummary">4.5 editorial score · 128 reader reviews</small>
         </div>
       </div>
 
       <div class="gallery">
-        <div class="gallery-item photo-a"><span class="video-badge">▶ Watch the tasting</span></div>
+        <div class="gallery-item photo-a"><span class="video-badge" data-i18n="stallWatchTasting">▶ Watch the tasting</span></div>
         <div class="gallery-item photo-b"></div>
         <div class="gallery-item photo-c"></div>
         <div class="gallery-item photo-a" style="background:linear-gradient(135deg,#D99A2B,#C23B22)"></div>
@@ -60,34 +61,34 @@
 
     <section class="stall-layout">
       <article class="editorial-block">
-        <p class="byline">Reviewed by the Makan Trail team · Published 3 Sept 2026 · Taste-tested in person, full price</p>
-        <p><em>This is a fictional demo stall used to preview the review layout — not a real business.</em></p>
-        <p>Forty years in, and the queue outside Golden Ladle still snakes past the neighbouring stalls by 11:30am on a weekday. We joined it anyway, curious whether the hype still holds up against Chinatown's newer noodle stalls.</p>
-        <p>It does. The noodles are springy without being tough, tossed in a dark sauce that isn't overly sweet — a common fault at stalls chasing a younger crowd. The chilli, made fresh each morning, has real heat and a lingering smokiness from what tastes like charred dried chillies rather than the usual shortcut of chilli sauce out of a bottle. The char siew is grilled to order over charcoal, which explains both the char and the ten-minute wait once you place your order.</p>
-        <p>At $4.50 for a regular bowl, this isn't the cheapest wanton mee in the complex, but it's priced fairly for what's clearly not being rushed. Portions are modest — order a side of dumplings if you're hungrier than a light lunch.</p>
-        <p><strong>Worth the queue?</strong> Yes, if you go before 11:30am or after 1:30pm. The 20-minute midday queue is the only real downside.</p>
+        <p class="byline" data-i18n="stallByline">Reviewed by the Makan Trail team · Published 3 Sept 2026 · Taste-tested in person, full price</p>
+        <p><em data-i18n="stallFictionalNote">This is a fictional demo stall used to preview the review layout — not a real business.</em></p>
+        <p data-i18n="stallPara1">Forty years in, and the queue outside Golden Ladle still snakes past the neighbouring stalls by 11:30am on a weekday. We joined it anyway, curious whether the hype still holds up against Chinatown's newer noodle stalls.</p>
+        <p data-i18n="stallPara2">It does. The noodles are springy without being tough, tossed in a dark sauce that isn't overly sweet — a common fault at stalls chasing a younger crowd. The chilli, made fresh each morning, has real heat and a lingering smokiness from what tastes like charred dried chillies rather than the usual shortcut of chilli sauce out of a bottle. The char siew is grilled to order over charcoal, which explains both the char and the ten-minute wait once you place your order.</p>
+        <p data-i18n="stallPara3">At $4.50 for a regular bowl, this isn't the cheapest wanton mee in the complex, but it's priced fairly for what's clearly not being rushed. Portions are modest — order a side of dumplings if you're hungrier than a light lunch.</p>
+        <p data-i18n="stallPara4"><strong>Worth the queue?</strong> Yes, if you go before 11:30am or after 1:30pm. The 20-minute midday queue is the only real downside.</p>
 
         <div class="share-row">
-          <button class="share-btn" id="shareBtn">Share this review ↗</button>
+          <button class="share-btn" id="shareBtn" data-i18n="stallShareBtn">Share this review ↗</button>
         </div>
       </article>
 
       <aside class="info-card">
-        <h3>At a glance</h3>
-        <div class="info-row"><span>Cuisine</span><span>Local · Noodles</span></div>
-        <div class="info-row"><span>Price range</span><span>$4 – $6</span></div>
-        <div class="info-row"><span>Best for</span><span>Solo lunch, cheap eats</span></div>
-        <div class="info-row"><span>Halal</span><span>No</span></div>
-        <div class="info-row"><span>Payment</span><span>Cash only</span></div>
-        <div class="info-row"><span>Nearest MRT</span><span>Chinatown (5 min walk)</span></div>
+        <h3 data-i18n="stallAtAGlance">At a glance</h3>
+        <div class="info-row"><span data-i18n="stallCuisine">Cuisine</span><span data-i18n="stallCuisineValue">Local · Noodles</span></div>
+        <div class="info-row"><span data-i18n="stallPriceRange">Price range</span><span>$4 – $6</span></div>
+        <div class="info-row"><span data-i18n="stallBestFor">Best for</span><span data-i18n="stallBestForValue">Solo lunch, cheap eats</span></div>
+        <div class="info-row"><span data-i18n="chipHalal">Halal</span><span data-i18n="stallNo">No</span></div>
+        <div class="info-row"><span data-i18n="stallPayment">Payment</span><span data-i18n="stallCashOnly">Cash only</span></div>
+        <div class="info-row"><span data-i18n="stallNearestMrt">Nearest MRT</span><span data-i18n="stallNearestMrtValue">Chinatown (5 min walk)</span></div>
       </aside>
     </section>
 
     <section class="reviews-block">
       <div class="reviews-header">
         <div>
-          <h2>Reader<br />reviews.</h2>
-          <p style="color:var(--ink-soft);margin-top:10px">128 reviews · average 4.3 stars</p>
+          <h2 data-i18n="stallReaderReviews">Reader<br />reviews.</h2>
+          <p style="color:var(--ink-soft);margin-top:10px" data-i18n="stallReviewCount">128 reviews · average 4.3 stars</p>
         </div>
       </div>
 
