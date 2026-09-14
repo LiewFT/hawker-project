@@ -122,7 +122,15 @@ if (mapEl && window.L) {
     },
   ];
 
-  const map = L.map(mapEl, { scrollWheelZoom: true }).setView(SG_CENTER, SG_ZOOM);
+  const SG_BOUNDS = L.latLngBounds([1.130, 103.55], [1.475, 104.15]);
+
+  const map = L.map(mapEl, {
+    scrollWheelZoom: true,
+    maxBounds: SG_BOUNDS,
+    maxBoundsViscosity: 1.0,
+    minZoom: 11,
+  }).setView(SG_CENTER, SG_ZOOM);
+  map.setMaxBounds(SG_BOUNDS);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
