@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="index.html">
       <span class="brand-mark">M</span>
@@ -34,7 +35,7 @@
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="map-section">
       <div class="map-heading">
         <p class="tag" data-i18n="mapTag">Explore the island</p>
@@ -49,7 +50,7 @@
         <button class="map-back" id="mapBack" data-i18n="mapBack" hidden>← Back to Singapore</button>
         <div class="map-search">
           <input type="text" id="mapSearchInput" placeholder="Search a hawker centre or stall…" data-i18n-placeholder="mapSearchPlaceholder" autocomplete="off" />
-          <div class="map-search-results" id="mapSearchResults" hidden></div>
+          <div class="map-search-results" id="mapSearchResults" role="status" aria-live="polite" hidden></div>
         </div>
         <div id="hawkerMap"></div>
 
@@ -102,6 +103,7 @@
         <button type="button" class="chip" data-filter="big-group" data-i18n="chipBigGroup">Big group</button>
       </div>
       <p class="filter-empty" id="filterEmpty" data-i18n="filterEmpty" hidden>No reviews match that filter yet — check back soon.</p>
+      <p class="visually-hidden" id="filterStatus" aria-live="polite"></p>
     </section>
 
     <section id="reviews" class="reviews-section">

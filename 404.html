@@ -8,19 +8,21 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="index.html">
       <span class="brand-mark">M</span>
       <span class="brand-word">MAKAN TRAIL</span>
     </a>
+    <button type="button" class="lang-toggle" aria-label="Switch to Chinese" style="margin-left:auto">中文</button>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="not-found">
-      <p class="ticket">QUEUE No. 404</p>
-      <h1>This stall's<br />moved on.</h1>
-      <p class="hero-text">The page you're looking for doesn't exist, or the listing may have closed. Let's get you back on the trail.</p>
-      <a class="button button-primary" href="index.html">Back to homepage</a>
+      <p class="ticket" data-i18n="notFoundTicket">QUEUE No. 404</p>
+      <h1 data-i18n="notFoundTitle">This stall's<br />moved on.</h1>
+      <p class="hero-text" data-i18n="notFoundText">The page you're looking for doesn't exist, or the listing may have closed. Let's get you back on the trail.</p>
+      <a class="button button-primary" href="index.html" data-i18n="notFoundButton">Back to homepage</a>
     </section>
   </main>
 
@@ -30,8 +32,9 @@
         <span class="brand-mark">M</span>
         <span class="brand-word">MAKAN TRAIL</span>
       </div>
-      <p class="footer-note">© 2026 Makan Trail.</p>
+      <p class="footer-note" data-i18n="notFoundFooterNote">© 2026 Makan Trail.</p>
     </div>
   </footer>
+  <script src="script.js"></script>
 </body>
 </html>

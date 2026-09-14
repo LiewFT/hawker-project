@@ -3,11 +3,12 @@ const chips = Array.from(document.querySelectorAll('.chip'));
 const reviewGrid = document.getElementById('reviewGrid');
 const filterEmpty = document.getElementById('filterEmpty');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
+const filterStatus = document.getElementById('filterStatus');
 
 function applyFilter(filterValue) {
   if (!reviewGrid) return;
   const cards = Array.from(reviewGrid.querySelectorAll('.review-card'));
-  let anyVisible = false;
+  let visibleCount = 0;
 
   cards.forEach((card) => {
     const categories = (card.dataset.categories || '').split(' ');
@@ -19,11 +20,18 @@ function applyFilter(filterValue) {
     } else {
       card.hidden = !categories.includes(filterValue);
     }
-    if (!card.hidden) anyVisible = true;
+    if (!card.hidden) visibleCount++;
   });
 
+  const anyVisible = visibleCount > 0;
   if (filterEmpty) filterEmpty.hidden = anyVisible;
   if (loadMoreBtn) loadMoreBtn.style.display = filterValue === 'all' ? '' : 'none';
+  if (filterStatus) {
+    const isZh = window.__makanTrailLang === 'zh';
+    filterStatus.textContent = anyVisible
+      ? (isZh ? `显示 ${visibleCount} 条评价。` : `Showing ${visibleCount} review${visibleCount === 1 ? '' : 's'}.`)
+      : (isZh ? '暂无符合该分类的评价。' : 'No reviews match that filter yet.');
+  }
 }
 
 chips.forEach((chip) => {
@@ -472,7 +480,12 @@ if (mapEl && window.L) {
     });
   }
 
-  searchInput?.addEventListener('input', (e) => renderSearchResults(e.target.value));
+  let searchDebounce = null;
+  searchInput?.addEventListener('input', (e) => {
+    clearTimeout(searchDebounce);
+    const value = e.target.value;
+    searchDebounce = setTimeout(() => renderSearchResults(value), 150);
+  });
   searchInput?.addEventListener('focus', (e) => {
     if (e.target.value) renderSearchResults(e.target.value);
   });
@@ -558,6 +571,80 @@ const I18N = {
   footerPrivacy: { en: 'Privacy Policy', zh: '隐私政策' },
   footerContact: { en: 'Contact', zh: '联系我们' },
   footerNote: { en: '© 2026 Makan Trail. Draft concept — placeholder content and images.', zh: '© 2026 Makan Trail。草稿概念——内容与图片均为占位。' },
+
+  // --- stall.html ---
+  stallBreadcrumbHome: { en: 'Home', zh: '首页' },
+  stallTag: { en: 'Chinatown Complex · Hawker · Noodles', zh: '牛车水大厦 · 小贩中心 · 面食' },
+  stallAddress: { en: '📍 335 Smith St, #02-111, Singapore (placeholder unit)', zh: '📍 新加坡史密斯街335号 #02-111（占位单位）' },
+  stallHours: { en: '🕐 Open 10am–8pm, closed Mon', zh: '🕐 营业时间 10am–8pm，星期一休息' },
+  stallPrice: { en: '💵 $4–$6 per pax', zh: '💵 每人 $4–$6' },
+  stallRatingSummary: { en: '4.5 editorial score · 128 reader reviews', zh: '编辑评分 4.5 · 128 条读者评价' },
+  stallWatchTasting: { en: '▶ Watch the tasting', zh: '▶ 观看试吃视频' },
+  stallByline: { en: 'Reviewed by the Makan Trail team · Published 3 Sept 2026 · Taste-tested in person, full price', zh: '由 Makan Trail 团队评测 · 2026年9月3日发布 · 亲自试吃，全额付费' },
+  stallFictionalNote: { en: 'This is a fictional demo stall used to preview the review layout — not a real business.', zh: '这是一个虚构的示例摊位，用于预览评价页面排版——并非真实商家。' },
+  stallPara1: { en: "Forty years in, and the queue outside Golden Ladle still snakes past the neighbouring stalls by 11:30am on a weekday. We joined it anyway, curious whether the hype still holds up against Chinatown's newer noodle stalls.", zh: '开业四十年，工作日上午11点半，Golden Ladle门前的队伍依然蜿蜒过隔壁摊位。我们还是加入了排队，想看看在牛车水新兴面食摊位的冲击下，这份口碑是否依然名不虚传。' },
+  stallPara2: { en: "It does. The noodles are springy without being tough, tossed in a dark sauce that isn't overly sweet — a common fault at stalls chasing a younger crowd. The chilli, made fresh each morning, has real heat and a lingering smokiness from what tastes like charred dried chillies rather than the usual shortcut of chilli sauce out of a bottle. The char siew is grilled to order over charcoal, which explains both the char and the ten-minute wait once you place your order.", zh: '确实名不虚传。面条弹牙不硬，拌入的黑酱油不会过甜——这是许多迎合年轻顾客口味的摊位常犯的毛病。每天早上现制的辣椒酱够辣，还带着烘干辣椒的烟熏香，而不是瓶装辣椒酱的敷衍味道。叉烧是现点现烤的炭烤叉烧，这解释了叉烧的炭香，也解释了点餐后要等上十分钟的原因。' },
+  stallPara3: { en: "At $4.50 for a regular bowl, this isn't the cheapest wanton mee in the complex, but it's priced fairly for what's clearly not being rushed. Portions are modest — order a side of dumplings if you're hungrier than a light lunch.", zh: '一碗普通份量卖$4.50，在这座大厦里不算最便宜的云吞面，但对于用心不赶工的出品来说，价格算公道。份量偏小——如果想吃得更饱，建议加点一份水饺。' },
+  stallPara4: { en: '<strong>Worth the queue?</strong> Yes, if you go before 11:30am or after 1:30pm. The 20-minute midday queue is the only real downside.', zh: '<strong>值得排队吗？</strong>值得，只要你在上午11点半前或下午1点半后前往。中午20分钟的排队时间，是唯一真正的缺点。' },
+  stallShareBtn: { en: 'Share this review ↗', zh: '分享这篇评价 ↗' },
+  stallAtAGlance: { en: 'At a glance', zh: '一览' },
+  stallCuisine: { en: 'Cuisine', zh: '菜系' },
+  stallCuisineValue: { en: 'Local · Noodles', zh: '本地 · 面食' },
+  stallPriceRange: { en: 'Price range', zh: '价格范围' },
+  stallBestFor: { en: 'Best for', zh: '适合' },
+  stallBestForValue: { en: 'Solo lunch, cheap eats', zh: '单人午餐、平价美食' },
+  stallNo: { en: 'No', zh: '否' },
+  stallPayment: { en: 'Payment', zh: '付款方式' },
+  stallCashOnly: { en: 'Cash only', zh: '只收现金' },
+  stallNearestMrt: { en: 'Nearest MRT', zh: '最近地铁站' },
+  stallNearestMrtValue: { en: 'Chinatown (5 min walk)', zh: '牛车水站（步行5分钟）' },
+  stallReaderReviews: { en: 'Reader<br />reviews.', zh: '读者<br />评价。' },
+  stallReviewCount: { en: '128 reviews · average 4.3 stars', zh: '128 条评价 · 平均 4.3 星' },
+
+  // --- about.html ---
+  aboutTitle: { en: 'About<br />Makan Trail.', zh: '关于<br />Makan Trail。' },
+  aboutPara1: { en: 'Makan Trail started with a simple frustration: most food recommendations online are either paid placements dressed up as reviews, or crowd ratings that swing wildly depending on who happened to post that week.', zh: 'Makan Trail 的起点很简单：网络上大多数美食推荐，不是包装成评价的广告置入，就是随发帖人心情剧烈波动的大众评分。' },
+  aboutPara2: { en: "We wanted something closer to what a well-fed friend would tell you — someone who's actually queued at the stall, paid full price, and will tell you honestly if it's not worth the wait.", zh: '我们想要的，更像一位吃饱喝足的朋友会告诉你的话——一个真的去排过队、自己付了钱，并且会老实告诉你值不值得等的人。' },
+  aboutWhatWeDoTitle: { en: 'What we do', zh: '我们做什么' },
+  aboutWhatWeDoText: { en: "Our team visits hawker stalls, food courts, and kopitiams across Singapore, orders like any other customer, photographs and films the food on site, and writes up an honest verdict — good, average, or skip it. Every review carries a byline and a publish date, so you always know it's current and who stands behind it.", zh: '我们的团队走访新加坡各地的小贩摊位、美食广场和咖啡店，像普通顾客一样点餐，在现场拍照拍摄，并写下诚实的结论——好、一般，或不推荐。每篇评价都标注作者与发布日期，让你随时知道内容是否最新，以及是谁把关的。' },
+  aboutReaderReviewsTitle: { en: 'Reader reviews', zh: '读者评价' },
+  aboutReaderReviewsText: { en: "Alongside our own editorial reviews, we plan to let readers leave their own star rating, a note, and an optional photo. That feature needs real accounts and a database to work honestly, so it's not live on this draft yet — for now you're seeing editorial reviews and sample reader comments only.", zh: '除了我们自己的编辑评价，我们计划让读者留下自己的星级评分、留言，以及可选的照片。这项功能需要真实账户与数据库才能可靠运作，因此目前这份草稿版本尚未上线——现在你看到的只是编辑评价和示例读者留言。' },
+  aboutWhatWeDontTitle: { en: "What we don't do", zh: '我们不做什么' },
+  aboutDont1: { en: "We don't accept payment in exchange for a positive review.", zh: '我们不接受付费换取正面评价。' },
+  aboutDont2: { en: "We don't take free meals in exchange for coverage — every visit is paid for at full price.", zh: '我们不接受免费餐食换取报道——每一次到访都全额付费。' },
+  aboutDont3: { en: 'We don’t inflate or fabricate ratings, view counts, or "most popular" claims.', zh: '我们不夸大或捏造评分、浏览量，或「最受欢迎」之类的说法。' },
+  aboutContactTitle: { en: 'Get in touch', zh: '联系我们' },
+  aboutContactText: { en: 'Spotted a stall we should try, or think we got a review wrong? Use the "Recommend a Stall" link on any listing, or drop us a note through our contact channels.', zh: '发现了值得我们试吃的摊位，或觉得我们的评价有误？可以在任何页面使用「推荐摊位」链接，或透过我们的联系渠道留言。' },
+
+  // --- privacy.html ---
+  privacyTitle: { en: 'Privacy<br />Policy.', zh: '隐私<br />政策。' },
+  privacyLegalNotice: { en: '⚠ <strong>Placeholder text — not legal advice.</strong> This page is a structural draft only. Before publishing, this must be reviewed and confirmed by the site owner or a qualified lawyer, particularly for compliance with Singapore’s Personal Data Protection Act (PDPA).', zh: '⚠ <strong>占位文本——并非法律意见。</strong>本页仅为结构草稿。发布前必须由网站所有者或专业律师审阅确认，尤其需符合新加坡《个人资料保护法》（PDPA）的要求。' },
+  privacyLastUpdated: { en: 'Last updated: [insert date]', zh: '最后更新：[请填入日期]' },
+  privacyCollectTitle: { en: 'What we collect', zh: '我们收集的信息' },
+  privacyCollectNote: { en: "Sign-in and reader review submission are not live on this draft yet — the items below describe what we'll collect once that feature ships with a real backend.", zh: '登录与读者评价提交功能目前尚未在这份草稿中上线——以下条目描述的是该功能接入真实后端后，我们将会收集的信息。' },
+  privacyCollect1: { en: 'Account information if you sign in to leave a review (name, email, or social login profile details)', zh: '登录留言时的账户信息（姓名、电子邮箱，或社交账号登录的个人资料信息）' },
+  privacyCollect2: { en: 'Reviews, ratings, and any photos you choose to submit', zh: '你提交的评价、评分，以及任何照片' },
+  privacyCollect3: { en: 'Basic analytics data (pages visited, general location, device type) to understand site usage', zh: '基础分析数据（浏览页面、大致地区、设备类型），用于了解网站使用情况' },
+  privacyUseTitle: { en: 'How we use it', zh: '我们如何使用这些信息' },
+  privacyUse1: { en: 'To display your review and attribute it to your account', zh: '展示你的评价，并标注为你的账户所发布' },
+  privacyUse2: { en: 'To moderate submitted content and prevent spam or fake reviews', zh: '审核提交内容，防止垃圾信息或虚假评价' },
+  privacyUse3: { en: "To improve the site based on how it's used", zh: '根据使用情况改进网站' },
+  privacyDont1: { en: "We don't sell personal data to third parties.", zh: '我们不会将个人数据出售给第三方。' },
+  privacyDont2: { en: "We don't use your data for purposes beyond what's described here without asking first.", zh: '除非事先征得同意，我们不会将你的数据用于本政策未说明的用途。' },
+  privacyRightsTitle: { en: 'Your rights', zh: '你的权利' },
+  privacyRightsText: { en: '[Insert: how users can request access to, correction of, or deletion of their data, per PDPA requirements. Include a contact method for privacy requests.]', zh: '[请填入：根据 PDPA 要求，用户如何申请查阅、更正或删除其数据，并附上隐私相关请求的联系方式。]' },
+  privacyRetentionTitle: { en: 'Data retention', zh: '数据保留' },
+  privacyRetentionText: { en: '[Insert: how long account and review data is kept, and what happens to it if an account is deleted.]', zh: '[请填入：账户与评价数据的保留期限，以及账户被删除后数据将如何处理。]' },
+  privacyThirdPartyTitle: { en: 'Third-party services', zh: '第三方服务' },
+  privacyThirdPartyText: { en: '[Insert: list of third-party services used — e.g. login providers, hosting, analytics — and link to their respective privacy policies.]', zh: '[请填入：所使用的第三方服务清单——例如登录服务商、主机服务、分析工具——并附上各自隐私政策的链接。]' },
+  privacyContactText: { en: '[Insert: contact email or form for privacy-related questions or data requests.]', zh: '[请填入：用于隐私相关问题或数据请求的联系邮箱或表单。]' },
+
+  // --- 404.html ---
+  notFoundTicket: { en: 'QUEUE No. 404', zh: '排队号 404' },
+  notFoundTitle: { en: "This stall's<br />moved on.", zh: '这个摊位<br />已经搬走了。' },
+  notFoundText: { en: "The page you're looking for doesn't exist, or the listing may have closed. Let's get you back on the trail.", zh: '你要找的页面不存在，或该摊位可能已经歇业。我们带你回到主页吧。' },
+  notFoundButton: { en: 'Back to homepage', zh: '返回首页' },
+  notFoundFooterNote: { en: '© 2026 Makan Trail.', zh: '© 2026 Makan Trail。' },
 };
 
 const LANG_KEY = 'makanTrailLang';

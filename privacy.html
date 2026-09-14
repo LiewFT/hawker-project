@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="index.html">
       <span class="brand-mark">M</span>
@@ -24,50 +25,50 @@
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="simple-page">
-      <p class="breadcrumb"><a href="index.html">Home</a> / Privacy Policy</p>
-      <h1 class="page-title">Privacy<br />Policy.</h1>
+      <p class="breadcrumb"><a href="index.html" data-i18n="stallBreadcrumbHome">Home</a> / <span data-i18n="footerPrivacy">Privacy Policy</span></p>
+      <h1 class="page-title" data-i18n="privacyTitle">Privacy<br />Policy.</h1>
 
-      <div class="legal-notice">
+      <div class="legal-notice" data-i18n="privacyLegalNotice">
         ⚠ <strong>Placeholder text — not legal advice.</strong> This page is a structural draft only. Before publishing, this must be reviewed and confirmed by the site owner or a qualified lawyer, particularly for compliance with Singapore's Personal Data Protection Act (PDPA).
       </div>
 
       <div class="prose">
-        <p><em>Last updated: [insert date]</em></p>
+        <p><em data-i18n="privacyLastUpdated">Last updated: [insert date]</em></p>
 
-        <h2>What we collect</h2>
-        <p><em>Sign-in and reader review submission are not live on this draft yet — the items below describe what we'll collect once that feature ships with a real backend.</em></p>
+        <h2 data-i18n="privacyCollectTitle">What we collect</h2>
+        <p><em data-i18n="privacyCollectNote">Sign-in and reader review submission are not live on this draft yet — the items below describe what we'll collect once that feature ships with a real backend.</em></p>
         <ul>
-          <li>Account information if you sign in to leave a review (name, email, or social login profile details)</li>
-          <li>Reviews, ratings, and any photos you choose to submit</li>
-          <li>Basic analytics data (pages visited, general location, device type) to understand site usage</li>
+          <li data-i18n="privacyCollect1">Account information if you sign in to leave a review (name, email, or social login profile details)</li>
+          <li data-i18n="privacyCollect2">Reviews, ratings, and any photos you choose to submit</li>
+          <li data-i18n="privacyCollect3">Basic analytics data (pages visited, general location, device type) to understand site usage</li>
         </ul>
 
-        <h2>How we use it</h2>
+        <h2 data-i18n="privacyUseTitle">How we use it</h2>
         <ul>
-          <li>To display your review and attribute it to your account</li>
-          <li>To moderate submitted content and prevent spam or fake reviews</li>
-          <li>To improve the site based on how it's used</li>
+          <li data-i18n="privacyUse1">To display your review and attribute it to your account</li>
+          <li data-i18n="privacyUse2">To moderate submitted content and prevent spam or fake reviews</li>
+          <li data-i18n="privacyUse3">To improve the site based on how it's used</li>
         </ul>
 
-        <h2>What we don't do</h2>
+        <h2 data-i18n="aboutWhatWeDontTitle">What we don't do</h2>
         <ul>
-          <li>We don't sell personal data to third parties.</li>
-          <li>We don't use your data for purposes beyond what's described here without asking first.</li>
+          <li data-i18n="privacyDont1">We don't sell personal data to third parties.</li>
+          <li data-i18n="privacyDont2">We don't use your data for purposes beyond what's described here without asking first.</li>
         </ul>
 
-        <h2>Your rights</h2>
-        <p>[Insert: how users can request access to, correction of, or deletion of their data, per PDPA requirements. Include a contact method for privacy requests.]</p>
+        <h2 data-i18n="privacyRightsTitle">Your rights</h2>
+        <p data-i18n="privacyRightsText">[Insert: how users can request access to, correction of, or deletion of their data, per PDPA requirements. Include a contact method for privacy requests.]</p>
 
-        <h2>Data retention</h2>
-        <p>[Insert: how long account and review data is kept, and what happens to it if an account is deleted.]</p>
+        <h2 data-i18n="privacyRetentionTitle">Data retention</h2>
+        <p data-i18n="privacyRetentionText">[Insert: how long account and review data is kept, and what happens to it if an account is deleted.]</p>
 
-        <h2>Third-party services</h2>
-        <p>[Insert: list of third-party services used — e.g. login providers, hosting, analytics — and link to their respective privacy policies.]</p>
+        <h2 data-i18n="privacyThirdPartyTitle">Third-party services</h2>
+        <p data-i18n="privacyThirdPartyText">[Insert: list of third-party services used — e.g. login providers, hosting, analytics — and link to their respective privacy policies.]</p>
 
-        <h2>Contact</h2>
-        <p>[Insert: contact email or form for privacy-related questions or data requests.]</p>
+        <h2 data-i18n="footerContact">Contact</h2>
+        <p data-i18n="privacyContactText">[Insert: contact email or form for privacy-related questions or data requests.]</p>
       </div>
     </section>
   </main>
