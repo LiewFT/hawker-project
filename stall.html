@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Ah Heng's Wanton Mee reviewed by Makan Trail — taste tested, filmed, and rated." />
   <title>Ah Heng's Wanton Mee — Chinatown Complex｜Makan Trail</title>
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Ah Heng's Wanton Mee — Chinatown Complex｜Makan Trail" />
+  <meta property="og:description" content="Ah Heng's Wanton Mee reviewed by Makan Trail — taste tested, filmed, and rated." />
+  <meta property="og:locale" content="en_SG" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ah Heng's Wanton Mee — Chinatown Complex｜Makan Trail" />
+  <meta name="twitter:description" content="Ah Heng's Wanton Mee reviewed by Makan Trail — taste tested, filmed, and rated." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%23C23B22'/%3E%3Ctext x='50' y='66' font-size='46' font-family='Georgia,serif' font-weight='700' fill='%23F5F1E4' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -18,6 +25,7 @@
       <a href="index.html#browse">Browse</a>
       <a href="index.html#reviews">Reviews</a>
       <a href="index.html#process">How we review</a>
+      <a href="about.html">About</a>
       <a class="nav-signin" href="#" id="headerSignIn">Sign in</a>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
@@ -83,33 +91,64 @@
         <button class="write-review-btn" id="writeReviewBtn">Write a review</button>
       </div>
 
-      <div id="loginNote" class="login-note" hidden>
-        Sign in with Google or Facebook to leave a review — this keeps ratings honest and tied to a real person, not a fake account.
+      <div id="authPanel" class="auth-panel" hidden>
+        <p class="auth-note">Demo sign-in — this stands in for real Google/Facebook login until a backend is connected. Your name here is just for this preview.</p>
+        <label>Display name
+          <input type="text" id="authNameInput" placeholder="e.g. Jaslyn T." />
+        </label>
+        <div class="button-row">
+          <button type="button" class="button button-primary" id="authContinueBtn">Continue &amp; write a review</button>
+        </div>
       </div>
 
-      <div class="user-review">
-        <span class="avatar">JT</span>
-        <div>
-          <strong>Jaslyn T.</strong>
-          <div class="stars small" aria-label="5 out of 5 stars">★★★★★</div>
-          <p>Went based on this review and the queue was so worth it. Chilli oil really is next level — brought my parents back the next weekend.</p>
+      <form id="reviewForm" class="review-form" hidden>
+        <p class="auth-note" id="reviewingAsNote"></p>
+        <label>Your rating
+          <div class="star-picker" id="starPicker" role="radiogroup" aria-label="Your star rating">
+            <button type="button" data-value="1" aria-label="1 star">★</button>
+            <button type="button" data-value="2" aria-label="2 stars">★</button>
+            <button type="button" data-value="3" aria-label="3 stars">★</button>
+            <button type="button" data-value="4" aria-label="4 stars">★</button>
+            <button type="button" data-value="5" aria-label="5 stars">★</button>
+          </div>
+        </label>
+        <label>Your review
+          <textarea id="reviewText" rows="3" required placeholder="What did you order? Would you go back?"></textarea>
+        </label>
+        <label>Add a photo (optional)
+          <input type="file" accept="image/*" id="reviewPhotoInput" />
+        </label>
+        <div class="button-row">
+          <button type="submit" class="button button-primary">Post review</button>
         </div>
-      </div>
-      <div class="user-review">
-        <span class="avatar">RK</span>
-        <div>
-          <strong>Ridzwan K.</strong>
-          <div class="stars small" aria-label="4 out of 5 stars">★★★★☆</div>
-          <p>Good but portion has gotten smaller since last year. Still tasty though, and the char siew is genuinely great.</p>
-          <div class="user-review-photo"></div>
+        <p class="demo-disclaimer">Demo mode: this review will appear below for this browsing session only. It isn't saved to a real database yet.</p>
+      </form>
+
+      <div id="userReviewsList">
+        <div class="user-review">
+          <span class="avatar">JT</span>
+          <div>
+            <strong>Jaslyn T.</strong>
+            <div class="stars small" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>Went based on this review and the queue was so worth it. Chilli oil really is next level — brought my parents back the next weekend.</p>
+          </div>
         </div>
-      </div>
-      <div class="user-review">
-        <span class="avatar">MC</span>
-        <div>
-          <strong>Melissa C.</strong>
-          <div class="stars small" aria-label="4 out of 5 stars">★★★★☆</div>
-          <p>Queue moves faster than it looks. Worth timing your visit around 2pm to skip the worst of it.</p>
+        <div class="user-review">
+          <span class="avatar">RK</span>
+          <div>
+            <strong>Ridzwan K.</strong>
+            <div class="stars small" aria-label="4 out of 5 stars">★★★★☆</div>
+            <p>Good but portion has gotten smaller since last year. Still tasty though, and the char siew is genuinely great.</p>
+            <div class="user-review-photo"></div>
+          </div>
+        </div>
+        <div class="user-review">
+          <span class="avatar">MC</span>
+          <div>
+            <strong>Melissa C.</strong>
+            <div class="stars small" aria-label="4 out of 5 stars">★★★★☆</div>
+            <p>Queue moves faster than it looks. Worth timing your visit around 2pm to skip the worst of it.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -125,7 +164,8 @@
         <a href="index.html#browse">Browse</a>
         <a href="index.html#reviews">Reviews</a>
         <a href="index.html#process">How we review</a>
-        <a href="#">Privacy Policy</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
         <a href="#">Contact</a>
       </nav>
       <p class="footer-note">© 2026 Makan Trail. Draft concept — placeholder content and images.</p>

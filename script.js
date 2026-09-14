@@ -1,3 +1,45 @@
+// --- Category filter chips + load more -----------------------------------
+const chips = Array.from(document.querySelectorAll('.chip'));
+const reviewGrid = document.getElementById('reviewGrid');
+const filterEmpty = document.getElementById('filterEmpty');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+function applyFilter(filterValue) {
+  if (!reviewGrid) return;
+  const cards = Array.from(reviewGrid.querySelectorAll('.review-card'));
+  let anyVisible = false;
+
+  cards.forEach((card) => {
+    const categories = (card.dataset.categories || '').split(' ');
+    const isLoadMoreItem = card.classList.contains('load-more-item');
+
+    if (filterValue === 'all') {
+      // Reset to the default state: first 3 shown, "load more" cards hidden again.
+      card.hidden = isLoadMoreItem;
+    } else {
+      card.hidden = !categories.includes(filterValue);
+    }
+    if (!card.hidden) anyVisible = true;
+  });
+
+  if (filterEmpty) filterEmpty.hidden = anyVisible;
+  if (loadMoreBtn) loadMoreBtn.style.display = filterValue === 'all' ? '' : 'none';
+}
+
+chips.forEach((chip) => {
+  chip.addEventListener('click', () => {
+    chips.forEach((c) => c.classList.remove('chip-active'));
+    chip.classList.add('chip-active');
+    applyFilter(chip.dataset.filter);
+    document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+loadMoreBtn?.addEventListener('click', () => {
+  reviewGrid?.querySelectorAll('.load-more-item').forEach((card) => (card.hidden = false));
+  loadMoreBtn.hidden = true;
+});
+
 // --- Mobile menu ------------------------------------------------------
 const menuButton = document.getElementById('menuToggle');
 const nav = document.getElementById('mainNav');
@@ -284,22 +326,116 @@ if (mapEl && window.L) {
   mapBack?.addEventListener('click', resetMap);
 }
 
-// --- Login-gated review button -------------------------------------------
-// TODO(dev team): replace this placeholder with real auth (e.g. Google/
-// Facebook OAuth) once the backend is in place. For now it just reveals a
-// note explaining why sign-in is required, so the flow is demonstrable.
+// --- Sign-in + review submission (demo/session-only) ----------------------
+// TODO(dev team): this simulates login and review storage entirely in the
+// browser so the full UX flow is demonstrable. Nothing here is persisted or
+// sent anywhere. Once a real backend is chosen (e.g. Firebase, Supabase),
+// replace `mockSignIn` with real Google/Facebook OAuth, and replace
+// `submitReview` with an actual API call that saves to a database.
 const writeReviewBtn = document.getElementById('writeReviewBtn');
-const loginNote = document.getElementById('loginNote');
 const headerSignIn = document.getElementById('headerSignIn');
+const authPanel = document.getElementById('authPanel');
+const authNameInput = document.getElementById('authNameInput');
+const authContinueBtn = document.getElementById('authContinueBtn');
+const reviewForm = document.getElementById('reviewForm');
+const reviewingAsNote = document.getElementById('reviewingAsNote');
+const starPicker = document.getElementById('starPicker');
+const reviewText = document.getElementById('reviewText');
+const reviewPhotoInput = document.getElementById('reviewPhotoInput');
+const userReviewsList = document.getElementById('userReviewsList');
 
-writeReviewBtn?.addEventListener('click', () => {
-  if (loginNote) loginNote.hidden = !loginNote.hidden;
-});
+let currentUserName = null;
+let selectedRating = 0;
 
+function openAuthOrReviewFlow() {
+  if (currentUserName) {
+    reviewForm.hidden = false;
+    authPanel.hidden = true;
+    reviewForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    authPanel.hidden = false;
+    reviewForm.hidden = true;
+    authPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    authNameInput?.focus();
+  }
+}
+
+writeReviewBtn?.addEventListener('click', openAuthOrReviewFlow);
 headerSignIn?.addEventListener('click', (event) => {
   event.preventDefault();
-  if (loginNote) {
-    loginNote.hidden = false;
-    loginNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (authPanel) openAuthOrReviewFlow();
+});
+
+authContinueBtn?.addEventListener('click', () => {
+  const name = (authNameInput?.value || '').trim();
+  if (!name) {
+    authNameInput?.focus();
+    return;
   }
+  currentUserName = name;
+  authPanel.hidden = true;
+  reviewForm.hidden = false;
+  if (reviewingAsNote) reviewingAsNote.textContent = `Posting as ${currentUserName} (demo session).`;
+  if (headerSignIn) headerSignIn.textContent = currentUserName;
+  reviewForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+// Star picker: click a star to select 1-5, filling all stars up to it.
+starPicker?.querySelectorAll('button').forEach((starBtn) => {
+  starBtn.addEventListener('click', () => {
+    selectedRating = parseInt(starBtn.dataset.value, 10);
+    starPicker.querySelectorAll('button').forEach((b) => {
+      b.classList.toggle('star-filled', parseInt(b.dataset.value, 10) <= selectedRating);
+    });
+  });
+});
+
+function initials(name) {
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+reviewForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!selectedRating) {
+    alert('Please select a star rating before posting.');
+    return;
+  }
+  const text = reviewText.value.trim();
+  if (!text) {
+    reviewText.focus();
+    return;
+  }
+
+  const card = document.createElement('div');
+  card.className = 'user-review';
+  const ratingStars = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
+
+  let photoHtml = '';
+  const file = reviewPhotoInput?.files?.[0];
+  if (file) {
+    const url = URL.createObjectURL(file);
+    photoHtml = `<div class="user-review-photo" style="background-image:url('${url}');background-size:cover;background-position:center"></div>`;
+  }
+
+  card.innerHTML = `
+    <span class="avatar">${initials(currentUserName)}</span>
+    <div>
+      <strong>${currentUserName}</strong>
+      <div class="stars small" aria-label="${selectedRating} out of 5 stars">${ratingStars}</div>
+      <p>${text}</p>
+      ${photoHtml}
+    </div>
+  `;
+  userReviewsList?.prepend(card);
+
+  reviewText.value = '';
+  reviewPhotoInput.value = '';
+  selectedRating = 0;
+  starPicker.querySelectorAll('button').forEach((b) => b.classList.remove('star-filled'));
+  reviewForm.hidden = true;
 });

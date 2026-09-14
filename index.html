@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Makan Trail — honest hawker and restaurant reviews from Singapore, tasted and filmed by our team." />
   <title>Makan Trail｜Singapore Hawker &amp; Restaurant Reviews</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Makan Trail｜Singapore Hawker & Restaurant Reviews" />
+  <meta property="og:description" content="Honest hawker and restaurant reviews from Singapore, tasted and filmed by our team." />
+  <meta property="og:locale" content="en_SG" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Makan Trail｜Singapore Hawker & Restaurant Reviews" />
+  <meta name="twitter:description" content="Honest hawker and restaurant reviews from Singapore, tasted and filmed by our team." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%23C23B22'/%3E%3Ctext x='50' y='66' font-size='46' font-family='Georgia,serif' font-weight='700' fill='%23F5F1E4' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="styles.css" />
@@ -19,7 +26,8 @@
       <a href="#browse">Browse</a>
       <a href="#reviews">Reviews</a>
       <a href="#process">How we review</a>
-      <a class="nav-signin" href="#">Sign in</a>
+      <a href="about.html">About</a>
+      <a class="nav-signin" href="#" id="headerSignIn">Sign in</a>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
   </header>
@@ -75,19 +83,20 @@
         <p>Filter by what you're actually deciding between — where you are, what you're craving, or who you're eating with.</p>
       </div>
       <div class="chip-row">
-        <span class="chip chip-active">All</span>
-        <span class="chip">Hawker</span>
-        <span class="chip">Kopitiam</span>
-        <span class="chip">Restaurant</span>
-        <span class="chip">Cafe</span>
+        <button type="button" class="chip chip-active" data-filter="all">All</button>
+        <button type="button" class="chip" data-filter="hawker">Hawker</button>
+        <button type="button" class="chip" data-filter="kopitiam">Kopitiam</button>
+        <button type="button" class="chip" data-filter="restaurant">Restaurant</button>
+        <button type="button" class="chip" data-filter="cafe">Cafe</button>
       </div>
       <div class="chip-row chip-row-muted">
-        <span class="chip">Cheap eats</span>
-        <span class="chip">Halal</span>
-        <span class="chip">Late night</span>
-        <span class="chip">Solo lunch</span>
-        <span class="chip">Big group</span>
+        <button type="button" class="chip" data-filter="cheap-eats">Cheap eats</button>
+        <button type="button" class="chip" data-filter="halal">Halal</button>
+        <button type="button" class="chip" data-filter="late-night">Late night</button>
+        <button type="button" class="chip" data-filter="solo-lunch">Solo lunch</button>
+        <button type="button" class="chip" data-filter="big-group">Big group</button>
       </div>
+      <p class="filter-empty" id="filterEmpty" hidden>No reviews match that filter yet — check back soon.</p>
     </section>
 
     <section id="reviews" class="reviews-section">
@@ -95,8 +104,8 @@
         <h2>Latest<br />tastings.</h2>
         <p>Filmed and reviewed by the Makan Trail team this month.</p>
       </div>
-      <div class="review-grid">
-        <article class="review-card feature">
+      <div class="review-grid" id="reviewGrid">
+        <article class="review-card feature" data-categories="hawker cheap-eats">
           <div class="review-photo photo-a"><span class="video-badge">▶ Video</span></div>
           <div class="review-body">
             <p class="tag">Chinatown Complex · Hawker</p>
@@ -106,7 +115,7 @@
             <a class="text-link" href="stall.html">Read the full review →</a>
           </div>
         </article>
-        <article class="review-card">
+        <article class="review-card" data-categories="cafe solo-lunch">
           <div class="review-photo photo-b"></div>
           <div class="review-body">
             <p class="tag">Tiong Bahru · Cafe</p>
@@ -115,7 +124,7 @@
             <a class="text-link" href="stall.html">Read the full review →</a>
           </div>
         </article>
-        <article class="review-card">
+        <article class="review-card" data-categories="restaurant late-night">
           <div class="review-photo photo-c"><span class="video-badge">▶ Video</span></div>
           <div class="review-body">
             <p class="tag">Geylang · Restaurant</p>
@@ -124,6 +133,27 @@
             <a class="text-link" href="stall.html">Read the full review →</a>
           </div>
         </article>
+        <article class="review-card load-more-item" data-categories="kopitiam cheap-eats" hidden>
+          <div class="review-photo photo-b"></div>
+          <div class="review-body">
+            <p class="tag">Tiong Bahru Market · Kopitiam</p>
+            <h3>Jian Bo Shui Kueh — still Teochew comfort done right</h3>
+            <div class="stars" aria-label="4.4 out of 5 stars">★★★★☆</div>
+            <a class="text-link" href="stall.html">Read the full review →</a>
+          </div>
+        </article>
+        <article class="review-card load-more-item" data-categories="hawker big-group halal" hidden>
+          <div class="review-photo photo-c"></div>
+          <div class="review-body">
+            <p class="tag">Geylang Serai Market · Malay</p>
+            <h3>Nasi padang worth bringing the whole family for</h3>
+            <div class="stars" aria-label="4.4 out of 5 stars">★★★★☆</div>
+            <a class="text-link" href="stall.html">Read the full review →</a>
+          </div>
+        </article>
+      </div>
+      <div class="load-more-row">
+        <button type="button" class="button button-quiet" id="loadMoreBtn">Load more reviews</button>
       </div>
     </section>
 
@@ -195,7 +225,8 @@
         <a href="#browse">Browse</a>
         <a href="#reviews">Reviews</a>
         <a href="#process">How we review</a>
-        <a href="#">Privacy Policy</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
         <a href="#">Contact</a>
       </nav>
       <p class="footer-note">© 2026 Makan Trail. Draft concept — placeholder content and images.</p>
