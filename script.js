@@ -101,12 +101,10 @@ shareBtn?.addEventListener('click', async () => {
 // metres) from its hawker centre's real GPS point to demonstrate drill-down.
 const mapEl = document.getElementById('hawkerMap');
 
-if (mapEl && window.L) {
-  const SG_CENTER = [1.3226, 103.8636];
-  const SG_ZOOM = 12;
-  const STALL_ZOOM = 18;
-
-  const hawkerCentres = [
+// Featured hawker centres + their demo stalls, kept at top level (not inside
+// the map-only block below) so stall.html can also look up a stall's real
+// name/cuisine/rating/photo by id, without needing the map itself to load.
+const hawkerCentres = [
     {
       id: 'chinatown', name: 'Chinatown Complex', lat: 1.2823, lng: 103.8428802,
       address: '335 Smith Street, Singapore 050335', stallCount: 226,
@@ -163,7 +161,84 @@ if (mapEl && window.L) {
         { name: 'Golden Pan Fried Oyster Omelette', cuisine: 'Local', rating: 4.2, dlat: 0.00015, dlng: 0.00030 },
       ],
     },
-  ];
+];
+
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function findStallBySlug(hcId, stallSlug) {
+  const hc = hawkerCentres.find((h) => h.id === hcId);
+  const stall = hc?.stalls.find((s) => slugify(s.name) === stallSlug);
+  return hc && stall ? { hc, stall } : null;
+}
+
+// stall.html only: reads ?hc=<id>&stall=<slug> from the URL and, if it
+// matches a real stall, overwrites the page's generic Golden Ladle demo
+// content with that stall's real name/cuisine/rating/photo. With no match
+// (including a plain visit to stall.html with no query string, e.g. from a
+// directory-only hawker centre with no stall-level data), the static demo
+// content already in the HTML is left untouched.
+function renderStallDetail() {
+  const heroEl = document.querySelector('.stall-hero');
+  if (!heroEl) return;
+
+  const params = new URLSearchParams(location.search);
+  const match = findStallBySlug(params.get('hc'), params.get('stall'));
+  if (!match) return;
+  const { hc, stall } = match;
+  const isZh = window.__makanTrailLang === 'zh';
+
+  document.title = `${stall.name} — ${hc.name}｜Makan Trail`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.content = `${stall.name} reviewed by Makan Trail — taste tested, filmed, and rated.`;
+
+  const breadcrumbName = document.getElementById('stallBreadcrumbName');
+  if (breadcrumbName) breadcrumbName.textContent = stall.name;
+
+  const tagEl = document.getElementById('stallTagLine');
+  if (tagEl) {
+    tagEl.removeAttribute('data-i18n');
+    tagEl.textContent = isZh ? `${hc.name} · 小贩中心 · ${stall.cuisine}` : `${hc.name} · Hawker · ${stall.cuisine}`;
+  }
+
+  const nameEl = document.getElementById('stallNameHeading');
+  if (nameEl) nameEl.textContent = stall.name;
+
+  const addressEl = document.getElementById('stallAddressDynamic');
+  if (addressEl) {
+    addressEl.removeAttribute('data-i18n');
+    addressEl.textContent = `📍 ${hc.address}`;
+  }
+
+  const starsEl = document.getElementById('stallStars');
+  if (starsEl) {
+    const ratingNum = Math.round(stall.rating);
+    starsEl.textContent = '★'.repeat(ratingNum) + '☆'.repeat(5 - ratingNum);
+    starsEl.setAttribute('aria-label', `${stall.rating} out of 5 stars`);
+  }
+
+  const cuisineValueEl = document.getElementById('stallCuisineValueDynamic');
+  if (cuisineValueEl) {
+    cuisineValueEl.removeAttribute('data-i18n');
+    cuisineValueEl.textContent = isZh ? `本地 · ${stall.cuisine}` : `Local · ${stall.cuisine}`;
+  }
+
+  if (stall.photo) {
+    const galleryMain = document.getElementById('stallGalleryMain');
+    if (galleryMain) {
+      galleryMain.style.background = `url('${stall.photo}') center/cover`;
+      galleryMain.classList.remove('photo-a');
+    }
+    // No real video exists for these demo stalls, so don't claim there is one.
+    document.getElementById('stallVideoBadge')?.remove();
+  }
+}
+
+if (mapEl && window.L) {
+  const SG_CENTER = [1.3226, 103.8636];
+  const SG_ZOOM = 12;
+  const STALL_ZOOM = 18;
 
   const SG_BOUNDS = L.latLngBounds([1.130, 103.55], [1.475, 104.15]);
 
@@ -346,18 +421,19 @@ if (mapEl && window.L) {
     }
   }
 
-  function showStallPreview(stall) {
+  function showStallPreview(hc, stall) {
     if (!stallPanel) return;
     const ratingNum = Math.round(stall.rating);
     const photoHtml = stall.photo
       ? `<img class="stall-panel-photo" src="${stall.photo}" alt="${stall.name}" />`
       : '';
+    const detailUrl = `stall.html?hc=${encodeURIComponent(hc.id)}&stall=${encodeURIComponent(slugify(stall.name))}`;
     stallPanel.innerHTML = `
       ${photoHtml}
       <p class="tag">${stall.cuisine}</p>
       <h3>${stall.name}</h3>
       <div class="stars small" aria-label="${stall.rating} out of 5 stars">${'★'.repeat(ratingNum)}${'☆'.repeat(5 - ratingNum)}</div>
-      <a class="popup-btn" href="stall.html">View full review →</a>
+      <a class="popup-btn" href="${detailUrl}">View full review →</a>
     `;
   }
 
@@ -397,7 +473,7 @@ if (mapEl && window.L) {
       stallMarker.bindTooltip(stall.name, { direction: 'top', offset: [0, -6] });
       stallMarker.on('click', (event) => {
         L.DomEvent.stopPropagation(event);
-        showStallPreview(stall);
+        showStallPreview(hc, stall);
       });
       group.addLayer(stallMarker);
       if (focusStallName && stall.name === focusStallName) {
@@ -412,7 +488,7 @@ if (mapEl && window.L) {
 
     const focusStall = focusStallName && hc.stalls.find((s) => s.name === focusStallName);
     if (focusStall) {
-      showStallPreview(focusStall);
+      showStallPreview(hc, focusStall);
     } else {
       resetStallPanel();
     }
@@ -677,9 +753,11 @@ function applyLanguage(lang) {
 
 const savedLang = localStorage.getItem(LANG_KEY) === 'zh' ? 'zh' : 'en';
 applyLanguage(savedLang);
+renderStallDetail();
 
 document.querySelectorAll('.lang-toggle').forEach((btn) => {
   btn.addEventListener('click', () => {
     applyLanguage(window.__makanTrailLang === 'zh' ? 'en' : 'zh');
+    renderStallDetail();
   });
 });

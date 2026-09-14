@@ -34,25 +34,25 @@
 
   <main id="main-content">
     <section class="stall-hero">
-      <p class="breadcrumb"><a href="index.html" data-i18n="stallBreadcrumbHome">Home</a> / <a href="index.html#browse" data-i18n="chipHawker">Hawker</a> / Golden Ladle Wanton Mee</p>
+      <p class="breadcrumb"><a href="index.html" data-i18n="stallBreadcrumbHome">Home</a> / <a href="index.html#browse" data-i18n="chipHawker">Hawker</a> / <span id="stallBreadcrumbName">Golden Ladle Wanton Mee</span></p>
       <div class="stall-title-row">
         <div>
-          <p class="tag" data-i18n="stallTag">Chinatown Complex · Hawker · Noodles</p>
-          <h1 style="font-family:'Work Sans';font-weight:700;font-size:clamp(30px,4vw,44px);letter-spacing:0;">Golden Ladle Wanton Mee</h1>
+          <p class="tag" id="stallTagLine" data-i18n="stallTag">Chinatown Complex · Hawker · Noodles</p>
+          <h1 id="stallNameHeading" style="font-family:'Work Sans';font-weight:700;font-size:clamp(30px,4vw,44px);letter-spacing:0;">Golden Ladle Wanton Mee</h1>
           <div class="stall-meta">
-            <span data-i18n="stallAddress">📍 335 Smith St, #02-111, Singapore (placeholder unit)</span>
+            <span id="stallAddressDynamic" data-i18n="stallAddress">📍 335 Smith St, #02-111, Singapore (placeholder unit)</span>
             <span data-i18n="stallHours">🕐 Open 10am–8pm, closed Mon</span>
             <span data-i18n="stallPrice">💵 $4–$6 per pax</span>
           </div>
         </div>
         <div class="stall-rating">
-          <div class="stars" aria-label="4.5 out of 5 stars">★★★★☆</div>
+          <div class="stars" id="stallStars" aria-label="4.5 out of 5 stars">★★★★☆</div>
           <small data-i18n="stallRatingSummary">4.5 editorial score · 128 reader reviews</small>
         </div>
       </div>
 
       <div class="gallery">
-        <div class="gallery-item photo-a"><span class="video-badge" data-i18n="stallWatchTasting">▶ Watch the tasting</span></div>
+        <div class="gallery-item photo-a" id="stallGalleryMain"><span class="video-badge" id="stallVideoBadge" data-i18n="stallWatchTasting">▶ Watch the tasting</span></div>
         <div class="gallery-item photo-b"></div>
         <div class="gallery-item photo-c"></div>
         <div class="gallery-item photo-a" style="background:linear-gradient(135deg,#D99A2B,#C23B22)"></div>
@@ -75,7 +75,7 @@
 
       <aside class="info-card">
         <h3 data-i18n="stallAtAGlance">At a glance</h3>
-        <div class="info-row"><span data-i18n="stallCuisine">Cuisine</span><span data-i18n="stallCuisineValue">Local · Noodles</span></div>
+        <div class="info-row"><span data-i18n="stallCuisine">Cuisine</span><span id="stallCuisineValueDynamic" data-i18n="stallCuisineValue">Local · Noodles</span></div>
         <div class="info-row"><span data-i18n="stallPriceRange">Price range</span><span>$4 – $6</span></div>
         <div class="info-row"><span data-i18n="stallBestFor">Best for</span><span data-i18n="stallBestForValue">Solo lunch, cheap eats</span></div>
         <div class="info-row"><span data-i18n="chipHalal">Halal</span><span data-i18n="stallNo">No</span></div>
