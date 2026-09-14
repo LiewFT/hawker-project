@@ -32,9 +32,12 @@ real login and review storage into this exact frontend.
 The hawker centre map uses **real GPS coordinates** from NEA's official
 "Hawker Centres" dataset on data.gov.sg (Open Data Licence — free for
 commercial use), rendered with Leaflet.js + OpenStreetMap tiles (no API key
-needed, no cost). Currently includes 6 real hawker centres: Chinatown
-Complex, Tiong Bahru Market, Maxwell Food Centre, Geylang Serai Market,
-51 Old Airport Road Food Centre, and Newton Food Centre.
+needed, no cost). It plots all 124 currently-open hawker centres in
+Singapore (centres still under construction are excluded): 6 are "featured"
+with drill-down stall markers and reviews (Chinatown Complex, Tiong Bahru
+Market, Maxwell Food Centre, Geylang Serai Market, 51 Old Airport Road Food
+Centre, and Newton Food Centre), and the remaining 118 appear as a clustered
+grey-pin layer covering the full island-wide directory.
 
 **Still placeholder:** the individual stall markers inside each hawker
 centre. There is no public dataset at the stall level, so these are

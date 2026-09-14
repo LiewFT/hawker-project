@@ -185,12 +185,11 @@ if (mapEl && window.L) {
   const dirIcon = L.divIcon({ className: '', html: '<div class="dir-pin"></div>', iconSize: [12, 12] });
 
   // Full hawker centre directory (name, lat, lng, short address, food stall
-  // count) sourced from NEA's official dataset. These are shown as a
-  // clustered layer -- nearby points group into a single number bubble that
-  // "explodes" into individual pins on zoom, so 70+ locations stay readable
-  // instead of turning into a wall of pins. A handful of the newest hawker
-  // centres (opened after this dataset's last snapshot) aren't included yet
-  // since no official coordinate exists for them -- see the note in chat.
+  // count) sourced from NEA's official dataset (data.gov.sg, snapshot Nov
+  // 2025). These are shown as a clustered layer -- nearby points group into
+  // a single number bubble that "explodes" into individual pins on zoom, so
+  // 100+ locations stay readable instead of turning into a wall of pins.
+  // Centres still under construction are excluded since they aren't open yet.
   const directoryCentres = [
     ['Ci Yuan Hawker Centre', 1.3749377, 103.8829472, '51 Hougang Ave 9', 40],
     ['Ayer Rajah Market', 1.31195998, 103.7591019, '502 West Coast Drive', 0],
@@ -262,6 +261,54 @@ if (mapEl && window.L) {
     ['Jurong West Hawker Centre', 1.34122300, 103.697374, '50 Jurong West St 61', 34],
     ['Bukit Merah Central Food Centre', 1.28374004, 103.8171082, '163 Bukit Merah Central', 57],
     ['Pek Kio Market & Food Centre', 1.31620002, 103.8503036, '41A Cambridge Road', 50],
+    ['Golden Mile Food Centre', 1.30314175, 103.86387762, '505 Beach Road', 112],
+    ['Dunman Food Centre', 1.30941789, 103.90182541, '271 Onan Road', 30],
+    ['Beo Crescent Market', 1.28883089, 103.82735389, '38A Beo Crescent', 32],
+    ['Adam Road Food Centre', 1.32415985, 103.81416592, '2 Adam Road', 32],
+    ['50A Marine Terrace', 1.30572974, 103.91573704, '50A Marine Terrace', 24],
+    ['Marine Parade Central Market & Food Centre', 1.30229656, 103.90634383, '84 Marine Parade Central', 55],
+    ['Kampung Admiralty Hawker Centre', 1.43974952, 103.80072071, '676 Woodlands Drive 71', 43],
+    ['Market Street Hawker Centre', 1.28390006, 103.85000596, '86 Market Street', 53],
+    ['Marsiling Lane Blk 20/21', 1.44341624, 103.77700610, '20 Marsiling Lane', 52],
+    ['Marsiling Mall Hawker Centre', 1.43354318, 103.77988189, '4 Woodlands Street 12', 70],
+    ['Albert Centre', 1.30110202, 103.85411578, '270 Queen Street', 86],
+    ['Sims Vista Market & Food Centre', 1.31703502, 103.87930986, '49 Sims Place', 66],
+    ['Teban Gardens Market & Food Centre', 1.32083109, 103.74274812, '37A Teban Gardens Road', 28],
+    ['Telok Blangah Food Centre', 1.27335599, 103.80761813, '79 Telok Blangah Drive', 40],
+    ['Telok Blangah Market', 1.27389077, 103.80790034, '82 Telok Blangah Drive', 0],
+    ['Telok Blangah Rise Market', 1.27276129, 103.82236354, '36 Telok Blangah Rise', 24],
+    ['Toa Payoh Vista Market', 1.33455075, 103.85200351, '74 Lorong 4 Toa Payoh', 10],
+    ['Telok Blangah Crescent Market & Food Centre', 1.27736813, 103.81865152, '11 Telok Blangah Crescent', 56],
+    ['Teck Ghee Square', 1.36265411, 103.85528830, '409 Ang Mo Kio Ave 10', 40],
+    ['Cheng San Market & Cooked Food Centre', 1.37277209, 103.85445796, '527 Ang Mo Kio Ave 10', 50],
+    ['Mayflower Market', 1.37452774, 103.83917606, '160 Ang Mo Kio Ave 4', 40],
+    ['Ang Mo Kio 628 Market', 1.38098762, 103.84062809, '628 Ang Mo Kio Ave 4', 52],
+    ['Bendemeer Market & Food Centre', 1.31921668, 103.86302092, '29 Bendemeer Road', 88],
+    ['Tekka Centre', 1.30618664, 103.85058557, '665 Buffalo Road', 119],
+    ['Blk 117 Aljunied Market & Food Centre', 1.32064637, 103.88702414, '117 Aljunied Ave 2', 79],
+    ['Alexandra Village Food Centre', 1.28630594, 103.80449264, '120 Bukit Merah Lane 1', 88],
+    ['Changi Village Hawker Centre', 1.38915165, 103.98824525, '2 Changi Village Road', 87],
+    ['80 Circuit Road Market & Food Centre', 1.32783415, 103.88710267, '80 Circuit Road', 16],
+    ['Haig Road Market & Cooked Food Centre', 1.31510752, 103.89558794, '13 Haig Road', 72],
+    ['Havelock Road Cooked Food Centre', 1.28797052, 103.82962341, '22A Havelock Road', 30],
+    ['Hawker Centre @ Our Tampines Hub', 1.35313360, 103.94040814, '1 Tampines Walk', 42],
+    ['Jalan Batu Hawker Centre', 1.30236035, 103.88390947, '4A Jalan Batu', 36],
+    ['Whampoa Makan Place', 1.32306494, 103.85499618, '90 Whampoa Drive', 80],
+    ['Whampoa Drive Market', 1.32342819, 103.85406020, '91 Whampoa Drive', 52],
+    ['Margaret Drive Hawker Centre', 1.29748656, 103.80469380, '38A Margaret Drive', 38],
+    ['Anchorvale Village Hawker Centre', 1.39679315, 103.88843734, '339 Anchorvale Road', 36],
+    ['Fernvale Hawker Centre & Market', 1.39172209, 103.87703907, '21 Sengkang West Avenue', 28],
+    ['One Punggol Hawker Centre', 1.40874765, 103.90516946, '1 Punggol Drive', 34],
+    ['Bukit Canberra Hawker Centre', 1.44826336, 103.82276363, '21 Canberra Link', 44],
+    ['Punggol Coast Hawker Centre', 1.41451801, 103.90854260, '84 Punggol Way', 40],
+    ['Senja Hawker Centre', 1.38719400, 103.76108398, '2 Senja Close', 28],
+    ['Buangkok Hawker Centre', 1.38298163, 103.89272101, '70 Compassvale Bow', 38],
+    ['Bukit Batok West Hawker Centre', 1.35544583, 103.74207854, '469A Bukit Batok West Avenue 9', 22],
+    ['Woodleigh Village Hawker Centre', 1.33979101, 103.87201377, '202C Woodleigh Link', 40],
+    ['Bukit Timah Interim Hawker Centre', 1.34078792, 103.77521471, '2A Jalan Seh Chuan', 78],
+    ['Amoy Street Food Centre', 1.27923121, 103.84661927, '7 Maxwell Road', 134],
+    ['Sembawang Hills Food Centre', 1.37231949, 103.82901815, '590 Upper Thomson Road', 36],
+    ['Berseh Food Centre', 1.30734411, 103.85688878, '166 Jalan Besar', 66],
   ];
 
   const directoryCluster = L.markerClusterGroup({ maxClusterRadius: 50 });
