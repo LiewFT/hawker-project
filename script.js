@@ -349,8 +349,28 @@ if (mapEl && window.L) {
 
   let activeStallLayer = null;
 
+  // flyTo() eases both pan and zoom together along a curve that becomes
+  // numerically unstable -- a brief violent shake -- whenever the start
+  // and end zoom levels are identical (a known Leaflet quirk). That's
+  // exactly what happens when hopping between two hawker centres while
+  // already zoomed in to STALL_ZOOM, or re-clicking the one you're on.
+  // Route those cases through setView/panTo instead, which don't use
+  // that curve, and reserve flyTo for moves that actually change zoom.
+  function flyToUnlessAlreadyThere(latlng, zoom) {
+    const target = L.latLng(latlng);
+    const sameZoom = map.getZoom() === zoom;
+    const alreadyThere = sameZoom && map.getCenter().distanceTo(target) < 5;
+    if (alreadyThere) {
+      map.setView(target, zoom, { animate: false });
+    } else if (sameZoom) {
+      map.panTo(target, { animate: true, duration: 0.6 });
+    } else {
+      map.flyTo(target, zoom, { duration: 0.9 });
+    }
+  }
+
   function openHawkerCentre(hc, focusStallName) {
-    map.flyTo([hc.lat, hc.lng], STALL_ZOOM, { duration: 0.9 });
+    flyToUnlessAlreadyThere([hc.lat, hc.lng], STALL_ZOOM);
 
     if (activeStallLayer) {
       map.removeLayer(activeStallLayer);
@@ -440,7 +460,7 @@ if (mapEl && window.L) {
       btn.addEventListener('click', () => {
         const m = matches[i];
         if (m.type === 'directory') {
-          map.flyTo([m.lat, m.lng], STALL_ZOOM, { duration: 0.9 });
+          flyToUnlessAlreadyThere([m.lat, m.lng], STALL_ZOOM);
           if (mapBack) mapBack.hidden = false;
           if (mapTitle) mapTitle.textContent = m.label;
         } else {
@@ -463,7 +483,7 @@ if (mapEl && window.L) {
   });
 
   function resetMap() {
-    map.flyTo(SG_CENTER, SG_ZOOM, { duration: 0.9 });
+    flyToUnlessAlreadyThere(SG_CENTER, SG_ZOOM);
     if (activeStallLayer) {
       map.removeLayer(activeStallLayer);
       activeStallLayer = null;
