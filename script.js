@@ -113,7 +113,7 @@ if (mapEl && window.L) {
       stalls: [
         { name: 'Golden Ladle Wanton Mee', cuisine: 'Noodles', rating: 4.5, dlat: 0.00035, dlng: -0.00030 },
         { name: 'Silver Bowl Porridge', cuisine: 'Porridge', rating: 4.2, dlat: -0.00020, dlng: 0.00025 },
-        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', rating: 4.6, dlat: 0.00020, dlng: 0.00040 },
+        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', rating: 4.6, dlat: 0.00020, dlng: 0.00040, photo: 'images/stalls/char-kway-teow.png' },
       ],
     },
     {
@@ -123,13 +123,14 @@ if (mapEl && window.L) {
         { name: 'Teochew Corner Shui Kueh', cuisine: 'Teochew', rating: 4.4, dlat: 0.00025, dlng: -0.00020 },
         { name: 'Market Wok Hokkien Mee', cuisine: 'Hokkien Mee', rating: 4.3, dlat: -0.00030, dlng: 0.00015 },
         { name: 'Lor Mee Corner', cuisine: 'Lor Mee', rating: 4.1, dlat: 0.00010, dlng: 0.00035 },
+        { name: 'Heritage Toast & Kopi', cuisine: 'Kaya Toast', rating: 4.3, dlat: -0.00010, dlng: -0.00035, photo: 'images/stalls/kaya-toast.png' },
       ],
     },
     {
       id: 'maxwell', name: 'Maxwell Food Centre', lat: 1.28055096, lng: 103.8444595,
       address: '1 Kadayanallur Street, Singapore 069184', stallCount: 103,
       stalls: [
-        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', rating: 4.5, dlat: 0.00020, dlng: -0.00025 },
+        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', rating: 4.5, dlat: 0.00020, dlng: -0.00025, photo: 'images/stalls/hainanese-chicken-rice.png' },
         { name: 'Harbour Fuzhou Oyster Cake', cuisine: 'Snacks', rating: 4.0, dlat: -0.00025, dlng: 0.00020 },
         { name: 'Northern Style La Mian & Xiao Long Bao', cuisine: 'Noodles', rating: 4.3, dlat: 0.00030, dlng: 0.00030 },
       ],
@@ -141,6 +142,7 @@ if (mapEl && window.L) {
         { name: "Uncle Kok's Frog Leg Bee Hoon", cuisine: 'Bee Hoon', rating: 4.8, dlat: 0.00030, dlng: -0.00020 },
         { name: 'Kampung Flavours Nasi Padang', cuisine: 'Malay', rating: 4.4, dlat: -0.00020, dlng: 0.00030 },
         { name: 'Sweet Steam Putu Piring', cuisine: 'Dessert', rating: 4.2, dlat: 0.00015, dlng: 0.00035 },
+        { name: 'Spice Trail Laksa', cuisine: 'Laksa', rating: 4.5, dlat: -0.00035, dlng: -0.00015, photo: 'images/stalls/laksa.png' },
       ],
     },
     {
