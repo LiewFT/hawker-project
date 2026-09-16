@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mustgotoeat.example/schema/stall.schema.json",
+  "title": "Stall",
+  "description": "One stall inside one venue. Lives in data/venues/<venue-slug>.json, one file per venue holding an array of these. The unit number is the address; the name is the tenant -- a stall renaming must not break its identity (venue-slug + unit).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["unit", "status", "verified", "collected_by"],
+  "properties": {
+    "unit": {
+      "type": "string",
+      "pattern": "^[0-9A-Za-z]+-[0-9A-Za-z]+$",
+      "description": "Normalised to e.g. 01-23, # stripped. This plus the venue slug is the stall's permanent identity."
+    },
+    "name": {
+      "type": "string",
+      "description": "Required when status is \"open\". Omitted (never a blank string) when unknown."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["open", "closed", "unknown"]
+    },
+    "cuisine": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["must-try", "cheap-eats", "breakfast", "halal", "drinks"] }
+    },
+    "halal": {
+      "type": "boolean",
+      "description": "Only ever set true with a cited MUIS certificate number recorded alongside it (outside this schema, in the collection notes) -- never inferred."
+    },
+    "dishes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "price_sgd": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "hours": {
+      "type": "object",
+      "description": "Keyed by lowercase 3-letter day, e.g. { \"tue\": \"11:00-19:30\" }. Omit days that are unknown -- do not guess.",
+      "additionalProperties": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]$" }
+    },
+    "payment": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["cash", "paynow", "card", "nets"] }
+    },
+    "direction_hint": {
+      "type": "string",
+      "description": "One line of human-written orientation, e.g. \"Level 1, aisle nearest Maxwell Road, opposite the drinks stall.\" This replaces a drawn floor plan."
+    },
+    "photos": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Relative paths. Every entry must have a lawful-source sidecar per the rights policy -- shot by the team, submitted through the tip flow with a licence grant, or sent by the owner with written confirmation. Never AI-generated, never lifted from a blog or Instagram."
+    },
+    "editorial": {
+      "type": "string",
+      "enum": ["pick", "listed"],
+      "description": "\"pick\" is a label (Tony's Picks), not a score. There is no star rating field in this schema -- none is ever invented."
+    },
+    "collected_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Initials of whoever verified this record in person. Required -- a record with no accountable collector does not publish."
+    },
+    "verified": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this stall was last checked in person. A record past its re-check deadline (90/180/365 days by tier) displays as stale, never silently as current."
+    },
+    "moved_to": {
+      "type": "string",
+      "description": "Set only on a tombstoned stall record. Stalls are never deleted -- a closed stall becomes \"Closed as of <date>\", still indexed."
+    }
+  }
+}

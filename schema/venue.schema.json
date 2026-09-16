@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mustgotoeat.example/schema/venue.schema.json",
+  "title": "Venue",
+  "description": "One hawker centre, food court, or cafe. Lives in data/venues.json (index, all venues) and is the source for the per-venue file at data/venues/<slug>.json once stalls exist.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["slug", "name", "type", "lat", "lng", "address", "stall_count_nea", "stalls_documented", "status", "verified"],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "URL identity. Never changes even if the venue is renamed or reclassified -- reclassifying a cafe as a food court must not change its URL."
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": ["hawker", "foodcourt", "cafe"],
+      "description": "Scope is hawker centres, food courts and cafes only. No restaurants."
+    },
+    "region": {
+      "type": "string",
+      "enum": ["Central", "East", "North", "North-East", "West"],
+      "description": "One of the five official URA planning regions -- not an informal compass direction. Omit (do not guess) until classified against real boundary data."
+    },
+    "lat": { "type": "number", "minimum": 1.0, "maximum": 1.5 },
+    "lng": { "type": "number", "minimum": 103.5, "maximum": 104.2 },
+    "address": { "type": "string", "minLength": 1 },
+    "postal": { "type": "string", "pattern": "^[0-9]{6}$" },
+    "nearest_mrt": { "type": "string" },
+    "stall_count_nea": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "From the NEA dataset, where available. Not the same as stalls_documented."
+    },
+    "stalls_documented": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Computed from how many stall records exist for this venue. Never hand-typed."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["open", "under_construction", "closed"]
+    },
+    "verified": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this venue record was last checked against a real source. Every venue and stall record carries this; a record past its re-check deadline displays as stale."
+    },
+    "moved_to": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Set only on a tombstoned venue record that has been superseded by a new one. Records are never deleted."
+    }
+  }
+}

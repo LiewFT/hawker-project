@@ -111,7 +111,7 @@ const hawkerCentres = [
       stalls: [
         { name: 'Golden Ladle Wanton Mee', cuisine: 'Noodles', rating: 4.5, dlat: 0.00035, dlng: -0.00030 },
         { name: 'Silver Bowl Porridge', cuisine: 'Porridge', rating: 4.2, dlat: -0.00020, dlng: 0.00025 },
-        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', rating: 4.6, dlat: 0.00020, dlng: 0.00040, photo: 'images/stalls/char-kway-teow.png' },
+        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', rating: 4.6, dlat: 0.00020, dlng: 0.00040 },
       ],
     },
     {
@@ -121,14 +121,13 @@ const hawkerCentres = [
         { name: 'Teochew Corner Shui Kueh', cuisine: 'Teochew', rating: 4.4, dlat: 0.00025, dlng: -0.00020 },
         { name: 'Market Wok Hokkien Mee', cuisine: 'Hokkien Mee', rating: 4.3, dlat: -0.00030, dlng: 0.00015 },
         { name: 'Lor Mee Corner', cuisine: 'Lor Mee', rating: 4.1, dlat: 0.00010, dlng: 0.00035 },
-        { name: 'Heritage Toast & Kopi', cuisine: 'Kaya Toast', rating: 4.3, dlat: -0.00010, dlng: -0.00035, photo: 'images/stalls/kaya-toast.png' },
       ],
     },
     {
       id: 'maxwell', name: 'Maxwell Food Centre', lat: 1.28055096, lng: 103.8444595,
       address: '1 Kadayanallur Street, Singapore 069184', stallCount: 103,
       stalls: [
-        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', rating: 4.5, dlat: 0.00020, dlng: -0.00025, photo: 'images/stalls/hainanese-chicken-rice.png' },
+        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', rating: 4.5, dlat: 0.00020, dlng: -0.00025 },
         { name: 'Harbour Fuzhou Oyster Cake', cuisine: 'Snacks', rating: 4.0, dlat: -0.00025, dlng: 0.00020 },
         { name: 'Northern Style La Mian & Xiao Long Bao', cuisine: 'Noodles', rating: 4.3, dlat: 0.00030, dlng: 0.00030 },
       ],
@@ -140,7 +139,6 @@ const hawkerCentres = [
         { name: "Uncle Kok's Frog Leg Bee Hoon", cuisine: 'Bee Hoon', rating: 4.8, dlat: 0.00030, dlng: -0.00020 },
         { name: 'Kampung Flavours Nasi Padang', cuisine: 'Malay', rating: 4.4, dlat: -0.00020, dlng: 0.00030 },
         { name: 'Sweet Steam Putu Piring', cuisine: 'Dessert', rating: 4.2, dlat: 0.00015, dlng: 0.00035 },
-        { name: 'Spice Trail Laksa', cuisine: 'Laksa', rating: 4.5, dlat: -0.00035, dlng: -0.00015, photo: 'images/stalls/laksa.png' },
       ],
     },
     {
@@ -660,7 +658,7 @@ const I18N = {
   stallAddress: { en: '📍 335 Smith St, #02-111, Singapore (placeholder unit)', zh: '📍 新加坡史密斯街335号 #02-111（占位单位）' },
   stallHours: { en: '🕐 Open 10am–8pm, closed Mon', zh: '🕐 营业时间 10am–8pm，星期一休息' },
   stallPrice: { en: '💵 $4–$6 per pax', zh: '💵 每人 $4–$6' },
-  stallRatingSummary: { en: '4.5 editorial score · 128 reader reviews', zh: '编辑评分 4.5 · 128 条读者评价' },
+  stallRatingSummary: { en: '4.5 editorial score', zh: '编辑评分 4.5' },
   stallWatchTasting: { en: '▶ Watch the tasting', zh: '▶ 观看试吃视频' },
   stallByline: { en: 'Reviewed by the Makan Trail team · Published 3 Sept 2026 · Taste-tested in person, full price', zh: '由 Makan Trail 团队评测 · 2026年9月3日发布 · 亲自试吃，全额付费' },
   stallFictionalNote: { en: 'This is a fictional demo stall used to preview the review layout — not a real business.', zh: '这是一个虚构的示例摊位，用于预览评价页面排版——并非真实商家。' },
@@ -680,8 +678,6 @@ const I18N = {
   stallCashOnly: { en: 'Cash only', zh: '只收现金' },
   stallNearestMrt: { en: 'Nearest MRT', zh: '最近地铁站' },
   stallNearestMrtValue: { en: 'Chinatown (5 min walk)', zh: '牛车水站（步行5分钟）' },
-  stallReaderReviews: { en: 'Reader<br />reviews.', zh: '读者<br />评价。' },
-  stallReviewCount: { en: '128 reviews · average 4.3 stars', zh: '128 条评价 · 平均 4.3 星' },
 
   // --- about.html ---
   aboutTitle: { en: 'About<br />Makan Trail.', zh: '关于<br />Makan Trail。' },
