@@ -1,0 +1,31 @@
+name: Validate data
+
+# Runs on every push/PR that touches data or schema files, so a record
+# missing a required field (verified, collected_by, etc.) fails the build
+# instead of reaching the site silently incomplete. See section 04/05 of
+# the MustGoToEat plan: "a hand-typed count is the first false fact a site
+# acquires" -- the same discipline applies to any hand-edited data file.
+on:
+  push:
+    paths:
+      - 'data/**'
+      - 'schema/**'
+      - 'scripts/validate-data.js'
+      - 'package.json'
+  pull_request:
+    paths:
+      - 'data/**'
+      - 'schema/**'
+      - 'scripts/validate-data.js'
+      - 'package.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run validate-data
