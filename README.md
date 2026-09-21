@@ -14,7 +14,8 @@ A map of every hawker centre in Singapore, plus a demo layer of sample stalls.
   stalls. They live in `hawkerCentres` in `script.js`.
 
 ## Pages
-- `index.html` — clustered map (real venues + demo centres), search, demo sections
+- `index.html` — clustered map (real venues + demo centres), search, real
+  category browser, demo sections
 - `venue.html?v=<slug>` — a real venue: facts, mini map, Google Maps link, checked
   date (stale label past its deadline), coverage line, and a stall list once
   `data/venues/<slug>.json` exists (hidden below 30% coverage)
@@ -25,15 +26,21 @@ Static site (GitHub Pages), currently `noindex`.
 
 ## Code
 - `script.js` — map, search, EN/中文 dictionary (`I18N`), demo stall page. Exposes
-  `window.MT = { t, getLang }` and fires `langchange` so the venue page can share
+  `window.MT = { t, getLang }` and fires `langchange` so the ES modules can share
   the same dictionary.
-- `js/venue.js`, `js/data.js`, `js/i18n.js` — the venue page (ES modules; DOM built
-  with `textContent`)
+- `js/venue.js` (venue page), `js/categories.js` (homepage category browser),
+  `js/stalls.js` (stall card), `js/data.js`, `js/i18n.js` — ES modules; DOM built
+  with `textContent`
 
 ## Data (`data/`, validated in CI against `schema/`)
 - `npm run validate-data` runs the same check CI runs.
 - `data/venues/<slug>.json` — real stalls, added only after being checked in
   person. None exist yet.
+- Categories (Must try, Cheap eats, Breakfast, Halal, Drinks) come from real stall
+  `tags`, so they are empty until stalls are collected; demo stalls never count.
+  A tag needs its evidence or CI fails: `halal` needs `halal: true` and a
+  `muis_cert` number; `cheap-eats` needs a dish at or under $5 (`CHEAP_MAX_SGD`,
+  in `scripts/validate-data.js` and `js/data.js`).
 - `pipeline/SETUP.md` — Google Form → Sheet → nightly PR pipeline (needs a Google account).
 
 ## Map

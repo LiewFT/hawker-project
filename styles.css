@@ -308,3 +308,7 @@ button.popup-btn{font-family:'Work Sans';cursor:pointer}
 .info-row{gap:16px}
 .info-row span:last-child{text-align:right}
 @media(max-width:900px){.venue-layout{grid-template-columns:1fr}}
+.badge-halal{background:var(--enamel);color:#fff}
+.stall-list-wide{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));max-width:none}
+#categoryChips .chip{min-height:44px}
+#categoryResults{margin-top:18px}

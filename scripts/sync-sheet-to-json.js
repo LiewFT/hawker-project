@@ -40,6 +40,10 @@ function rowToStall(row) {
   if (tags.length) stall.tags = tags;
   const payment = splitList(row.payment);
   if (payment.length) stall.payment = payment;
+  if (row.muis_cert) {
+    stall.muis_cert = String(row.muis_cert).trim();
+    stall.halal = true;
+  }
   if (row.signature_dish) {
     stall.dishes = [{
       name: row.signature_dish,

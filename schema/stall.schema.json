@@ -5,7 +5,12 @@
   "description": "One stall inside one venue. Lives in data/venues/<venue-slug>.json, one file per venue holding an array of these. The unit number is the address; the name is the tenant -- a stall renaming must not break its identity (venue-slug + unit).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["unit", "status", "verified", "collected_by"],
+  "required": [
+    "unit",
+    "status",
+    "verified",
+    "collected_by"
+  ],
   "properties": {
     "unit": {
       "type": "string",
@@ -18,40 +23,79 @@
     },
     "status": {
       "type": "string",
-      "enum": ["open", "closed", "unknown"]
+      "enum": [
+        "open",
+        "closed",
+        "unknown"
+      ]
     },
     "cuisine": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "tags": {
       "type": "array",
-      "items": { "type": "string", "enum": ["must-try", "cheap-eats", "breakfast", "halal", "drinks"] }
+      "items": {
+        "type": "string",
+        "enum": [
+          "must-try",
+          "cheap-eats",
+          "breakfast",
+          "halal",
+          "drinks"
+        ]
+      },
+      "description": "Filter tags shown on the site. halal needs muis_cert; cheap-eats needs at least one dish priced at or under the threshold in scripts/validate-data.js."
     },
     "halal": {
       "type": "boolean",
-      "description": "Only ever set true with a cited MUIS certificate number recorded alongside it (outside this schema, in the collection notes) -- never inferred."
+      "description": "True only with a MUIS certificate number recorded in muis_cert. Never inferred from the cuisine or the stall name."
+    },
+    "muis_cert": {
+      "type": "string",
+      "minLength": 1,
+      "description": "MUIS halal certificate number, as sighted on the stall. Required whenever halal is true or the halal tag is used."
     },
     "dishes": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "price_sgd": { "type": "number", "minimum": 0 }
+          "name": {
+            "type": "string"
+          },
+          "price_sgd": {
+            "type": "number",
+            "minimum": 0
+          }
         }
       }
     },
     "hours": {
       "type": "object",
       "description": "Keyed by lowercase 3-letter day, e.g. { \"tue\": \"11:00-19:30\" }. Omit days that are unknown -- do not guess.",
-      "additionalProperties": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]$" }
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]$"
+      }
     },
     "payment": {
       "type": "array",
-      "items": { "type": "string", "enum": ["cash", "paynow", "card", "nets"] }
+      "items": {
+        "type": "string",
+        "enum": [
+          "cash",
+          "paynow",
+          "card",
+          "nets"
+        ]
+      }
     },
     "direction_hint": {
       "type": "string",
@@ -59,12 +103,17 @@
     },
     "photos": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Relative paths. Every entry must have a lawful-source sidecar per the rights policy -- shot by the team, submitted through the tip flow with a licence grant, or sent by the owner with written confirmation. Never AI-generated, never lifted from a blog or Instagram."
     },
     "editorial": {
       "type": "string",
-      "enum": ["pick", "listed"],
+      "enum": [
+        "pick",
+        "listed"
+      ],
       "description": "\"pick\" is a label (Tony's Picks), not a score. There is no star rating field in this schema -- none is ever invented."
     },
     "collected_by": {

@@ -22,6 +22,21 @@ export async function loadStalls(slug) {
   }
 }
 
+// Category filters. Each id is a stall tag from schema/stall.schema.json, and a
+// stall only carries a tag when its record has the evidence (see validate-data.js).
+// Keep in sync with CHEAP_MAX_SGD in scripts/validate-data.js.
+export const CHEAP_MAX_SGD = 5;
+export const CATEGORIES = ['must-try', 'cheap-eats', 'breakfast', 'halal', 'drinks'];
+
+// Every stall we have, paired with its venue. Only venues that report stalls
+// are fetched, so with no fieldwork yet this makes no requests at all.
+export async function loadAllStalls(venues) {
+  const withStalls = venues.filter((v) => v.stalls_documented > 0);
+  const lists = await Promise.all(withStalls.map(async (venue) => (
+    (await loadStalls(venue.slug)).map((stall) => ({ venue, stall })))));
+  return lists.flat();
+}
+
 export function venueUrl(slug) {
   return `venue.html?v=${encodeURIComponent(slug)}`;
 }

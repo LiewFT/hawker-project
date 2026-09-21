@@ -27,6 +27,7 @@
       <span class="brand-word">MAKAN TRAIL</span>
     </a>
     <nav class="main-nav" id="mainNav">
+      <a href="#categories" data-i18n="navCategories">Categories</a>
       <a href="#browse" data-i18n="navBrowse">Browse</a>
       <a href="#reviews" data-i18n="navReviews">Reviews</a>
       <a href="#process" data-i18n="navProcess">How we review</a>
@@ -83,6 +84,16 @@
       <div class="ticker-inner">
         <span data-i18n="tickerHawker">HAWKER STALLS</span><span data-i18n="tickerKopitiam">KOPITIAM</span><span data-i18n="tickerFoodCourts">FOOD COURTS</span><span data-i18n="tickerCafes">CAFES</span><span data-i18n="tickerHalal">HALAL</span><span data-i18n="tickerLateNight">LATE NIGHT</span><span data-i18n="tickerCheapEats">CHEAP EATS</span>
       </div>
+    </section>
+
+    <section id="categories" class="browse-section">
+      <div class="section-heading">
+        <h2 id="categoriesHeading" data-i18n="categoriesHeading">What are<br />you after?</h2>
+        <p data-i18n="categoriesText">Pick a category to see stalls that have been checked in person and tagged for it.</p>
+      </div>
+      <div class="chip-row" id="categoryChips" role="group" aria-labelledby="categoriesHeading"></div>
+      <p class="visually-hidden" id="categoryStatus" aria-live="polite"></p>
+      <div id="categoryResults"></div>
     </section>
 
     <section id="browse" class="browse-section">
@@ -207,5 +218,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
   <script src="script.js"></script>
+  <script type="module" src="js/categories.js"></script>
 </body>
 </html>
