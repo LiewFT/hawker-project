@@ -1,38 +1,48 @@
 # Makan Trail
 
-Every hawker centre in Singapore on one map. Each record shows the date it was
-last checked; anything past its re-check deadline is labelled stale instead of
-being shown as current. No ratings, no reader reviews, nothing invented.
+A map of every hawker centre in Singapore, plus a demo layer of sample stalls.
+
+## Two kinds of content
+- **Real:** all 124 NEA hawker centres in `data/venues.json` (name, address,
+  location, NEA stall count, status, checked date). Each has a page at
+  `venue.html?v=<slug>`. Facts come from NEA's dataset on data.gov.sg
+  (Open Data Licence). `stalls_documented` is computed, never typed.
+- **Demo:** the six featured centres (red pins) carry fictional sample stalls
+  with dish illustrations, the stall detail pages, and the homepage
+  "Latest tastings" cards. They are labelled **Demo** in the map panel and
+  under a DEMO CONTENT banner on the homepage, and are not counted as real
+  stalls. They live in `hawkerCentres` in `script.js`.
 
 ## Pages
-- `index.html` — map of all venues, search, and a filterable list
-- `venue.html?v=<slug>` — one venue: facts, mini map, Google Maps link, and its
-  stall list once stalls have been collected
+- `index.html` — clustered map (real venues + demo centres), search, real
+  category browser, demo sections
+- `venue.html?v=<slug>` — a real venue: facts, mini map, Google Maps link, checked
+  date (stale label past its deadline), coverage line, and a stall list once
+  `data/venues/<slug>.json` exists (hidden below 30% coverage)
+- `stall.html?hc=<id>&stall=<slug>` — demo stall page
 - `about.html`, `privacy.html` (placeholder, needs legal review), `404.html`
 
-The site is static (GitHub Pages) and currently `noindex` until launch.
+Static site (GitHub Pages), currently `noindex`.
 
-## Code layout
-- `js/data.js` — loads and derives everything from `data/`; no invented values
-- `js/home.js`, `js/venue.js` — page logic; `js/stalls.js` — stall card shared by both
-- `js/i18n.js`, `js/dictionary.js` — EN / 中文 toggle (every string in the dictionary)
-- `js/common.js` — language toggle and mobile menu, on every page
+## Code
+- `script.js` — map, search, EN/中文 dictionary (`I18N`), demo stall page. Exposes
+  `window.MT = { t, getLang }` and fires `langchange` so the ES modules can share
+  the same dictionary.
+- `js/venue.js` (venue page), `js/categories.js` (homepage category browser),
+  `js/stalls.js` (stall card), `js/data.js`, `js/i18n.js` — ES modules; DOM built
+  with `textContent`
 
 ## Data (`data/`, validated in CI against `schema/`)
-- `data/venues.json` — all 124 NEA hawker centres. Facts from NEA's dataset on
-  data.gov.sg (Open Data Licence). `stalls_documented` is computed, never typed.
-- `data/venues/<slug>.json` — stalls for one venue, added only after being checked
-  in person. Absent for every venue today. Until a venue has at least 30% of its
-  stalls logged, its page shows the coverage line but no stall list.
-- Categories (Must try, Cheap eats, Breakfast, Halal, Drinks) come from stall `tags`, so they are empty until stalls are collected. A tag needs its evidence or CI fails: `halal` needs `halal: true` and a `muis_cert` number; `cheap-eats` needs a dish at or under $5 (`CHEAP_MAX_SGD`, in `scripts/validate-data.js` and `js/data.js`).
 - `npm run validate-data` runs the same check CI runs.
+- `data/venues/<slug>.json` — real stalls, added only after being checked in
+  person. None exist yet.
+- Categories (Must try, Cheap eats, Breakfast, Halal, Drinks) come from real stall
+  `tags`, so they are empty until stalls are collected; demo stalls never count.
+  A tag needs its evidence or CI fails: `halal` needs `halal: true` and a
+  `muis_cert` number; `cheap-eats` needs a dish at or under $5 (`CHEAP_MAX_SGD`,
+  in `scripts/validate-data.js` and `js/data.js`).
 - `pipeline/SETUP.md` — Google Form → Sheet → nightly PR pipeline (needs a Google account).
 
 ## Map
-OneMap raster tiles (no API key needed), locked to Singapore. Attribution to
-NEA / data.gov.sg and OneMap / SLA stays visible.
-
-## Not built yet
-Region filter (needs official planning-region boundaries), dish-first search
-(needs stall data), Makan Trails, closure tracker, tip line, per-page share
-images, and the MustGoToEat rebrand and domain (ownership decisions are open).
+Leaflet with OneMap raster tiles (no API key), locked to Singapore.
+Attribution to NEA / data.gov.sg and OneMap / SLA stays visible.

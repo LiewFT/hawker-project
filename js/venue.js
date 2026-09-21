@@ -2,7 +2,6 @@
 // data/venues.json and, once stalls have been collected, that venue's stall
 // list from data/venues/<slug>.json. Every record shows its checked date;
 // past its re-check deadline it is labelled stale, never shown as current.
-import './common.js';
 import { t } from './i18n.js';
 import { stallCard, stamp } from './stalls.js';
 import {
@@ -70,7 +69,7 @@ function render() {
     el('div', { class: 'venue-layout' },
       el('div', {},
         el('div', { id: 'venueMap', class: 'venue-map', role: 'img', 'aria-label': t('venueMapLabel', { name: venue.name }) }),
-        el('p', { class: 'map-credit', text: t('mapCredit') })),
+        el('p', { class: 'map-credit', text: t('venueMapCredit') })),
       el('aside', { class: 'info-card' },
         el('h3', { text: t('atAGlance') }),
         infoRow(t('address'), venue.address),
