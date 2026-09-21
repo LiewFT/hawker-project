@@ -109,9 +109,9 @@ const hawkerCentres = [
       id: 'chinatown', name: 'Chinatown Complex', lat: 1.2823, lng: 103.8428802,
       address: '335 Smith Street, Singapore 050335', stallCount: 226,
       stalls: [
-        { name: 'Golden Ladle Wanton Mee', cuisine: 'Noodles', dlat: 0.00035, dlng: -0.00030 },
+        { name: 'Golden Ladle Wanton Mee', cuisine: 'Noodles', dlat: 0.00035, dlng: -0.00030, photo: 'images/stalls/wanton-mee.svg' },
         { name: 'Silver Bowl Porridge', cuisine: 'Porridge', dlat: -0.00020, dlng: 0.00025 },
-        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', dlat: 0.00020, dlng: 0.00040 },
+        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', dlat: 0.00020, dlng: 0.00040, photo: 'images/stalls/char-kway-teow.svg' },
       ],
     },
     {
@@ -127,7 +127,7 @@ const hawkerCentres = [
       id: 'maxwell', name: 'Maxwell Food Centre', lat: 1.28055096, lng: 103.8444595,
       address: '1 Kadayanallur Street, Singapore 069184', stallCount: 103,
       stalls: [
-        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', dlat: 0.00020, dlng: -0.00025 },
+        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', dlat: 0.00020, dlng: -0.00025, photo: 'images/stalls/chicken-rice.svg' },
         { name: 'Harbour Fuzhou Oyster Cake', cuisine: 'Snacks', dlat: -0.00025, dlng: 0.00020 },
         { name: 'Northern Style La Mian & Xiao Long Bao', cuisine: 'Noodles', dlat: 0.00030, dlng: 0.00030 },
       ],
@@ -136,7 +136,7 @@ const hawkerCentres = [
       id: 'geylang', name: 'Geylang Serai Market', lat: 1.31688809, lng: 103.8974075,
       address: '1 Geylang Serai, Singapore 402001', stallCount: 63,
       stalls: [
-        { name: "Uncle Kok's Frog Leg Bee Hoon", cuisine: 'Bee Hoon', dlat: 0.00030, dlng: -0.00020 },
+        { name: "Uncle Kok's Frog Leg Bee Hoon", cuisine: 'Bee Hoon', dlat: 0.00030, dlng: -0.00020, photo: 'images/stalls/frog-leg-claypot.svg' },
         { name: 'Kampung Flavours Nasi Padang', cuisine: 'Malay', dlat: -0.00020, dlng: 0.00030 },
         { name: 'Sweet Steam Putu Piring', cuisine: 'Dessert', dlat: 0.00015, dlng: 0.00035 },
       ],
@@ -155,7 +155,7 @@ const hawkerCentres = [
       address: '500 Clemenceau Avenue North, Singapore 229495', stallCount: 83,
       stalls: [
         { name: 'Circus Lights BBQ Seafood', cuisine: 'Seafood', dlat: 0.00025, dlng: -0.00025 },
-        { name: 'Charcoal Trail Satay', cuisine: 'Satay', dlat: -0.00030, dlng: 0.00015 },
+        { name: 'Charcoal Trail Satay', cuisine: 'Satay', dlat: -0.00030, dlng: 0.00015, photo: 'images/stalls/satay.svg' },
         { name: 'Golden Pan Fried Oyster Omelette', cuisine: 'Local', dlat: 0.00015, dlng: 0.00030 },
       ],
     },
@@ -220,6 +220,14 @@ function renderStallDetail() {
     if (galleryMain) {
       galleryMain.style.background = `url('${stall.photo}') center/cover`;
       galleryMain.classList.remove('photo-a');
+      galleryMain.setAttribute('role', 'img');
+      galleryMain.setAttribute('aria-label', `${stall.name} (dish illustration)`);
+      // Honest label: this is an illustration of the dish, not a photo of the stall.
+      galleryMain.querySelector('.illustration-caption')?.remove();
+      const caption = document.createElement('span');
+      caption.className = 'video-badge illustration-caption';
+      caption.textContent = isZh ? '菜式插图' : 'Dish illustration';
+      galleryMain.appendChild(caption);
     }
   }
 }
@@ -413,7 +421,7 @@ if (mapEl && window.L) {
   function showStallPreview(hc, stall) {
     if (!stallPanel) return;
     const photoHtml = stall.photo
-      ? `<img class="stall-panel-photo" src="${stall.photo}" alt="${stall.name}" />`
+      ? `<img class="stall-panel-photo" src="${stall.photo}" alt="${stall.name} (dish illustration)" />`
       : '';
     const detailUrl = `stall.html?hc=${encodeURIComponent(hc.id)}&stall=${encodeURIComponent(slugify(stall.name))}`;
     stallPanel.innerHTML = `
