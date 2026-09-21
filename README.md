@@ -29,16 +29,6 @@ Static site (GitHub Pages), currently `noindex`.
   the same dictionary.
 - `js/venue.js` (venue page), `js/stalls.js` (stall card), `js/data.js`, `js/i18n.js` —
   ES modules; DOM built with `textContent`
-- `js/reviews-ui.js` (visitor reviews + sign-in on venue pages), `js/backend.js`
-  (Firebase Auth + Firestore), `js/firebase-config.js` (empty until set up)
-
-## Visitor reviews
-Visitors review a real hawker centre on its venue page. They must register with an
-email and a nickname and verify the email first. Backed by Firebase Authentication +
-Firestore (encrypted in transit and at rest by Google; passwords are hashed and never
-reach our code; emails are not stored with reviews). **Off until the site owner sets
-up Firebase:** see `firebase/SETUP.md`; rules are in `firebase/firestore.rules`.
-Demo stalls have no reviews.
 
 ## Data (`data/`, validated in CI against `schema/`)
 - `npm run validate-data` runs the same check CI runs.
