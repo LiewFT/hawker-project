@@ -1,52 +1,37 @@
-# Makan Trail — Homepage & Stall Page Prototype
+# Makan Trail
+
+Every hawker centre in Singapore on one map. Each record shows the date it was
+last checked; anything past its re-check deadline is labelled stale instead of
+being shown as current. No ratings, no reader reviews, nothing invented.
 
 ## Pages
-- `index.html` — homepage: map, browse filters, latest reviews, process, community
-- `stall.html` — stall detail page: gallery, editorial review, reader reviews + submission
-- `about.html` — who's behind the site
-- `privacy.html` — placeholder privacy policy (needs legal review before publishing)
-- `404.html` — custom not-found page
+- `index.html` — map of all venues, search, and a filterable list
+- `venue.html?v=<slug>` — one venue: facts, mini map, Google Maps link, and its
+  stall list once stalls have been collected
+- `about.html`, `privacy.html` (placeholder, needs legal review), `404.html`
 
-## What's fully working right now (no backend needed)
-- Mobile menu, share button, category filter chips, "load more" reviews
-- Interactive Singapore map (Leaflet + OpenStreetMap) using real NEA hawker
-  centre GPS data, locked to Singapore bounds, with search
-- Demo sign-in + review submission flow — fully functional in-browser, but
-  **session-only**: reviews you post disappear on page refresh since there's
-  no database yet. This is intentional, to demonstrate the full UX without
-  needing real infrastructure first.
+The site is static (GitHub Pages) and currently `noindex` until launch.
 
-## What still needs a real backend (your decision needed)
-To make reviews permanent and logins real, you need to pick a backend
-service tied to your own account — I can't provision one for you. Common
-options for a static site like this:
-- **Firebase** (Google) — has a generous free tier, built-in Google/Facebook
-  login, and a database (Firestore) that's straightforward to wire into a
-  static site like this one.
-- **Supabase** — similar free tier, open-source, Postgres-based.
+## Code layout
+- `js/data.js` — loads and derives everything from `data/`; no invented values
+- `js/home.js`, `js/venue.js` — page logic
+- `js/i18n.js`, `js/dictionary.js` — EN / 中文 toggle (every string in the dictionary)
+- `js/common.js` — language toggle and mobile menu, on every page
 
-Once you pick one and create a project, come back and I can help wire the
-real login and review storage into this exact frontend.
+## Data (`data/`, validated in CI against `schema/`)
+- `data/venues.json` — all 124 NEA hawker centres. Facts from NEA's dataset on
+  data.gov.sg (Open Data Licence). `stalls_documented` is computed, never typed.
+- `data/venues/<slug>.json` — stalls for one venue, added only after being checked
+  in person. Absent for every venue today. Until a venue has at least 30% of its
+  stalls logged, its page shows the coverage line but no stall list.
+- `npm run validate-data` runs the same check CI runs.
+- `pipeline/SETUP.md` — Google Form → Sheet → nightly PR pipeline (needs a Google account).
 
-## Map data source
-The hawker centre map uses **real GPS coordinates** from NEA's official
-"Hawker Centres" dataset on data.gov.sg (Open Data Licence — free for
-commercial use), rendered with Leaflet.js + OpenStreetMap tiles (no API key
-needed, no cost). It plots all 124 currently-open hawker centres in
-Singapore (centres still under construction are excluded): 6 are "featured"
-with drill-down stall markers and reviews (Chinatown Complex, Tiong Bahru
-Market, Maxwell Food Centre, Geylang Serai Market, 51 Old Airport Road Food
-Centre, and Newton Food Centre), and the remaining 118 appear as a clustered
-grey-pin layer covering the full island-wide directory.
+## Map
+OneMap raster tiles (no API key needed), locked to Singapore. Attribution to
+NEA / data.gov.sg and OneMap / SLA stays visible.
 
-**Still placeholder:** the individual stall markers inside each hawker
-centre. There is no public dataset at the stall level, so these are
-demonstration points offset a small distance from the real hawker centre
-GPS point. Once the client has a real stall database, each stall marker
-should get its own confirmed coordinate.
-
-## Still placeholder / needs real content
-- Brand name "Makan Trail" — swap for the client's actual chosen name
-- All photos are solid-color placeholders — needs real photos/video
-- Privacy Policy text — needs legal review before publishing
-- Contact page/form — footer "Contact" link is currently a placeholder
+## Not built yet
+Region filter (needs official planning-region boundaries), dish-first search
+(needs stall data), Makan Trails, closure tracker, tip line, per-page share
+images, and the MustGoToEat rebrand and domain (ownership decisions are open).
