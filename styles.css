@@ -278,3 +278,54 @@ h3{font-size:22px;letter-spacing:.015em}
   .gallery-item:first-child{grid-row:span 1;grid-column:span 2;aspect-ratio:16/9}
   .gallery-item{aspect-ratio:1/1}
 }
+
+/* ---- Real-venue site: legend, stats, panel, list, venue page ---- */
+.legend-dot-open{background:var(--enamel)}
+.legend-dot-muted{background:#B8AE96}
+.venue-stats{margin-left:auto;font-weight:600;color:var(--ink)}
+.hero-single{grid-template-columns:1fr;min-height:auto;padding:30px 0 10px}
+.panel-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.popup-btn-quiet{background:none;border:1.5px solid var(--ink);color:var(--ink)!important}
+.popup-btn-quiet:hover{background:var(--ink);color:var(--paper)!important}
+button.popup-btn{font-family:'Work Sans';cursor:pointer}
+.stall-panel{position:static;pointer-events:auto;min-height:96px;justify-content:flex-start}
+
+.venue-filter{display:flex;flex-direction:column;gap:14px;margin-bottom:18px;max-width:560px}
+.venue-filter input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Work Sans';font-size:15px;background:#fff}
+.venue-filter input:focus{outline:2px solid var(--chilli);outline-offset:1px}
+.venue-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.venue-card{background:#fff;border:1px solid var(--line)}
+.venue-card-link{display:flex;flex-direction:column;gap:4px;padding:16px 18px;min-height:88px;height:100%}
+.venue-card-link:hover{background:var(--paper-dark)}
+.venue-card-meta{font-size:13px;color:var(--ink-soft)}
+.venue-card-checked{font-size:12px;color:var(--ink-soft)}
+
+.badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;padding:3px 8px;border-radius:999px;align-self:flex-start}
+.badge-muted{background:var(--paper-dark);color:var(--ink-soft)}
+.badge-pick{background:var(--turmeric);color:var(--ink)}
+.stamp{display:inline-block;font-size:12px;color:var(--ink-soft)}
+.stamp-stale{color:var(--chilli-dark);font-weight:600}
+
+.venue-page{width:min(1180px,calc(100% - 48px));margin:24px auto 90px}
+.venue-title{font-family:'Work Sans';font-weight:700;font-size:clamp(30px,4vw,44px);letter-spacing:0;margin:6px 0 10px}
+.venue-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:40px;margin:26px 0 40px;align-items:start}
+.venue-map{height:340px;background:var(--paper-dark);border:1px solid var(--line)}
+.venue-page .info-card{position:static}
+.venue-stalls h2{font-family:'Work Sans';font-weight:700;font-size:22px;letter-spacing:0;margin-bottom:8px}
+.coverage-line{font-size:18px;font-weight:600;margin:0 0 4px}
+.stall-list{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:14px;max-width:760px}
+.stall-card{background:#fff;border:1px solid var(--line);padding:16px 18px}
+.stall-card-closed{opacity:.75}
+.stall-card h3{font-family:'Work Sans';font-weight:700;font-size:18px;letter-spacing:0;margin:6px 0}
+.stall-card-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stall-unit{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:var(--paper-dark);padding:2px 8px;border-radius:3px}
+.stall-direction,.stall-dishes,.chip-line{margin:4px 0;font-size:14px}
+.chip-line{color:var(--ink-soft)}
+
+@media(max-width:900px){
+  .stall-panel{position:static;pointer-events:auto;border-top:1px solid var(--line)}
+  .venue-layout{grid-template-columns:1fr}
+  .venue-stats{margin-left:0;width:100%}
+}
+.info-row{gap:16px}
+.info-row span:last-child{text-align:right}
