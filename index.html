@@ -27,7 +27,6 @@
       <span class="brand-word">MAKAN TRAIL</span>
     </a>
     <nav class="main-nav" id="mainNav">
-      <a href="#categories" data-i18n="navCategories">Categories</a>
       <a href="#browse" data-i18n="navBrowse">Browse</a>
       <a href="#reviews" data-i18n="navReviews">Reviews</a>
       <a href="#process" data-i18n="navProcess">How we review</a>
@@ -74,9 +73,9 @@
         </div>
       </div>
       <div class="hero-board">
-        <div class="polaroid p1"><div class="polaroid-photo ph-1"></div><span>Chilli Crab, East Coast</span></div>
-        <div class="polaroid p2"><div class="polaroid-photo ph-2"></div><span>Wanton Mee, Chinatown</span></div>
-        <div class="polaroid p3"><div class="polaroid-photo ph-3"></div><span>Roti Prata, Geylang</span></div>
+        <div class="polaroid p1"><div class="polaroid-photo" role="img" aria-label="Laksa (dish illustration)" style="background-image:url('images/dishes/laksa.svg')"></div><span>Laksa · illustration</span></div>
+        <div class="polaroid p2"><div class="polaroid-photo" role="img" aria-label="Satay (dish illustration)" style="background-image:url('images/stalls/satay.svg')"></div><span>Satay · illustration</span></div>
+        <div class="polaroid p3"><div class="polaroid-photo" role="img" aria-label="Nasi Lemak (dish illustration)" style="background-image:url('images/dishes/nasi-lemak.svg')"></div><span>Nasi Lemak · illustration</span></div>
       </div>
     </section>
 
@@ -84,16 +83,6 @@
       <div class="ticker-inner">
         <span data-i18n="tickerHawker">HAWKER STALLS</span><span data-i18n="tickerKopitiam">KOPITIAM</span><span data-i18n="tickerFoodCourts">FOOD COURTS</span><span data-i18n="tickerCafes">CAFES</span><span data-i18n="tickerHalal">HALAL</span><span data-i18n="tickerLateNight">LATE NIGHT</span><span data-i18n="tickerCheapEats">CHEAP EATS</span>
       </div>
-    </section>
-
-    <section id="categories" class="browse-section">
-      <div class="section-heading">
-        <h2 id="categoriesHeading" data-i18n="categoriesHeading">What are<br />you after?</h2>
-        <p data-i18n="categoriesText">Pick a category to see stalls that have been checked in person and tagged for it.</p>
-      </div>
-      <div class="chip-row" id="categoryChips" role="group" aria-labelledby="categoriesHeading"></div>
-      <p class="visually-hidden" id="categoryStatus" aria-live="polite"></p>
-      <div id="categoryResults"></div>
     </section>
 
     <section id="browse" class="browse-section">
@@ -126,7 +115,7 @@
       </div>
       <div class="review-grid" id="reviewGrid">
         <article class="review-card feature" data-categories="hawker cheap-eats">
-          <div class="review-photo photo-a"></div>
+          <div class="review-photo" role="img" aria-label="Wanton mee (dish illustration)" style="background-image:url('images/stalls/wanton-mee.svg')"></div>
           <div class="review-body">
             <p class="tag">Chinatown Complex · Hawker</p>
             <h3>Golden Ladle Wanton Mee is still the one to beat</h3>
@@ -135,7 +124,7 @@
           </div>
         </article>
         <article class="review-card" data-categories="cafe solo-lunch">
-          <div class="review-photo photo-b"></div>
+          <div class="review-photo" role="img" aria-label="Kaya toast breakfast (dish illustration)" style="background-image:url('images/dishes/kaya-toast.svg')"></div>
           <div class="review-body">
             <p class="tag">Tiong Bahru · Cafe</p>
             <h3>A kopitiam breakfast set that doesn't cut corners</h3>
@@ -143,7 +132,7 @@
           </div>
         </article>
         <article class="review-card" data-categories="hawker late-night">
-          <div class="review-photo photo-c"></div>
+          <div class="review-photo" role="img" aria-label="Frog leg claypot (dish illustration)" style="background-image:url('images/stalls/frog-leg-claypot.svg')"></div>
           <div class="review-body">
             <p class="tag">Geylang · Hawker</p>
             <h3>Frog leg bee hoon worth the late-night trip</h3>
@@ -218,6 +207,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
   <script src="script.js"></script>
-  <script type="module" src="js/categories.js"></script>
 </body>
 </html>

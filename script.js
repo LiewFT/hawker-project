@@ -502,20 +502,6 @@ if (mapEl && window.L) {
 // footer) so non-English-speaking users can navigate and understand the
 // core flows; long-form editorial review text stays English-only for now.
 const I18N = {
-  "cat_must-try": {"en":"Must try","zh":"必吃"},
-  "cat_cheap-eats": {"en":"Cheap eats","zh":"平价美食"},
-  "cat_breakfast": {"en":"Breakfast","zh":"早餐"},
-  "cat_drinks": {"en":"Drinks","zh":"饮品"},
-  "categoriesHeading": {"en":"What are<br />you after?","zh":"你想吃<br />什么？"},
-  "categoriesText": {"en":"Pick a category to see stalls that have been checked in person and tagged for it.","zh":"选择一个类别，查看经实地查证并标记为该类别的摊位。"},
-  "categoryChipLabel": {"en":"{label} ({n})","zh":"{label}（{n}）"},
-  "categoryNone": {"en":"No stalls have been checked in person yet, so every category is empty. Stalls appear here as they are logged.","zh":"目前尚无经实地查证的摊位，所以每个类别都是空的。摊位记录后会显示在这里。"},
-  "categoryPick": {"en":"Choose a category above.","zh":"请在上方选择一个类别。"},
-  "categoryEmpty": {"en":"No {label} stalls logged yet.","zh":"暂时还没有记录“{label}”摊位。"},
-  "categoryShowing": {"en":"Showing {n} stalls: {label}.","zh":"显示 {n} 个摊位：{label}。"},
-  "categoryNoteHalal": {"en":"Only stalls with a MUIS halal certificate number on record are listed here.","zh":"这里只列出已记录 MUIS 清真认证编号的摊位。"},
-  "categoryNoteCheap": {"en":"Cheap eats means at least one dish priced at ${max} or less.","zh":"平价美食指至少有一道菜的价格在 ${max} 或以下。"},
-  "navCategories": {"en":"Categories","zh":"类别"},
   checked: {"en":"Checked {date}","zh":"查证于 {date}"},
   staleChecked: {"en":"Last checked {date} — may be out of date","zh":"上次查证于 {date} — 可能已过时"},
   cookedStalls: {"en":"{n} cooked food stalls (NEA)","zh":"{n} 个熟食摊位（NEA）"},
