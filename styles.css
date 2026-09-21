@@ -312,3 +312,34 @@ button.popup-btn{font-family:'Work Sans';cursor:pointer}
 .stall-list-wide{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));max-width:none}
 #categoryChips .chip{min-height:44px}
 #categoryResults{margin-top:18px}
+
+/* Visitor reviews and accounts */
+.venue-reviews{margin-top:44px;padding-top:28px;border-top:1px solid var(--line)}
+.venue-reviews h2{font-family:'Work Sans';font-weight:700;font-size:22px;letter-spacing:0;margin-bottom:8px}
+.venue-reviews h3{font-family:'Work Sans';font-weight:700;font-size:17px;margin:0 0 10px}
+.visitor-reviews{list-style:none;margin:16px 0 26px;padding:0;display:grid;gap:12px;max-width:760px}
+.visitor-review{background:#fff;border:1px solid var(--line);padding:14px 18px}
+.visitor-review-mine{border-color:var(--enamel)}
+.visitor-review-head{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.visitor-stars{color:var(--turmeric);letter-spacing:1px}
+.visitor-review-text{margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.auth-panel,.review-form,.account-bar{max-width:520px;margin-top:18px}
+.auth-form{display:grid;gap:12px;margin-top:14px}
+.field{display:grid;gap:4px}
+.field label,.rating-pick legend{font-size:13px;font-weight:600}
+.field input,.field textarea{font:inherit;padding:10px 12px;border:1.5px solid var(--line);background:#fff;border-radius:3px;width:100%;box-sizing:border-box}
+.field input:focus,.field textarea:focus{outline:2px solid var(--chilli);outline-offset:1px}
+.consent{font-size:13px;display:block}
+.rating-pick{border:0;padding:0;margin:0 0 12px}
+.rating-pick .star-pick{display:inline-block;margin:6px 6px 0 0}
+.star-pick{position:relative}
+.star-pick input{position:absolute;opacity:0}
+.star-pick span{display:inline-block;min-width:44px;min-height:44px;line-height:44px;text-align:center;border:1.5px solid var(--line);background:#fff;border-radius:3px;cursor:pointer}
+.star-pick input:checked+span{background:var(--turmeric);border-color:var(--ink);font-weight:700}
+.star-pick input:focus-visible+span{outline:2px solid var(--chilli);outline-offset:2px}
+.link-button{background:none;border:0;padding:0;font:inherit;cursor:pointer;justify-self:start}
+.account-bar{border-top:1px dashed var(--line);padding-top:14px}
+.account-bar details{margin-top:12px}
+.account-bar summary{cursor:pointer;font-size:13px;color:var(--ink-soft)}
+.review-message{margin:12px 0 0;font-weight:600;color:var(--enamel);min-height:1.2em}
+.review-message-error{color:var(--chilli-dark)}
