@@ -1,0 +1,49 @@
+rules_version = '2';
+
+// Visitor reviews. Anyone can read; only a signed-in user with a verified email
+// can write, only their own review, one per venue (the document id is
+// "<venue-slug>__<uid>"). Emails are never stored here: they live only in
+// Firebase Authentication.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function verified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function validReview(d) {
+      return d.rating is int && d.rating >= 1 && d.rating <= 5
+        && d.text is string && d.text.size() <= 1000;
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+
+      allow create: if signedIn() && verified()
+        && request.resource.data.keys().hasOnly(['venue', 'uid', 'name', 'rating', 'text', 'createdAt', 'updatedAt'])
+        && request.resource.data.keys().hasAll(['venue', 'uid', 'name', 'rating', 'text', 'createdAt', 'updatedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.venue is string
+        && request.resource.data.venue.matches('^[a-z0-9-]{1,80}$')
+        && reviewId == request.resource.data.venue + '__' + request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name == request.auth.token.name
+        && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 30
+        && validReview(request.resource.data)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      allow update: if signedIn() && verified()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rating', 'text', 'updatedAt'])
+        && validReview(request.resource.data)
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+  }
+}

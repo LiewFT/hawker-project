@@ -4,6 +4,7 @@
 // past its re-check deadline it is labelled stale, never shown as current.
 import { t } from './i18n.js';
 import { stallCard, stamp } from './stalls.js';
+import { createReviewsSection } from './reviews-ui.js';
 import {
   STALE_DAYS, loadVenues, loadStalls, googleMapsUrl, daysSince, el,
 } from './data.js';
@@ -18,6 +19,7 @@ const MIN_COVERAGE_FOR_LIST = 0.3;
 let venue = null;
 let stalls = [];
 let mapInstance = null;
+let reviewsSection = null; // built once, so its state survives re-renders
 
 function infoRow(label, value) {
   return el('div', { class: 'info-row' }, el('span', { text: label }), el('span', { text: value }));
@@ -81,6 +83,7 @@ function render() {
           el('a', { class: 'popup-btn', href: googleMapsUrl(venue), target: '_blank', rel: 'noopener', text: t('openInGoogleMaps') }),
           el('button', { type: 'button', class: 'popup-btn popup-btn-quiet', id: 'shareBtn', text: t('share') })))),
     renderStallSection(),
+    reviewsSection,
   );
 
   document.getElementById('shareBtn').addEventListener('click', async (event) => {
@@ -119,7 +122,10 @@ document.addEventListener('langchange', () => { if (root.childElementCount) rend
 try {
   const venues = await loadVenues();
   venue = venues.find((v) => v.slug === slug) || null;
-  if (venue) stalls = await loadStalls(venue.slug);
+  if (venue) {
+    stalls = await loadStalls(venue.slug);
+    reviewsSection = createReviewsSection(venue);
+  }
 } catch (err) {
   console.error(err);
 }
