@@ -56,7 +56,7 @@ up to 1000 characters; the review's name must match the account's name.
 
 ## Moderation and deletion
 Reviews appear without pre-approval. To remove one, delete its document in the
-Firestore console. Users can delete their own review, or their whole account and all
-their reviews, from any venue page. Handle privacy requests from people who lost
-access to their account by deleting their user in Authentication and their documents
+Firestore console. Users can delete their own review from its venue page, or their
+whole account and all their reviews from the Account page. Handle privacy requests
+from people who lost access to their account by deleting their user in Authentication and their documents
 in Firestore.

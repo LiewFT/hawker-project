@@ -21,6 +21,7 @@
       <a href="index.html#reviews" data-i18n="navReviews">Reviews</a>
       <a href="index.html#process" data-i18n="navProcess">How we review</a>
       <a href="about.html" data-i18n="navAbout">About</a>
+      <a class="nav-account" href="account.html" data-account-link data-i18n="navSignIn">Sign in</a>
       <button type="button" class="lang-toggle" aria-label="Switch to Chinese">中文</button>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
@@ -66,7 +67,7 @@
         <p data-i18n="privacyRightsText">[Insert: how users can request access to, correction of, or deletion of their data, per PDPA requirements. Include a contact method for privacy requests.]</p>
 
         <h2 data-i18n="privacyRetentionTitle">Data retention</h2>
-        <p data-i18n="privacyRetentionText">Your account and reviews are kept until you delete them. While signed in, you can delete a review, or your whole account (which also deletes all your reviews), from any venue page.</p>
+        <p data-i18n="privacyRetentionText">Your account and reviews are kept until you delete them. While signed in, you can delete a review from its venue page, or your whole account (which also deletes all your reviews) from the Account page.</p>
 
         <h2 data-i18n="privacyThirdPartyTitle">Third-party services</h2>
         <p data-i18n="privacyThirdPartyText">Sign-in and reviews are handled by Google Firebase (Authentication and Cloud Firestore). Map tiles come from OneMap (SLA). The site is hosted on GitHub Pages. Each has its own privacy policy.</p>
@@ -95,5 +96,6 @@
     </div>
   </footer>
   <script src="script.js"></script>
+  <script type="module" src="js/nav-auth.js"></script>
 </body>
 </html>
