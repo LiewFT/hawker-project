@@ -1,52 +1,41 @@
-# Makan Trail — Homepage & Stall Page Prototype
+# Makan Trail
+
+A map of every hawker centre in Singapore, plus a demo layer of sample stalls.
+
+## Two kinds of content
+- **Real:** all 124 NEA hawker centres in `data/venues.json` (name, address,
+  location, NEA stall count, status, checked date). Each has a page at
+  `venue.html?v=<slug>`. Facts come from NEA's dataset on data.gov.sg
+  (Open Data Licence). `stalls_documented` is computed, never typed.
+- **Demo:** the six featured centres (red pins) carry fictional sample stalls
+  with dish illustrations, the stall detail pages, and the homepage
+  "Latest tastings" cards. They are labelled **Demo** in the map panel and
+  under a DEMO CONTENT banner on the homepage, and are not counted as real
+  stalls. They live in `hawkerCentres` in `script.js`.
 
 ## Pages
-- `index.html` — homepage: map, browse filters, latest reviews, process, community
-- `stall.html` — stall detail page: gallery, editorial review, reader reviews + submission
-- `about.html` — who's behind the site
-- `privacy.html` — placeholder privacy policy (needs legal review before publishing)
-- `404.html` — custom not-found page
+- `index.html` — clustered map (real venues + demo centres), search, demo sections
+- `venue.html?v=<slug>` — a real venue: facts, mini map, Google Maps link, checked
+  date (stale label past its deadline), coverage line, and a stall list once
+  `data/venues/<slug>.json` exists (hidden below 30% coverage)
+- `stall.html?hc=<id>&stall=<slug>` — demo stall page
+- `about.html`, `privacy.html` (placeholder, needs legal review), `404.html`
 
-## What's fully working right now (no backend needed)
-- Mobile menu, share button, category filter chips, "load more" reviews
-- Interactive Singapore map (Leaflet + OpenStreetMap) using real NEA hawker
-  centre GPS data, locked to Singapore bounds, with search
-- Demo sign-in + review submission flow — fully functional in-browser, but
-  **session-only**: reviews you post disappear on page refresh since there's
-  no database yet. This is intentional, to demonstrate the full UX without
-  needing real infrastructure first.
+Static site (GitHub Pages), currently `noindex`.
 
-## What still needs a real backend (your decision needed)
-To make reviews permanent and logins real, you need to pick a backend
-service tied to your own account — I can't provision one for you. Common
-options for a static site like this:
-- **Firebase** (Google) — has a generous free tier, built-in Google/Facebook
-  login, and a database (Firestore) that's straightforward to wire into a
-  static site like this one.
-- **Supabase** — similar free tier, open-source, Postgres-based.
+## Code
+- `script.js` — map, search, EN/中文 dictionary (`I18N`), demo stall page. Exposes
+  `window.MT = { t, getLang }` and fires `langchange` so the venue page can share
+  the same dictionary.
+- `js/venue.js`, `js/data.js`, `js/i18n.js` — the venue page (ES modules; DOM built
+  with `textContent`)
 
-Once you pick one and create a project, come back and I can help wire the
-real login and review storage into this exact frontend.
+## Data (`data/`, validated in CI against `schema/`)
+- `npm run validate-data` runs the same check CI runs.
+- `data/venues/<slug>.json` — real stalls, added only after being checked in
+  person. None exist yet.
+- `pipeline/SETUP.md` — Google Form → Sheet → nightly PR pipeline (needs a Google account).
 
-## Map data source
-The hawker centre map uses **real GPS coordinates** from NEA's official
-"Hawker Centres" dataset on data.gov.sg (Open Data Licence — free for
-commercial use), rendered with Leaflet.js + OpenStreetMap tiles (no API key
-needed, no cost). It plots all 124 currently-open hawker centres in
-Singapore (centres still under construction are excluded): 6 are "featured"
-with drill-down stall markers and reviews (Chinatown Complex, Tiong Bahru
-Market, Maxwell Food Centre, Geylang Serai Market, 51 Old Airport Road Food
-Centre, and Newton Food Centre), and the remaining 118 appear as a clustered
-grey-pin layer covering the full island-wide directory.
-
-**Still placeholder:** the individual stall markers inside each hawker
-centre. There is no public dataset at the stall level, so these are
-demonstration points offset a small distance from the real hawker centre
-GPS point. Once the client has a real stall database, each stall marker
-should get its own confirmed coordinate.
-
-## Still placeholder / needs real content
-- Brand name "Makan Trail" — swap for the client's actual chosen name
-- All photos are solid-color placeholders — needs real photos/video
-- Privacy Policy text — needs legal review before publishing
-- Contact page/form — footer "Contact" link is currently a placeholder
+## Map
+Leaflet with OneMap raster tiles (no API key), locked to Singapore.
+Attribution to NEA / data.gov.sg and OneMap / SLA stays visible.
