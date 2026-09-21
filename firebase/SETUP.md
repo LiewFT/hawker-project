@@ -11,14 +11,33 @@ The site owner does this in their own Google account.
    - Settings → Password policy: minimum length 8.
    - Settings → Authorized domains: add `liewft.github.io` (and the custom domain
      once there is one). Sign-in fails on any domain not listed.
-   - Templates → Email address verification: set the sender name and wording.
+   - Templates → Email address verification (optional): you can change the sender
+     name and subject. The message body is fixed by Firebase, and the sender address
+     stays `noreply@<project>.firebaseapp.com` unless you set up a custom domain.
+     Project settings → General → "Public-facing name" is the app name shown in the email.
 3. **Firestore Database → Create database.** Location `asia-southeast1` (Singapore),
    production mode.
 4. **Firestore → Rules:** paste all of `firebase/firestore.rules` and Publish.
 5. **Project settings → Your apps → Web (`</>`)**: register an app, copy the config
    object into `js/firebase-config.js`, commit and push.
-6. **Recommended before launch:** App Check (reCAPTCHA) to limit bots, and a budget
+6. **Recommended before launch:** App Check to limit bots (below), and a budget
    alert under Google Cloud billing.
+
+## Optional: App Check with reCAPTCHA Enterprise
+Firebase's older "reCAPTCHA v3" option shows a deprecation warning; use Enterprise.
+1. Google Cloud console (same project) → **reCAPTCHA Enterprise** (now under "Fraud
+   Defense") → enable the API if asked → **Create key**: platform **Web**, domains
+   `liewft.github.io` (add `localhost` only for local testing), leave **"Use checkbox
+   challenge" off** (score-based). Copy the key ID.
+2. Firebase console → **App Check → Apps** → your web app → **reCAPTCHA Enterprise**
+   → paste the key → Save. Token time-to-live: leave the default.
+3. Paste the key into `appCheckSiteKey` in `js/firebase-config.js`, push, and wait for
+   the site to redeploy.
+4. Check the App Check **Requests** metrics show verified requests, and only then
+   turn on **Enforce** for Authentication and Firestore. Enforcing before step 3 is
+   live blocks every sign-in and review request.
+5. Local testing after enforcing needs an App Check debug token, or the localhost
+   domain added to the key.
 
 ## What is stored, and where
 | Data | Where | Public? |

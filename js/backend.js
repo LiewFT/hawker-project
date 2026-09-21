@@ -3,7 +3,7 @@
 // unconfigured site makes no third-party requests. Passwords go straight to
 // Firebase Auth (stored only as a hash); emails stay in Auth and are never
 // written to the reviews collection.
-import { firebaseConfig } from './firebase-config.js';
+import { firebaseConfig, appCheckSiteKey } from './firebase-config.js';
 
 const SDK = 'https://www.gstatic.com/firebasejs/10.14.1';
 
@@ -19,6 +19,14 @@ function load() {
         import(`${SDK}/firebase-firestore.js`),
       ]);
       const instance = app.initializeApp(firebaseConfig);
+      if (appCheckSiteKey) {
+        // Must run before Auth and Firestore are used, so their requests carry the token.
+        const AC = await import(`${SDK}/firebase-app-check.js`);
+        AC.initializeAppCheck(instance, {
+          provider: new AC.ReCaptchaEnterpriseProvider(appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true,
+        });
+      }
       return { auth: A.getAuth(instance), db: F.getFirestore(instance), A, F };
     })().catch((err) => { sdk = null; throw err; });
   }

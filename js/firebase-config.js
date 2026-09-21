@@ -10,3 +10,8 @@ export const firebaseConfig = {
   projectId: 'hawker-project-c1b8d',
   appId: '1:385170043149:web:2440ef9ce8afed1c7ec044',
 };
+
+// Optional bot protection (Firebase App Check with reCAPTCHA Enterprise). Paste the
+// reCAPTCHA Enterprise site key here, then turn on enforcement in the Firebase
+// console only after this is deployed. Leave null to skip. See firebase/SETUP.md.
+export const appCheckSiteKey = null;
