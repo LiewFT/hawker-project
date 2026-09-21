@@ -200,6 +200,12 @@ function renderStallDetail() {
     tagEl.textContent = isZh ? `${hc.name} · 小贩中心 · ${stall.cuisine}` : `${hc.name} · Hawker · ${stall.cuisine}`;
   }
 
+  const venueLink = document.getElementById('stallVenueLink');
+  if (venueLink) {
+    venueLink.href = 'venue.html?v=' + encodeURIComponent(hc.id);
+    venueLink.hidden = false;
+  }
+
   const nameEl = document.getElementById('stallNameHeading');
   if (nameEl) nameEl.textContent = stall.name;
 
@@ -264,158 +270,57 @@ if (mapEl && window.L) {
   const stallIcon = L.divIcon({ className: '', html: '<div class="pin-tap"><div class="stall-pin"></div></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
   const dirIcon = L.divIcon({ className: '', html: '<div class="pin-tap"><div class="dir-pin"></div></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
 
-  // Full hawker centre directory (name, lat, lng, short address, food stall
-  // count) sourced from NEA's official dataset (data.gov.sg, snapshot Nov
-  // 2025). These are shown as a clustered layer -- nearby points group into
-  // a single number bubble that "explodes" into individual pins on zoom, so
-  // 100+ locations stay readable instead of turning into a wall of pins.
-  // Centres still under construction are excluded since they aren't open yet.
-  const directoryCentres = [
-    ['Ci Yuan Hawker Centre', 1.3749377, 103.8829472, '51 Hougang Ave 9', 40],
-    ['Ayer Rajah Market', 1.31195998, 103.7591019, '502 West Coast Drive', 0],
-    ['Ayer Rajah Food Centre', 1.31186998, 103.7598038, '503 West Coast Drive', 80],
-    ['Bedok South Blk 16', 1.32055998, 103.9355469, '16 Bedok South Road', 64],
-    ['Pasir Ris Central Hawker Centre', 1.373318, 103.951364, '110 Pasir Ris Central', 42],
-    ['Tampines Round Market', 1.34559596, 103.9445953, '137 Tampines St 11', 45],
-    ['Toa Payoh Lor 5 Blk 75', 1.33609998, 103.8529968, '75 Lor 5 Toa Payoh', 36],
-    ['Zion Riverside Food Centre', 1.29234004, 103.8311844, '70 Zion Road', 32],
-    ['Toa Payoh Lor 1 Blk 127', 1.33816004, 103.8447876, '127 Lor 1 Toa Payoh', 40],
-    ['Tanjong Pagar Plaza Blk 6', 1.27667999, 103.8432312, '6 Tanjong Pagar Plaza', 52],
-    ['Kebun Baru Food Centre', 1.36726606, 103.8399429, '226H Ang Mo Kio St 22', 29],
-    ['Bedok Food Centre', 1.32035303, 103.9554749, '1 Bedok Road', 32],
-    ['Bedok North St 1 Blk 216', 1.32711995, 103.9332962, '216 Bedok North St 1', 82],
-    ['Kaki Bukit 511 Market', 1.33331001, 103.930687, '511 Bedok North St 3', 42],
-    ['Bedok North St 3 Blk 538', 1.33210003, 103.9247208, '538 Bedok North St 3', 42],
-    ['85 Fengshan Centre', 1.33205998, 103.9388123, '85 Bedok North St 4', 72],
-    ['Bedok Reservoir Blk 630', 1.33298004, 103.9142075, '630 Bedok Reservoir Rd', 36],
-    ['Circuit Road Blk 89', 1.32363999, 103.8855209, '89 Circuit Road', 41],
-    ['Holland Drive Market', 1.30818999, 103.7928391, '44 Holland Drive', 45],
-    ['Toa Payoh Lor 4 Blk 93', 1.33853996, 103.8495712, '93 Lor 4 Toa Payoh', 28],
-    ['Kim Keat Palm Market', 1.33528996, 103.8570633, '22 Lor 7 Toa Payoh', 61],
-    ['Toa Payoh Lor 8 Blk 210', 1.34033001, 103.8544617, '210 Lor 8 Toa Payoh', 80],
-    ['Blk 17 Upper Boon Keng', 1.31508994, 103.8716812, '17 Upper Boon Keng Rd', 84],
-    ['Hong Lim Market & Food Centre', 1.28446996, 103.8458633, '531A Upper Cross St', 103],
-    ['East Coast Lagoon Food Village', 1.30772996, 103.9343033, '1220 East Coast Pkwy', 63],
-    ['Circuit Road Blk 79/79A', 1.32666004, 103.8851166, '79/79A Circuit Road', 106],
-    ['Jurong West St 52 Blk 505', 1.34969997, 103.7184601, '505 Jurong West St 52', 60],
-    ['North Bridge Road Market', 1.30584705, 103.8638611, '861 North Bridge Rd', 37],
-    ['Bukit Merah View Blk 115', 1.28524005, 103.8223724, '115 Bukit Merah View', 84],
-    ['Yishun Park Hawker Centre', 1.424911, 103.844992, '51 Yishun Ave 11', 45],
-    ['Chong Pang Market & Food Centre', 1.43165803, 103.8280716, '104/105 Yishun Ring Rd', 56],
-    ['Teck Ghee Court', 1.36416996, 103.84832, '341 Ang Mo Kio Ave 1', 32],
-    ['Chong Boon Market', 1.36829996, 103.8564377, '453A Ang Mo Kio Ave 10', 38],
-    ['Blk 724 Ang Mo Kio Market', 1.37204003, 103.8464966, '724 Ang Mo Kio Ave 6', 45],
-    ['Clementi Ave 3 Blk 448', 1.31334996, 103.7645874, '448 Clementi Ave 3', 51],
-    ['Taman Jurong Market & Food Centre', 1.33468103, 103.7216187, '3 Yung Sheng Road', 123],
-    ["People's Park Food Centre", 1.28487098, 103.8425903, '32 New Market Road', 87],
-    ['Clementi Ave 2 Blk 353', 1.31433797, 103.7707748, '353 Clementi Ave 2', 18],
-    ['Bedok Interchange Hawker Centre', 1.3246290, 103.930477, '208B New Upper Changi Rd', 70],
-    ['New Upper Changi Rd Blk 58', 1.32516551, 103.940155, '58 New Upper Changi Rd', 48],
-    ['Clementi West St 2 Blk 726', 1.30391705, 103.7641754, '726 Clementi West St 2', 60],
-    ['Tanglin Halt / Commonwealth Food Centre', 1.29955006, 103.7980194, '1A/2A/3A Commonwealth Dr', 40],
-    ['Eunos Crescent Blk 4A', 1.320292, 103.9042206, '4A Eunos Crescent', 42],
-    ['Bukit Panjang Hawker Centre & Market', 1.378269, 103.772432, '2 Bukit Panjang Ring Rd', 28],
-    ['Bukit Timah Market', 1.33964503, 103.7758026, '51 Upper Bukit Timah Rd', 84],
-    ['Chomp Chomp Food Centre', 1.36422801, 103.8665314, '20 Kensington Park Rd', 36],
-    ['Mei Chin Road Market', 1.29330003, 103.8029633, '159 Mei Chin Road', 47],
-    ['Pasir Panjang Food Centre', 1.27565897, 103.7915573, '121 Pasir Panjang Rd', 45],
-    ['Redhill Market', 1.28790999, 103.8183975, '79 Redhill Lane', 0],
-    ['Redhill Food Centre', 1.28740001, 103.8183975, '85 Redhill Lane', 96],
-    ['Serangoon Garden Market', 1.36354005, 103.8669815, '49A Serangoon Garden Way', 46],
-    ['Shunfu Mart', 1.35181999, 103.8370285, '320 Shunfu Road', 31],
-    ['Geylang Bahru Market', 1.32152998, 103.8700714, '69 Geylang Bahru', 84],
-    ['Ghim Moh Road Market', 1.31105995, 103.7882919, '20 Ghim Moh Road', 72],
-    ['Tanglin Halt Market', 1.30085003, 103.7976837, '48A Tanglin Halt Road', 28],
-    ['Kukoh 21 Food Centre', 1.28831995, 103.8399963, '1 Jalan Kukoh', 21],
-    ['Yuhua Market & Hawker Centre', 1.34536004, 103.7315826, '347 Jurong East Ave 1', 56],
-    ['Yuhua Village Market', 1.34343302, 103.7376862, '254 Jurong East St 24', 60],
-    ['Kallang Estate Market & Food Centre', 1.30711246, 103.8841476, '17 Old Airport Road', 16],
-    ['Holland Village Market & Food Centre', 1.31110203, 103.7949448, '1 Lorong Mambong', 21],
-    ['Hougang 105 Hainanese Village', 1.35408998, 103.890213, '105 Hougang Ave 1', 51],
-    ['Kovan Hougang Market', 1.359079, 103.8859253, '209 Hougang St 21', 65],
-    ['Jalan Bukit Merah Blk 112', 1.28006995, 103.8260727, '112 Jalan Bukit Merah', 28],
-    ['ABC Brickworks Market', 1.28700995, 103.8081894, '6 Jalan Bukit Merah', 96],
-    ['Commonwealth Crescent Market', 1.30743206, 103.7994614, '31 Commonwealth Crescent', 39],
-    ['Empress Road Market', 1.31631005, 103.805687, '7 Empress Road', 40],
-    ['Boon Lay Place Market & Food Village', 1.34528005, 103.7128525, '221A/B Boon Lay Place', 72],
-    ['Jurong West Hawker Centre', 1.34122300, 103.697374, '50 Jurong West St 61', 34],
-    ['Bukit Merah Central Food Centre', 1.28374004, 103.8171082, '163 Bukit Merah Central', 57],
-    ['Pek Kio Market & Food Centre', 1.31620002, 103.8503036, '41A Cambridge Road', 50],
-    ['Golden Mile Food Centre', 1.30314175, 103.86387762, '505 Beach Road', 112],
-    ['Dunman Food Centre', 1.30941789, 103.90182541, '271 Onan Road', 30],
-    ['Beo Crescent Market', 1.28883089, 103.82735389, '38A Beo Crescent', 32],
-    ['Adam Road Food Centre', 1.32415985, 103.81416592, '2 Adam Road', 32],
-    ['50A Marine Terrace', 1.30572974, 103.91573704, '50A Marine Terrace', 24],
-    ['Marine Parade Central Market & Food Centre', 1.30229656, 103.90634383, '84 Marine Parade Central', 55],
-    ['Kampung Admiralty Hawker Centre', 1.43974952, 103.80072071, '676 Woodlands Drive 71', 43],
-    ['Market Street Hawker Centre', 1.28390006, 103.85000596, '86 Market Street', 53],
-    ['Marsiling Lane Blk 20/21', 1.44341624, 103.77700610, '20 Marsiling Lane', 52],
-    ['Marsiling Mall Hawker Centre', 1.43354318, 103.77988189, '4 Woodlands Street 12', 70],
-    ['Albert Centre', 1.30110202, 103.85411578, '270 Queen Street', 86],
-    ['Sims Vista Market & Food Centre', 1.31703502, 103.87930986, '49 Sims Place', 66],
-    ['Teban Gardens Market & Food Centre', 1.32083109, 103.74274812, '37A Teban Gardens Road', 28],
-    ['Telok Blangah Food Centre', 1.27335599, 103.80761813, '79 Telok Blangah Drive', 40],
-    ['Telok Blangah Market', 1.27389077, 103.80790034, '82 Telok Blangah Drive', 0],
-    ['Telok Blangah Rise Market', 1.27276129, 103.82236354, '36 Telok Blangah Rise', 24],
-    ['Toa Payoh Vista Market', 1.33455075, 103.85200351, '74 Lorong 4 Toa Payoh', 10],
-    ['Telok Blangah Crescent Market & Food Centre', 1.27736813, 103.81865152, '11 Telok Blangah Crescent', 56],
-    ['Teck Ghee Square', 1.36265411, 103.85528830, '409 Ang Mo Kio Ave 10', 40],
-    ['Cheng San Market & Cooked Food Centre', 1.37277209, 103.85445796, '527 Ang Mo Kio Ave 10', 50],
-    ['Mayflower Market', 1.37452774, 103.83917606, '160 Ang Mo Kio Ave 4', 40],
-    ['Ang Mo Kio 628 Market', 1.38098762, 103.84062809, '628 Ang Mo Kio Ave 4', 52],
-    ['Bendemeer Market & Food Centre', 1.31921668, 103.86302092, '29 Bendemeer Road', 88],
-    ['Tekka Centre', 1.30618664, 103.85058557, '665 Buffalo Road', 119],
-    ['Blk 117 Aljunied Market & Food Centre', 1.32064637, 103.88702414, '117 Aljunied Ave 2', 79],
-    ['Alexandra Village Food Centre', 1.28630594, 103.80449264, '120 Bukit Merah Lane 1', 88],
-    ['Changi Village Hawker Centre', 1.38915165, 103.98824525, '2 Changi Village Road', 87],
-    ['80 Circuit Road Market & Food Centre', 1.32783415, 103.88710267, '80 Circuit Road', 16],
-    ['Haig Road Market & Cooked Food Centre', 1.31510752, 103.89558794, '13 Haig Road', 72],
-    ['Havelock Road Cooked Food Centre', 1.28797052, 103.82962341, '22A Havelock Road', 30],
-    ['Hawker Centre @ Our Tampines Hub', 1.35313360, 103.94040814, '1 Tampines Walk', 42],
-    ['Jalan Batu Hawker Centre', 1.30236035, 103.88390947, '4A Jalan Batu', 36],
-    ['Whampoa Makan Place', 1.32306494, 103.85499618, '90 Whampoa Drive', 80],
-    ['Whampoa Drive Market', 1.32342819, 103.85406020, '91 Whampoa Drive', 52],
-    ['Margaret Drive Hawker Centre', 1.29748656, 103.80469380, '38A Margaret Drive', 38],
-    ['Anchorvale Village Hawker Centre', 1.39679315, 103.88843734, '339 Anchorvale Road', 36],
-    ['Fernvale Hawker Centre & Market', 1.39172209, 103.87703907, '21 Sengkang West Avenue', 28],
-    ['One Punggol Hawker Centre', 1.40874765, 103.90516946, '1 Punggol Drive', 34],
-    ['Bukit Canberra Hawker Centre', 1.44826336, 103.82276363, '21 Canberra Link', 44],
-    ['Punggol Coast Hawker Centre', 1.41451801, 103.90854260, '84 Punggol Way', 40],
-    ['Senja Hawker Centre', 1.38719400, 103.76108398, '2 Senja Close', 28],
-    ['Buangkok Hawker Centre', 1.38298163, 103.89272101, '70 Compassvale Bow', 38],
-    ['Bukit Batok West Hawker Centre', 1.35544583, 103.74207854, '469A Bukit Batok West Avenue 9', 22],
-    ['Woodleigh Village Hawker Centre', 1.33979101, 103.87201377, '202C Woodleigh Link', 40],
-    ['Bukit Timah Interim Hawker Centre', 1.34078792, 103.77521471, '2A Jalan Seh Chuan', 78],
-    ['Amoy Street Food Centre', 1.27923121, 103.84661927, '7 Maxwell Road', 134],
-    ['Sembawang Hills Food Centre', 1.37231949, 103.82901815, '590 Upper Thomson Road', 36],
-    ['Berseh Food Centre', 1.30734411, 103.85688878, '166 Jalan Besar', 66],
-  ];
+  // Every NEA hawker centre comes from data/venues.json -- the same file the
+  // venue pages read -- fetched at load. The featured centres in hawkerCentres
+  // are drawn separately as red pins, so they are skipped in this layer.
+  let directoryVenues = [];
 
   // Wider cluster radius + disableClusteringAtZoom keeps the city-wide view
   // to a small, readable number of grouped bubbles instead of 100+ dots on
   // top of each other; individual pins only appear once zoomed in close
   // enough that they're naturally spaced apart.
   const directoryCluster = L.markerClusterGroup({ maxClusterRadius: 70, disableClusteringAtZoom: 16 });
-  directoryCentres.forEach(([name, lat, lng, address, stalls]) => {
-    const marker = L.marker([lat, lng], { icon: dirIcon });
-    const stallLabel = stalls > 0 ? `${stalls} cooked food stalls` : 'Market stalls only';
-    marker.bindPopup(`
-      <span class="popup-title">${name}</span>
-      <span class="popup-meta">${address}<br />${stallLabel} · NEA, data.gov.sg</span>
-      <a class="popup-btn" href="stall.html">View stall page →</a>
-    `);
-    directoryCluster.addLayer(marker);
-  });
   map.addLayer(directoryCluster);
+
+  function esc(text) {
+    return String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  // Built when the popup opens, so it follows the current language.
+  function venuePopupHtml(v) {
+    const stalls = v.stall_count_nea > 0 ? t('cookedStalls', { n: v.stall_count_nea }) : t('marketStallsOnly');
+    const status = v.status === 'open' ? '' : `<br />${esc(t('status_' + v.status))}`;
+    return `
+      <span class="popup-title">${esc(v.name)}</span>
+      <span class="popup-meta">${esc(v.address)}<br />${esc(stalls)}${status}<br />${esc(t('checked', { date: formatVenueDate(v.verified) }))}</span>
+      <a class="popup-btn" href="venue.html?v=${encodeURIComponent(v.slug)}">${esc(t('viewVenue'))}</a>
+    `;
+  }
+
+  fetch('data/venues.json')
+    .then((res) => { if (!res.ok) throw new Error('venues.json ' + res.status); return res.json(); })
+    .then((venues) => {
+      const featuredIds = new Set(hawkerCentres.map((h) => h.id));
+      directoryVenues = venues.filter((v) => !featuredIds.has(v.slug));
+      venueTotal = venues.length;
+      venueUnderConstruction = venues.filter((v) => v.status === 'under_construction').length;
+      directoryVenues.forEach((v) => {
+        const marker = L.marker([v.lat, v.lng], { icon: dirIcon });
+        marker.bindPopup(() => venuePopupHtml(v));
+        directoryCluster.addLayer(marker);
+      });
+      renderLegendCount();
+    })
+    .catch((err) => console.error('Could not load data/venues.json', err));
 
   const mapBack = document.getElementById('mapBack');
   const mapTitle = document.getElementById('mapTitle');
   const stallPanel = document.getElementById('stallPanel');
 
-  function resetStallPanel() {
-    if (stallPanel) {
-      stallPanel.innerHTML = '<p class="map-hint">Click a stall marker to preview its review.</p>';
-    }
+  function resetStallPanel(hc) {
+    if (!stallPanel) return;
+    const venueLink = hc ? `<a class="popup-btn popup-btn-quiet" href="venue.html?v=${encodeURIComponent(hc.id)}">${t('viewVenue')}</a>` : '';
+    stallPanel.innerHTML = `<p class="map-hint">${t('mapHint')}</p>${venueLink}`;
   }
 
   function showStallPreview(hc, stall) {
@@ -426,9 +331,12 @@ if (mapEl && window.L) {
     const detailUrl = `stall.html?hc=${encodeURIComponent(hc.id)}&stall=${encodeURIComponent(slugify(stall.name))}`;
     stallPanel.innerHTML = `
       ${photoHtml}
-      <p class="tag">${stall.cuisine}</p>
+      <p class="tag">${stall.cuisine} <span class="badge badge-muted">${t('demoBadge')}</span></p>
       <h3>${stall.name}</h3>
-      <a class="popup-btn" href="${detailUrl}">View full review →</a>
+      <div class="panel-actions">
+        <a class="popup-btn" href="${detailUrl}">${t('viewStall')}</a>
+        <a class="popup-btn popup-btn-quiet" href="venue.html?v=${encodeURIComponent(hc.id)}">${t('viewVenue')}</a>
+      </div>
     `;
   }
 
@@ -485,7 +393,7 @@ if (mapEl && window.L) {
     if (focusStall) {
       showStallPreview(hc, focusStall);
     } else {
-      resetStallPanel();
+      resetStallPanel(hc);
     }
   }
 
@@ -511,7 +419,7 @@ if (mapEl && window.L) {
     const matches = [];
     hawkerCentres.forEach((hc) => {
       if (hc.name.toLowerCase().includes(q)) {
-        matches.push({ type: 'centre', label: hc.name, sub: 'Featured · has a review', hc });
+        matches.push({ type: 'centre', label: hc.name, sub: t('demoStalls'), hc });
       }
       hc.stalls.forEach((stall) => {
         if (stall.name.toLowerCase().includes(q)) {
@@ -519,9 +427,9 @@ if (mapEl && window.L) {
         }
       });
     });
-    directoryCentres.forEach(([name, lat, lng, address]) => {
-      if (name.toLowerCase().includes(q)) {
-        matches.push({ type: 'directory', label: name, sub: address, lat, lng });
+    directoryVenues.forEach((v) => {
+      if (v.name.toLowerCase().includes(q)) {
+        matches.push({ type: 'directory', label: v.name, sub: v.address, lat: v.lat, lng: v.lng });
       }
     });
 
@@ -594,17 +502,66 @@ if (mapEl && window.L) {
 // footer) so non-English-speaking users can navigate and understand the
 // core flows; long-form editorial review text stays English-only for now.
 const I18N = {
+  checked: {"en":"Checked {date}","zh":"查证于 {date}"},
+  staleChecked: {"en":"Last checked {date} — may be out of date","zh":"上次查证于 {date} — 可能已过时"},
+  cookedStalls: {"en":"{n} cooked food stalls (NEA)","zh":"{n} 个熟食摊位（NEA）"},
+  marketStallsOnly: {"en":"Market stalls only","zh":"仅有巴刹摊位"},
+  typeHawker: {"en":"Hawker centre","zh":"小贩中心"},
+  status_open: {"en":"Open","zh":"营业中"},
+  status_under_construction: {"en":"Under construction","zh":"施工中"},
+  status_closed: {"en":"Closed","zh":"已关闭"},
+  status_unknown: {"en":"Unknown","zh":"未知"},
+  day_mon: {"en":"Mon","zh":"周一"},
+  day_tue: {"en":"Tue","zh":"周二"},
+  day_wed: {"en":"Wed","zh":"周三"},
+  day_thu: {"en":"Thu","zh":"周四"},
+  day_fri: {"en":"Fri","zh":"周五"},
+  day_sat: {"en":"Sat","zh":"周六"},
+  day_sun: {"en":"Sun","zh":"周日"},
+  pick: {"en":"Pick","zh":"精选"},
+  payment: {"en":"Payment","zh":"付款方式"},
+  stallClosedNoName: {"en":"Closed stall","zh":"已关闭的摊位"},
+  stallUnknown: {"en":"Unit status unknown","zh":"摊位状态未知"},
+  venueNotFound: {"en":"Venue not found","zh":"找不到该场所"},
+  backToMap: {"en":"← Back to the map","zh":"← 返回地图"},
+  breadcrumbHome: {"en":"Home","zh":"首页"},
+  staleWarning: {"en":"This record has not been re-checked recently.","zh":"此记录近期未重新查证。"},
+  venueMapLabel: {"en":"Map showing {name}","zh":"显示 {name} 位置的地图"},
+  atAGlance: {"en":"At a glance","zh":"一览"},
+  address: {"en":"Address","zh":"地址"},
+  postal: {"en":"Postal code","zh":"邮区编号"},
+  nearestMrt: {"en":"Nearest MRT","zh":"最近地铁站"},
+  nea: {"en":"Stalls (NEA)","zh":"摊位数（NEA）"},
+  statusLabel: {"en":"Status","zh":"状态"},
+  openInGoogleMaps: {"en":"Open in Google Maps ↗","zh":"在 Google 地图中打开 ↗"},
+  share: {"en":"Share","zh":"分享"},
+  linkCopied: {"en":"Link copied ✓","zh":"链接已复制 ✓"},
+  stallsHeading: {"en":"Stalls","zh":"摊位"},
+  coverageLine: {"en":"{n} of ~{total} stalls logged","zh":"已记录约 {total} 个摊位中的 {n} 个"},
+  coverageLineNoTotal: {"en":"{n} stalls logged","zh":"已记录 {n} 个摊位"},
+  missingNotAbsent: {"en":"A missing stall does not mean it isn't there.","zh":"未列出的摊位并不代表不存在。"},
+  belowCoverage: {"en":"Too few stalls have been logged to show a useful list yet.","zh":"目前记录的摊位太少，暂不显示列表。"},
+  noStallsYet: {"en":"No stalls have been checked in person here yet.","zh":"这里尚未有经实地查证的摊位。"},
+  viewVenue: {"en":"View venue page →","zh":"查看场所页面 →"},
+  venueMapCredit: {"en":"Hawker centre locations: NEA, data.gov.sg (Open Data Licence). Map data © OneMap, SLA.","zh":"小贩中心位置数据来源：国家环境局 NEA, data.gov.sg（开放数据许可）。地图数据 © OneMap, SLA。"},
+  cat_halal: {"en":"Halal","zh":"清真"},
+  demoBadge: {"en":"Demo","zh":"示例"},
+  demoStalls: {"en":"Demo stalls","zh":"示例摊位"},
+  viewStall: {"en":"View demo stall page →","zh":"查看示例摊位页面 →"},
+  stallVenueLink: {"en":"View the venue page →","zh":"查看场所页面 →"},
+  legendUnderConstruction: {"en":"{n} under construction","zh":"其中 {n} 个施工中"},
+  demoContentBanner: {"en":"<strong>DEMO CONTENT.</strong> The stalls, reviews and dish illustrations in this section are fictional samples, not real stalls at these centres. The venues themselves are real.","zh":"<strong>示例内容。</strong>本区块中的摊位、评价和菜式插图均为虚构样本，并非这些中心的真实摊位。中心本身是真实的。"},
   navBrowse: { en: 'Browse', zh: '浏览' },
   navReviews: { en: 'Reviews', zh: '评价' },
   navProcess: { en: 'How we review', zh: '评测方式' },
   navAbout: { en: 'About', zh: '关于我们' },
   mapTag: { en: 'Explore the island', zh: '探索全岛' },
   mapTitleDefault: { en: 'Tap a hawker centre to see its stalls.', zh: '点击小贩中心查看摊位。' },
-  legendReviewed: { en: 'Reviewed by our team', zh: '我们团队已评测' },
-  legendDirectory: { en: 'Full NEA directory (124 centres)', zh: '全国环境局完整名录（124 个中心）' },
+  legendReviewed: { en: 'Demo centres (sample stalls)', zh: '示例中心（含示例摊位）' },
+  legendDirectory: { en: 'Full NEA directory ({n} centres)', zh: '全国环境局完整名录（{n} 个中心）' },
   mapBack: { en: '← Back to Singapore', zh: '← 返回新加坡全岛' },
   mapSearchPlaceholder: { en: 'Search a hawker centre or stall…', zh: '搜索小贩中心或摊位…' },
-  mapHint: { en: 'Click a stall marker to preview its review.', zh: '点击摊位标记查看评价预览。' },
+  mapHint: { en: 'Click a stall marker to preview it.', zh: '点击摊位标记查看预览。' },
   mapCredit: { en: 'Hawker centre locations: NEA, data.gov.sg (Open Data Licence). Map data © OneMap, SLA. Centres still under construction aren’t plotted yet.', zh: '小贩中心位置数据来源：国家环境局 NEA, data.gov.sg（开放数据许可）。地图数据 © OneMap, SLA。仍在施工中的中心尚未标出。' },
   heroTicket: { en: 'QUEUE No. 001', zh: '排队号 001' },
   heroTitle: { en: 'Singapore,<br />one stall at a time.', zh: '新加坡，<br />一个摊位一个故事。' },
@@ -735,14 +692,46 @@ function applyLanguage(lang) {
     if (!entry) return;
     el.placeholder = entry[lang] || entry.en;
   });
+  window.__makanTrailLang = lang;
   document.documentElement.lang = lang === 'zh' ? 'zh-SG' : 'en';
   document.querySelectorAll('.lang-toggle').forEach((btn) => {
     btn.textContent = lang === 'zh' ? 'EN' : '中文';
     btn.setAttribute('aria-label', lang === 'zh' ? 'Switch to English' : 'Switch to Chinese');
   });
   localStorage.setItem(LANG_KEY, lang);
-  window.__makanTrailLang = lang;
+  document.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
 }
+
+function getLang() {
+  return window.__makanTrailLang === 'zh' ? 'zh' : 'en';
+}
+
+function t(key, vars) {
+  const entry = I18N[key];
+  let text = entry ? (entry[getLang()] || entry.en) : key;
+  if (vars) text = text.replace(/\{(\w+)\}/g, (_, name) => (name in vars ? vars[name] : ''));
+  return text;
+}
+
+function formatVenueDate(isoDate) {
+  return new Intl.DateTimeFormat(getLang() === 'zh' ? 'zh-SG' : 'en-SG', {
+    day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+  }).format(new Date(isoDate + 'T00:00:00Z'));
+}
+
+// The venue page's modules read the same dictionary through this.
+window.MT = { t, getLang };
+
+let venueTotal = null;
+let venueUnderConstruction = 0;
+
+function renderLegendCount() {
+  const node = document.getElementById('legendDirectoryText');
+  if (!node || venueTotal == null) return;
+  node.textContent = t('legendDirectory', { n: venueTotal })
+    + (venueUnderConstruction ? (getLang() === 'zh' ? '，' : ', ') + t('legendUnderConstruction', { n: venueUnderConstruction }) : '');
+}
+document.addEventListener('langchange', renderLegendCount);
 
 const savedLang = localStorage.getItem(LANG_KEY) === 'zh' ? 'zh' : 'en';
 applyLanguage(savedLang);
