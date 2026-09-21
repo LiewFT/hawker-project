@@ -4,6 +4,7 @@
 // Firebase Auth (stored only as a hash); emails stay in Auth and are never
 // written to the reviews collection.
 import { firebaseConfig, appCheckSiteKey } from './firebase-config.js';
+import { NAME_HINT_KEY } from './ui-common.js';
 
 const SDK = 'https://www.gstatic.com/firebasejs/10.14.1';
 
@@ -38,16 +39,32 @@ const snapshot = (u) => u && {
   uid: u.uid, name: u.displayName || '', email: u.email || '', verified: u.emailVerified,
 };
 
+// Pages without the SDK show the nickname in the nav from this hint (nav-auth.js).
+// It is only the public nickname, and the pages that load the SDK keep it in sync.
+function syncHint(user) {
+  try {
+    if (!user) localStorage.removeItem(NAME_HINT_KEY);
+    else if (user.name) localStorage.setItem(NAME_HINT_KEY, user.name);
+  } catch { /* storage blocked: the nav just says Sign in */ }
+  document.dispatchEvent(new CustomEvent('mtnamechange'));
+}
+
+function push(u) {
+  const user = snapshot(u);
+  syncHint(user);
+  onChange(user);
+}
+
 // cb(user | null) fires on load and after every sign-in, sign-out or profile change.
 export async function watchUser(cb) {
   onChange = cb;
   const { auth, A } = await load();
-  A.onAuthStateChanged(auth, (u) => onChange(snapshot(u)));
+  A.onAuthStateChanged(auth, push);
 }
 
 async function notify() {
   const { auth } = await load();
-  onChange(snapshot(auth.currentUser));
+  push(auth.currentUser);
 }
 
 export async function register({ name, email, password }) {
@@ -99,21 +116,32 @@ export async function deleteAccount(password) {
   await A.deleteUser(user);
 }
 
+function toReview(x) {
+  const created = x.createdAt?.toDate?.() ?? new Date();
+  const updated = x.updatedAt?.toDate?.() ?? created;
+  return {
+    uid: String(x.uid),
+    venue: String(x.venue || ''),
+    name: String(x.name || ''),
+    rating: Math.min(5, Math.max(1, Number(x.rating) || 1)),
+    text: String(x.text || ''),
+    date: created.toISOString().slice(0, 10),
+    edited: updated.getTime() - created.getTime() > 60000,
+    time: created.getTime(),
+  };
+}
+
 export async function fetchReviews(venueSlug) {
   const { db, F } = await load();
   const snap = await F.getDocs(F.query(
     F.collection(db, 'reviews'), F.where('venue', '==', venueSlug), F.limit(200)));
-  return snap.docs.map((d) => {
-    const x = d.data();
-    const when = x.createdAt?.toDate?.() ?? new Date();
-    return {
-      uid: String(x.uid),
-      name: String(x.name || ''),
-      rating: Math.min(5, Math.max(1, Number(x.rating) || 1)),
-      text: String(x.text || ''),
-      date: when.toISOString().slice(0, 10),
-    };
-  }).sort((a, b) => b.date.localeCompare(a.date));
+  return snap.docs.map((d) => toReview(d.data())).sort((a, b) => b.time - a.time);
+}
+
+export async function fetchMyReviews(uid) {
+  const { db, F } = await load();
+  const snap = await F.getDocs(F.query(F.collection(db, 'reviews'), F.where('uid', '==', uid)));
+  return snap.docs.map((d) => toReview(d.data())).sort((a, b) => b.time - a.time);
 }
 
 export async function saveReview(venueSlug, { rating, text }) {

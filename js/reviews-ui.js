@@ -1,34 +1,49 @@
-// The visitor-reviews section of a venue page: read reviews, register / sign in,
-// and post, update or delete your own review. All text goes through textContent.
+// The visitor-reviews section of a venue page: read reviews, write one, and
+// edit or delete your own from the ⋯ menu on it. Signing in and registering
+// happen on account.html; this section only links there. All text goes through
+// textContent.
 import { t, getLang } from './i18n.js';
 import { el, formatDate } from './data.js';
 import * as backend from './backend.js';
+import {
+  stars, errorKey, avatarClass, initial, accountHref,
+} from './ui-common.js';
 
 const MAX_TEXT = 1000;
-const MIN_PASSWORD = 8;
 
-const stars = (n) => '★'.repeat(n) + '☆'.repeat(5 - n);
-
-function errorKey(err) {
-  if (err?.key) return err.key;
-  const code = err?.code || '';
-  if (code === 'auth/email-already-in-use') return 'errEmailInUse';
-  if (['auth/invalid-credential', 'auth/wrong-password', 'auth/user-not-found'].includes(code)) return 'errBadLogin';
-  if (code === 'auth/weak-password') return 'errWeakPassword';
-  if (code === 'auth/invalid-email') return 'errInvalidEmail';
-  if (code === 'auth/too-many-requests') return 'errTooMany';
-  if (code === 'auth/network-request-failed' || code === 'unavailable') return 'errNetwork';
-  if (code === 'permission-denied') return 'errPermission';
-  console.error(err);
-  return 'errGeneric';
+// Five radio buttons drawn as stars. They are in the DOM from 5 down to 1 and
+// laid out in reverse, so "checked star and every star before it" is a CSS sibling rule.
+function ratingInput(prefix, value, onPick) {
+  const word = el('span', { class: 'rating-word', 'aria-hidden': 'true', text: value ? t(`rate${value}`) : '' });
+  const row = el('div', { class: 'star-input' });
+  for (let n = 5; n >= 1; n--) {
+    row.append(
+      el('input', { type: 'radio', name: `${prefix}-rating`, id: `${prefix}-star${n}`, value: String(n), checked: value === n }),
+      el('label', { for: `${prefix}-star${n}`, title: t(`rate${n}`) },
+        el('span', { 'aria-hidden': 'true', text: '★' }),
+        el('span', { class: 'visually-hidden', text: t('starsOption', { n }) })));
+  }
+  row.addEventListener('change', (event) => {
+    const n = Number(event.target.value);
+    word.textContent = t(`rate${n}`);
+    onPick(n);
+  });
+  return el('fieldset', { class: 'rating-pick' },
+    el('legend', { text: t('rateLabel') }), el('div', { class: 'rating-row' }, row, word));
 }
 
-const invalid = (key) => Object.assign(new Error(key), { key });
-
-function field(id, labelKey, attrs) {
+function textInput(prefix, value, onType) {
+  const box = el('textarea', {
+    id: `${prefix}-text`, maxlength: MAX_TEXT, rows: 4, placeholder: t('textPlaceholder'),
+  });
+  box.value = value;
+  const count = el('span', { class: 'char-count popup-meta', text: `${value.length} / ${MAX_TEXT}` });
+  box.addEventListener('input', () => {
+    count.textContent = `${box.value.length} / ${MAX_TEXT}`;
+    onType(box.value);
+  });
   return el('div', { class: 'field' },
-    el('label', { for: id, text: t(labelKey) }),
-    el('input', { id, required: true, ...attrs }));
+    el('label', { for: `${prefix}-text`, text: t('textLabel') }), box, count);
 }
 
 export function createReviewsSection(venue) {
@@ -37,21 +52,22 @@ export function createReviewsSection(venue) {
     user: undefined, // undefined = still checking, null = signed out
     reviews: null,
     loadFailed: false,
-    mode: 'signin', // signin | register | reset
     message: null, // { kind, key }
-    draft: null, // the review being typed; survives re-renders
+    draft: { rating: 0, text: '' }, // the new review being typed
+    editing: false, // editing my existing review
+    editDraft: null,
+    confirmingDelete: false,
   };
 
   const mineOf = () => (state.user ? state.reviews?.find((r) => r.uid === state.user.uid) : null);
-  const draftFor = (mine) => state.draft ?? { rating: mine?.rating ?? 0, text: mine?.text ?? '' };
 
   function setMessage(kind, key) {
     state.message = key ? { kind, key } : null;
     const node = section.querySelector('#reviewMessage');
-    if (node) {
-      node.textContent = key ? t(key) : '';
-      node.className = `review-message ${kind === 'error' ? 'review-message-error' : ''}`;
-    }
+    if (!node) return;
+    node.textContent = key ? t(key) : '';
+    node.className = `review-message${key ? ` review-message-${kind}` : ''}`;
+    if (key) node.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
   function setBusy(flag) {
@@ -83,210 +99,214 @@ export function createReviewsSection(venue) {
     render();
   }
 
-  // --- pieces ---
+  const focusSoon = (selector) => setTimeout(() => section.querySelector(selector)?.focus(), 0);
+
+  // --- summary ---
   function summary() {
     const list = state.reviews;
-    if (state.loadFailed) return t('reviewsLoadError');
-    if (!list) return t('reviewsLoading');
-    if (!list.length) return t('reviewsNone');
+    const counts = [0, 0, 0, 0, 0, 0];
+    list.forEach((r) => { counts[r.rating] += 1; });
     const avg = (list.reduce((s, r) => s + r.rating, 0) / list.length).toFixed(1);
-    return t(list.length === 1 ? 'reviewsSummaryOne' : 'reviewsSummary', { avg, n: list.length });
+    return el('div', { class: 'rating-summary' },
+      el('div', { class: 'rating-big', role: 'img', 'aria-label': t('rvAvgLabel', { avg }) },
+        el('strong', { text: avg }),
+        el('span', { class: 'visitor-stars', 'aria-hidden': 'true', text: stars(Math.round(Number(avg))) }),
+        el('span', { class: 'popup-meta', text: list.length === 1 ? t('rvCountOne') : t('rvCount', { n: list.length }) })),
+      el('div', { class: 'rating-bars' },
+        [5, 4, 3, 2, 1].map((n) => el('div', { class: 'rating-bar', role: 'img', 'aria-label': t('rvBarLabel', { n, count: counts[n] }) },
+          el('span', { 'aria-hidden': 'true', text: `${n}★` }),
+          el('span', { class: 'bar-track', 'aria-hidden': 'true' },
+            el('span', { class: 'bar-fill', style: `width:${Math.round((counts[n] / list.length) * 100)}%` })),
+          el('span', { class: 'popup-meta', 'aria-hidden': 'true', text: String(counts[n]) })))));
   }
 
-  function reviewItem(r) {
-    return el('li', { class: `visitor-review${state.user?.uid === r.uid ? ' visitor-review-mine' : ''}` },
-      el('div', { class: 'visitor-review-head' },
-        el('strong', { text: r.name }),
-        el('span', { class: 'visitor-stars', role: 'img', 'aria-label': t('reviewStarsOption', { n: r.rating }), text: stars(r.rating) }),
-        el('span', { class: 'popup-meta', text: formatDate(r.date, getLang()) })),
-      r.text ? el('p', { class: 'visitor-review-text', text: r.text }) : null);
-  }
-
-  function authForm() {
-    const tabs = el('div', { class: 'panel-actions' },
-      ['signin', 'register'].map((mode) => el('button', {
-        type: 'button',
-        class: `popup-btn${state.mode === mode ? '' : ' popup-btn-quiet'}`,
-        'aria-pressed': String(state.mode === mode),
-        text: t(mode === 'signin' ? 'authSignIn' : 'authRegister'),
-      })));
-    tabs.children[0].addEventListener('click', () => { state.mode = 'signin'; state.message = null; render(); });
-    tabs.children[1].addEventListener('click', () => { state.mode = 'register'; state.message = null; render(); });
-
-    const form = el('form', { class: 'auth-form', novalidate: true });
-    let onSubmit;
-
-    if (state.mode === 'register') {
-      form.append(
-        field('authName', 'authNickname', { type: 'text', autocomplete: 'nickname', minlength: 2, maxlength: 30 }),
-        field('authEmail', 'authEmail', { type: 'email', autocomplete: 'email' }),
-        field('authPassword', 'authPassword', { type: 'password', autocomplete: 'new-password', minlength: MIN_PASSWORD }),
-        el('p', { class: 'popup-meta', text: t('authPasswordHint') }),
-        el('label', { class: 'consent' },
-          el('input', { type: 'checkbox', id: 'authConsent' }), ' ',
-          t('authConsentBefore'), ' ',
-          el('a', { class: 'text-link', href: 'privacy.html', target: '_blank', rel: 'noopener', text: t('footerPrivacy') }),
-          t('authConsentAfter')),
-        el('button', { type: 'submit', class: 'popup-btn', text: t('authRegister') }));
-      onSubmit = () => {
-        const name = form.querySelector('#authName').value.trim();
-        const email = form.querySelector('#authEmail').value.trim();
-        const password = form.querySelector('#authPassword').value;
-        if (name.length < 2 || name.length > 30) throw invalid('errNickname');
-        if (!email) throw invalid('errInvalidEmail');
-        if (password.length < MIN_PASSWORD) throw invalid('errWeakPassword');
-        if (!form.querySelector('#authConsent').checked) throw invalid('errConsent');
-        return backend.register({ name, email, password });
-      };
-    } else if (state.mode === 'reset') {
-      form.append(
-        field('authEmail', 'authEmail', { type: 'email', autocomplete: 'email' }),
-        el('button', { type: 'submit', class: 'popup-btn', text: t('authResetSend') }));
-      onSubmit = async () => {
-        const email = form.querySelector('#authEmail').value.trim();
-        if (!email) throw invalid('errInvalidEmail');
-        try { await backend.sendReset(email); } catch (err) {
-          if (['auth/invalid-email', 'auth/network-request-failed'].includes(err?.code)) throw err;
-        }
-      };
-    } else {
-      form.append(
-        field('authEmail', 'authEmail', { type: 'email', autocomplete: 'email' }),
-        field('authPassword', 'authPassword', { type: 'password', autocomplete: 'current-password' }),
-        el('button', { type: 'submit', class: 'popup-btn', text: t('authSignIn') }),
-        el('button', { type: 'button', class: 'text-link link-button', id: 'authForgot', text: t('authForgot') }));
-      form.querySelector('#authForgot').addEventListener('click', () => { state.mode = 'reset'; state.message = null; render(); });
-      onSubmit = () => {
-        const email = form.querySelector('#authEmail').value.trim();
-        const password = form.querySelector('#authPassword').value;
-        if (!email || !password) throw invalid('errBadLogin');
-        return backend.signIn(email, password);
-      };
-    }
-
-    const okKey = state.mode === 'register' ? 'authVerifySent' : state.mode === 'reset' ? 'authResetSent' : null;
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      run(async () => onSubmit(), okKey);
-    });
-    return el('div', { class: 'auth-panel' }, el('p', { text: t('authPrompt') }), tabs, form);
-  }
-
-  function verifyPanel() {
-    const checkBtn = el('button', { type: 'button', class: 'popup-btn', text: t('authVerifiedBtn') });
-    const resendBtn = el('button', { type: 'button', class: 'popup-btn popup-btn-quiet', text: t('authResend') });
-    checkBtn.addEventListener('click', () => run(async () => {
-      if (!(await backend.refreshVerification())) throw invalid('authNotYetVerified');
-    }));
-    resendBtn.addEventListener('click', () => run(() => backend.resendVerification(), 'authVerifySent'));
-    return el('div', { class: 'auth-panel' },
-      el('p', { text: t('authVerifyNeeded', { email: state.user.email }) }),
-      el('div', { class: 'panel-actions' }, checkBtn, resendBtn));
-  }
-
-  function reviewForm() {
-    const mine = mineOf();
-    const draft = draftFor(mine);
-    const picks = [1, 2, 3, 4, 5].map((n) => el('label', { class: 'star-pick' },
-      el('input', { type: 'radio', name: 'rating', value: String(n), checked: draft.rating === n }),
-      el('span', {},
-        el('span', { 'aria-hidden': 'true', text: `${n}★` }),
-        el('span', { class: 'visually-hidden', text: t('reviewStarsOption', { n }) }))));
-    const box = el('textarea', { id: 'reviewText', maxlength: MAX_TEXT, rows: 4 });
-    box.value = draft.text;
-
-    const form = el('form', { class: 'review-form' },
-      el('h3', { text: t(mine ? 'reviewYours' : 'reviewWrite') }),
-      el('fieldset', { class: 'rating-pick' }, el('legend', { text: t('reviewRatingLabel') }), picks),
-      el('div', { class: 'field' }, el('label', { for: 'reviewText', text: t('reviewTextLabel') }), box),
+  // --- one review ---
+  function editForm(review) {
+    state.editDraft ??= { rating: review.rating, text: review.text };
+    const form = el('form', { class: 'review-form review-edit' },
+      ratingInput('edit', state.editDraft.rating, (n) => { state.editDraft.rating = n; }),
+      textInput('edit', state.editDraft.text, (v) => { state.editDraft.text = v; }),
       el('div', { class: 'panel-actions' },
-        el('button', { type: 'submit', class: 'popup-btn', text: t(mine ? 'reviewUpdate' : 'reviewPost') }),
-        mine ? el('button', { type: 'button', class: 'popup-btn popup-btn-quiet', id: 'reviewDelete', text: t('reviewDelete') }) : null));
-
-    form.addEventListener('input', () => {
-      state.draft = {
-        rating: Number(form.querySelector('input[name="rating"]:checked')?.value || 0),
-        text: box.value,
-      };
+        el('button', { type: 'submit', class: 'popup-btn', text: t('btnSave') }),
+        el('button', { type: 'button', class: 'popup-btn popup-btn-quiet', id: 'editCancel', text: t('btnCancel') })));
+    form.querySelector('#editCancel').addEventListener('click', () => {
+      state.editing = false;
+      state.editDraft = null;
+      render();
     });
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const d = draftFor(mine);
-      if (!d.rating) { setMessage('error', 'reviewNeedRating'); return; }
+      const d = state.editDraft;
+      if (!d.rating) { setMessage('error', 'needRating'); return; }
       run(async () => {
         await backend.saveReview(venue.slug, { rating: d.rating, text: d.text.trim() });
-        state.draft = null;
+        state.editing = false;
+        state.editDraft = null;
         await loadReviews();
-      }, 'reviewPosted');
-    });
-    form.querySelector('#reviewDelete')?.addEventListener('click', () => {
-      if (!window.confirm(t('reviewDeleteConfirm'))) return;
-      run(async () => {
-        await backend.removeReview(venue.slug);
-        state.draft = null;
-        await loadReviews();
-      }, 'reviewRemoved');
+      }, 'updatedOk');
     });
     return form;
   }
 
-  function accountBar() {
-    const out = el('button', { type: 'button', class: 'popup-btn popup-btn-quiet', text: t('authSignOut') });
-    out.addEventListener('click', () => run(() => backend.signOutUser()));
+  function deleteConfirm() {
+    const yes = el('button', { type: 'button', class: 'popup-btn popup-btn-danger', text: t('rvDeleteYes') });
+    const no = el('button', { type: 'button', class: 'popup-btn popup-btn-quiet', id: 'deleteCancel', text: t('btnCancel') });
+    yes.addEventListener('click', () => run(async () => {
+      await backend.removeReview(venue.slug);
+      state.confirmingDelete = false;
+      state.draft = { rating: 0, text: '' };
+      await loadReviews();
+    }, 'removed'));
+    no.addEventListener('click', () => { state.confirmingDelete = false; render(); });
+    return el('div', { class: 'confirm-row', role: 'alertdialog', 'aria-label': t('rvDeleteAsk') },
+      el('p', { text: t('rvDeleteAsk') }), el('div', { class: 'panel-actions' }, yes, no));
+  }
 
-    const pw = el('input', { type: 'password', id: 'deletePassword', autocomplete: 'current-password' });
-    const confirmBtn = el('button', { type: 'submit', class: 'popup-btn popup-btn-quiet', text: t('authDeleteConfirmBtn') });
-    const del = el('form', { class: 'auth-form' },
-      el('p', { class: 'popup-meta', text: t('authDeleteHelp') }),
-      el('div', { class: 'field' }, el('label', { for: 'deletePassword', text: t('authPassword') }), pw),
-      confirmBtn);
-    del.addEventListener('submit', (event) => {
-      event.preventDefault();
-      if (!pw.value) { setMessage('error', 'errBadLogin'); return; }
-      run(async () => {
-        await backend.deleteAccount(pw.value);
-        state.draft = null;
-        await loadReviews();
-      }, 'authDeleted');
+  // The ⋯ menu. Only my own review has one; a "Report" item can be added here later.
+  function reviewMenu() {
+    const trigger = el('button', {
+      type: 'button', class: 'kebab', 'aria-haspopup': 'menu', 'aria-expanded': 'false',
+      'aria-label': t('rvMenu'), text: '⋯',
     });
-    return el('div', { class: 'account-bar' },
-      el('p', { class: 'popup-meta', text: t('authSignedInAs', { name: state.user.name }) }),
-      out,
-      el('details', {}, el('summary', { text: t('authDelete') }), del));
+    const edit = el('button', { type: 'button', role: 'menuitem', text: t('rvMenuEdit') });
+    const del = el('button', { type: 'button', role: 'menuitem', class: 'menu-danger', text: t('rvMenuDelete') });
+    const menu = el('div', { class: 'review-menu', role: 'menu', hidden: true }, edit, del);
+
+    const close = () => { menu.hidden = true; trigger.setAttribute('aria-expanded', 'false'); };
+    trigger.addEventListener('click', () => {
+      const opening = menu.hidden;
+      menu.hidden = !opening;
+      trigger.setAttribute('aria-expanded', String(opening));
+      if (opening) edit.focus();
+    });
+    menu.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') { close(); trigger.focus(); }
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        (document.activeElement === edit ? del : edit).focus();
+      }
+    });
+    edit.addEventListener('click', () => {
+      state.editing = true; state.confirmingDelete = false; state.editDraft = null;
+      render();
+      focusSoon('#edit-text');
+    });
+    del.addEventListener('click', () => {
+      state.confirmingDelete = true; state.editing = false;
+      render();
+      focusSoon('#deleteCancel');
+    });
+    return el('div', { class: 'review-menu-wrap' }, trigger, menu);
   }
 
-  function authArea() {
-    if (state.user === undefined) return el('p', { class: 'popup-meta', text: t('reviewsLoading') });
-    if (state.user === null) return authForm();
-    if (!state.user.verified) return el('div', {}, verifyPanel(), accountBar());
-    return el('div', {}, reviewForm(), accountBar());
+  function reviewItem(r) {
+    const mine = state.user?.uid === r.uid;
+    const editing = mine && state.editing;
+    return el('li', { class: `visitor-review${mine ? ' visitor-review-mine' : ''}` },
+      el('span', { class: avatarClass(r.uid), 'aria-hidden': 'true', text: initial(r.name) }),
+      el('div', { class: 'visitor-review-body' },
+        el('div', { class: 'visitor-review-head' },
+          el('strong', { text: r.name }),
+          mine ? el('span', { class: 'badge badge-you', text: t('rvYou') }) : null),
+        editing ? null : el('p', { class: 'visitor-review-meta' },
+          el('span', { class: 'visitor-stars', role: 'img', 'aria-label': t('starsOption', { n: r.rating }), text: stars(r.rating) }),
+          el('span', { class: 'popup-meta', text: ` ${formatDate(r.date, getLang())}${r.edited ? ` · ${t('rvEdited')}` : ''}` })),
+        editing ? editForm(r) : (r.text ? el('p', { class: 'visitor-review-text', text: r.text }) : null),
+        mine && state.confirmingDelete ? deleteConfirm() : null),
+      mine && !editing && !state.confirmingDelete ? reviewMenu() : null);
   }
 
-  function render() {
-    const parts = [el('h2', { id: 'reviewsTitle', text: t('reviewsTitle') })];
-    if (!backend.enabled) {
-      parts.push(el('p', { class: 'popup-meta', text: t('reviewsOff') }));
-    } else {
-      const list = state.reviews ?? [];
-      parts.push(
-        el('p', { class: 'coverage-line', text: summary() }),
-        el('p', { class: 'popup-meta', text: t('reviewsNote') }),
-        list.length ? el('ul', { class: 'visitor-reviews' }, list.map(reviewItem)) : null,
-        authArea(),
-        el('p', { id: 'reviewMessage', role: 'status', 'aria-live': 'polite' }));
+  // --- the card beside the list ---
+  function composeCard() {
+    const form = el('form', { class: 'review-form' },
+      el('h3', { text: t('composeTitle') }),
+      el('p', { class: 'popup-meta', text: t('composeAs', { name: state.user.name }) }),
+      ratingInput('new', state.draft.rating, (n) => { state.draft.rating = n; form.querySelector('.field-error')?.remove(); }),
+      textInput('new', state.draft.text, (v) => { state.draft.text = v; }),
+      el('button', { type: 'submit', class: 'popup-btn popup-btn-wide', text: t('btnPost') }));
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const d = state.draft;
+      if (!d.rating) {
+        if (!form.querySelector('.field-error')) {
+          form.querySelector('.rating-pick').append(el('p', { class: 'field-error', role: 'alert', text: t('needRating') }));
+        }
+        form.querySelector('input[name="new-rating"]').focus();
+        return;
+      }
+      run(async () => {
+        await backend.saveReview(venue.slug, { rating: d.rating, text: d.text.trim() });
+        state.draft = { rating: 0, text: '' };
+        await loadReviews();
+      }, 'posted');
+    });
+    return el('aside', { class: 'review-side-card' }, form);
+  }
+
+  function promptCard(title, text, actions) {
+    return el('aside', { class: 'review-side-card' },
+      el('h3', { text: title }), el('p', { text }), el('div', { class: 'panel-actions' }, actions));
+  }
+
+  function sideCard() {
+    if (state.user === undefined) return el('aside', { class: 'review-side-card' }, el('p', { class: 'popup-meta', text: t('rvLoading') }));
+    if (state.user === null) {
+      return promptCard(t('ctaTitle'), t('ctaText'), [
+        el('a', { class: 'popup-btn', href: accountHref('register'), text: t('btnCreate') }),
+        el('a', { class: 'popup-btn popup-btn-quiet', href: accountHref(), text: t('btnSignIn') }),
+      ]);
     }
-    section.replaceChildren(...parts.filter(Boolean));
+    if (!state.user.verified) {
+      return promptCard(t('verifyCtaTitle'), t('verifyCtaText'), [
+        el('a', { class: 'popup-btn', href: accountHref(), text: t('verifyCtaBtn') }),
+      ]);
+    }
+    if (mineOf()) return el('aside', { class: 'review-side-card' }, el('p', { class: 'popup-meta', text: t('rvYourHint') }));
+    return composeCard();
+  }
+
+  // --- whole section ---
+  function render() {
+    const parts = [el('h2', { id: 'reviewsTitle', text: t('rvTitle') })];
+    if (!backend.enabled) {
+      parts.push(el('p', { class: 'popup-meta', text: t('rvOff') }));
+    } else {
+      const list = state.reviews;
+      let main;
+      if (state.loadFailed) main = el('p', { class: 'popup-meta', text: t('rvLoadError') });
+      else if (!list) main = el('p', { class: 'popup-meta', text: t('rvLoading') });
+      else if (!list.length) main = el('p', { class: 'reviews-empty', text: t('rvNone') });
+      else main = el('div', {}, summary(), el('ul', { class: 'visitor-reviews' }, list.map(reviewItem)));
+
+      parts.push(
+        el('p', { class: 'popup-meta reviews-note', text: t('rvNote') }),
+        el('p', { id: 'reviewMessage', role: 'status', 'aria-live': 'polite' }),
+        el('div', { class: 'reviews-layout' }, el('div', { class: 'reviews-main' }, main), sideCard()));
+    }
+    section.replaceChildren(...parts);
     if (state.message) setMessage(state.message.kind, state.message.key);
   }
 
+  // Click outside, or Escape, closes an open ⋯ menu.
+  document.addEventListener('click', (event) => {
+    section.querySelectorAll('.review-menu:not([hidden])').forEach((menu) => {
+      if (!menu.parentElement.contains(event.target)) {
+        menu.hidden = true;
+        menu.parentElement.querySelector('.kebab')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
   document.addEventListener('langchange', render);
   render();
 
   if (backend.enabled) {
     loadReviews();
     backend.watchUser((user) => {
-      if (state.user?.uid !== user?.uid) state.draft = null;
-      if (user) state.mode = 'signin'; // after sign-out, start from the sign-in form
+      if (state.user?.uid !== user?.uid) {
+        state.draft = { rating: 0, text: '' };
+        state.editing = false;
+        state.confirmingDelete = false;
+      }
       state.user = user;
       render();
     }).catch((err) => {

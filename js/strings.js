@@ -1,0 +1,146 @@
+// Text for the account page and the reviews section. Kept in the modules (not in
+// script.js) so these screens can never show a raw key if a cached script.js is
+// older than the modules. i18n.js falls back to script.js for shared strings.
+const S = (en, zh) => ({ en, zh });
+
+export const STRINGS = {
+  // --- nav ---
+  navAccountLabel: S('Your account: {name}', '你的账户：{name}'),
+
+  // --- account page: headings ---
+  accTitleSignIn: S('Welcome back', '欢迎回来'),
+  accSubSignIn: S('Sign in to write reviews and manage your own.', '登录后即可发表和管理你的评价。'),
+  accTitleRegister: S('Create your account', '创建你的账户'),
+  accSubRegister: S('You only need an account to post reviews. Browsing is always free.', '只有发表评价才需要账户，浏览始终免费。'),
+  accTitleReset: S('Reset your password', '重置密码'),
+  accSubReset: S("Enter your email and we'll send you a link to choose a new password.", '输入你的邮箱，我们会发送一个链接，让你设置新密码。'),
+  accTabSignIn: S('Sign in', '登录'),
+  accTabRegister: S('Create account', '注册账户'),
+  accNewHere: S('New here?', '第一次来？'),
+  accHaveAccount: S('Already have an account?', '已有账户？'),
+  accBackToSignIn: S('Back to sign in', '返回登录'),
+  accReturnTo: S('You will return to the page you were on after signing in.', '登录后会自动回到你刚才所在的页面。'),
+
+  // --- form fields ---
+  fldNickname: S('Nickname', '昵称'),
+  hintNickname: S('Shown publicly next to your reviews. Use a nickname if you prefer not to use your real name (2 to 30 characters).', '会显示在你的评价旁边。如不想用真名，可使用昵称（2 至 30 个字符）。'),
+  fldEmail: S('Email', '电子邮箱'),
+  hintEmail: S("We'll send a verification link here. It is never shown publicly.", '我们会向此邮箱发送验证链接，邮箱不会公开显示。'),
+  fldPassword: S('Password', '密码'),
+  hintPassword: S('At least 8 characters.', '至少 8 个字符。'),
+  fldConfirm: S('Confirm password', '确认密码'),
+  hintConfirm: S('Type it again to catch typos.', '再输入一次，避免输错。'),
+  showPassword: S('Show password', '显示密码'),
+  pwShort: S('Too short', '太短'),
+  pwOkay: S('Okay', '一般'),
+  pwStrong: S('Strong', '很强'),
+  pwMatch: S('Passwords match', '两次密码一致'),
+  pwMismatch: S("Passwords don't match yet", '两次输入的密码不一致'),
+  consentBefore: S('I agree to the ', '我同意'),
+  privacyPolicy: S('Privacy Policy', '隐私政策'),
+  consentAfter: S(' and to my nickname being shown with my reviews.', '，并同意我的昵称与评价一起公开显示。'),
+
+  // --- buttons ---
+  btnSignIn: S('Sign in', '登录'),
+  btnCreate: S('Create account', '注册账户'),
+  btnWait: S('Please wait…', '请稍候……'),
+  btnSendReset: S('Send reset link', '发送重置链接'),
+  linkForgot: S('Forgot your password?', '忘记密码？'),
+  btnCancel: S('Cancel', '取消'),
+  btnSave: S('Save changes', '保存修改'),
+  btnSignOut: S('Sign out', '退出登录'),
+
+  // --- why an account ---
+  whyTitle: S('Why an account?', '为什么需要账户？'),
+  why1: S('Every review comes from a verified email, which helps keep out fake reviews.', '每条评价都来自已验证的邮箱，有助于杜绝虚假评价。'),
+  why2: S('Your email is never shown. Only your nickname appears on reviews.', '你的邮箱不会公开，评价上只显示昵称。'),
+  why3: S('Delete a review, or your whole account, any time.', '随时可以删除评价或整个账户。'),
+
+  // --- verify email ---
+  verTitle: S('Check your inbox', '请查看收件箱'),
+  verBody: S('We sent a verification link to {email}. Open it, then come back here. This page updates by itself.', '我们已向 {email} 发送验证链接。请打开链接，然后回到这里，本页会自动更新。'),
+  verSpam: S("Can't find it? Check your spam folder.", '找不到？请查看垃圾邮件文件夹。'),
+  verCheck: S("I've verified my email", '我已验证邮箱'),
+  verResend: S('Resend email', '重新发送邮件'),
+  verResendIn: S('Resend in {n}s', '{n} 秒后可重发'),
+  verNotYet: S('Not verified yet. Open the link in the email, then try again.', '尚未验证。请先打开邮件中的链接，再试一次。'),
+  verSent: S('Verification email sent.', '验证邮件已发送。'),
+  verWrongEmail: S('Wrong email address?', '邮箱地址写错了？'),
+  verDone: S('Email verified. Thank you!', '邮箱已验证，谢谢！'),
+  verifiedBadge: S('Email verified', '邮箱已验证'),
+  redirecting: S("You're signed in. Taking you back…", '已登录，正在带你返回……'),
+
+  // --- signed-in account ---
+  profTitle: S('Your account', '你的账户'),
+  myReviews: S('Your reviews', '你的评价'),
+  myReviewsNone: S("You haven't reviewed anything yet. Find a hawker centre and share what you thought.", '你还没有发表过评价。找一个小贩中心，分享你的感受吧。'),
+  myReviewsBrowse: S('Browse hawker centres', '浏览小贩中心'),
+  myReviewsError: S("Couldn't load your reviews. Please try again later.", '无法加载你的评价，请稍后再试。'),
+  deleteAccount: S('Delete my account', '删除我的账户'),
+  deleteHelp: S('This permanently deletes your account, your email address and all your reviews. It cannot be undone. Enter your password to confirm.', '这将永久删除你的账户、电子邮箱和所有评价，且无法恢复。请输入密码确认。'),
+  deleteConfirm: S('Delete permanently', '永久删除'),
+  deleted: S('Your account and reviews were deleted.', '你的账户和评价已删除。'),
+  resetSent: S('If an account exists for that email, a reset link is on its way. Check your inbox.', '如果该邮箱已注册，重置链接已发送，请查看收件箱。'),
+
+  // --- reviews section ---
+  rvTitle: S('Visitor reviews', '访客评价'),
+  rvOff: S('Visitor reviews are not switched on yet.', '访客评价功能尚未开启。'),
+  rvLoading: S('Loading reviews…', '正在加载评价……'),
+  rvLoadError: S("Couldn't load reviews. Please try again later.", '无法加载评价，请稍后再试。'),
+  rvNote: S('Written by visitors with an account, not by our team, and not checked before they appear.', '由注册访客撰写，并非本团队所写，发布前未经审核。'),
+  rvNone: S('No reviews yet. Be the first to share what you thought.', '暂无评价，来第一个分享你的感受吧。'),
+  rvCount: S('{n} reviews', '{n} 条评价'),
+  rvCountOne: S('1 review', '1 条评价'),
+  rvAvgLabel: S('Average rating {avg} out of 5', '平均评分 {avg} 分（满分 5 分）'),
+  rvBarLabel: S('{n} stars: {count}', '{n} 星：{count} 条'),
+  rvYou: S('You', '你'),
+  rvEdited: S('Edited', '已编辑'),
+  rvMenu: S('Review options', '评价选项'),
+  rvMenuEdit: S('Edit review', '编辑评价'),
+  rvMenuDelete: S('Delete review', '删除评价'),
+  rvDeleteAsk: S('Delete this review?', '要删除这条评价吗？'),
+  rvDeleteYes: S('Delete', '删除'),
+  rvYourHint: S('You have reviewed this hawker centre. Use the ⋯ menu on your review to edit or delete it.', '你已评价过这个小贩中心。点击你评价上的 ⋯ 菜单，即可编辑或删除。'),
+
+  // --- write a review ---
+  composeTitle: S('Write a review', '写评价'),
+  composeAs: S('Posting as {name}', '将以「{name}」发布'),
+  rateLabel: S('Your rating', '你的评分'),
+  rate1: S('Poor', '差'),
+  rate2: S('Fair', '一般'),
+  rate3: S('Okay', '还行'),
+  rate4: S('Good', '不错'),
+  rate5: S('Excellent', '很棒'),
+  starsOption: S('{n} out of 5', '{n} 分（满分 5 分）'),
+  textLabel: S('Your review (optional)', '你的评价（选填）'),
+  textPlaceholder: S('What did you eat? Was it worth the queue?', '你吃了什么？值得排队吗？'),
+  btnPost: S('Post review', '发布评价'),
+  posted: S('Thanks, your review is posted.', '谢谢，你的评价已发布。'),
+  updatedOk: S('Your review was updated.', '你的评价已更新。'),
+  removed: S('Your review was deleted.', '你的评价已删除。'),
+  needRating: S('Please choose a star rating.', '请选择星级评分。'),
+
+  // --- prompts on a venue page ---
+  ctaTitle: S('Been here?', '来过这里吗？'),
+  ctaText: S('Sign in or create a free account to share your rating.', '登录或注册免费账户，即可分享你的评分。'),
+  verifyCtaTitle: S('One more step', '还差一步'),
+  verifyCtaText: S('Verify your email to start reviewing.', '验证邮箱后即可开始评价。'),
+  verifyCtaBtn: S('Verify my email', '去验证邮箱'),
+
+  // --- errors ---
+  errNickname: S('Choose a nickname of 2 to 30 characters.', '请填写 2 至 30 个字符的昵称。'),
+  errEmailRequired: S('Enter your email address.', '请输入邮箱地址。'),
+  errInvalidEmail: S("That email address doesn't look right.", '这个邮箱地址似乎不正确。'),
+  errPasswordRequired: S('Enter your password.', '请输入密码。'),
+  errPasswordShort: S('Use at least 8 characters.', '请至少使用 8 个字符。'),
+  errWeakPassword: S('Choose a stronger password (at least 8 characters).', '请设置更强的密码（至少 8 个字符）。'),
+  errMismatch: S("The two passwords don't match.", '两次输入的密码不一致。'),
+  errConsent: S('Please tick the box to continue.', '请勾选同意后再继续。'),
+  errEmailInUse: S('That email is already registered. Try signing in instead.', '该邮箱已注册，请直接登录。'),
+  errBadLogin: S('Wrong email or password.', '邮箱或密码不正确。'),
+  errBadPassword: S("That password isn't right.", '密码不正确。'),
+  errTooMany: S('Too many attempts. Please wait a few minutes and try again.', '尝试次数过多，请等几分钟后再试。'),
+  errNetwork: S('Network problem. Check your connection and try again.', '网络出错，请检查连接后再试。'),
+  errPermission: S('This was not accepted. Make sure your email is verified, then try again.', '操作未被接受。请确认已验证邮箱，然后再试。'),
+  errGeneric: S('Something went wrong. Please try again.', '出了点问题，请再试一次。'),
+};
