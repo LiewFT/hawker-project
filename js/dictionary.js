@@ -192,10 +192,6 @@ export const DICT = {
     "en": "Under construction",
     "zh": "施工中"
   },
-  "heroBtnAbout": {
-    "en": "How it works",
-    "zh": "运作方式"
-  },
   "filterLabel": {
     "en": "Filter venues by name or street",
     "zh": "按名称或街道筛选场所"
@@ -439,5 +435,69 @@ export const DICT = {
   "aboutCorrText": {
     "en": "A public way to send corrections is not set up yet.",
     "zh": "公开的更正渠道尚未设立。"
+  },
+  "cat_must-try": {
+    "en": "Must try",
+    "zh": "必吃"
+  },
+  "cat_cheap-eats": {
+    "en": "Cheap eats",
+    "zh": "平价美食"
+  },
+  "cat_breakfast": {
+    "en": "Breakfast",
+    "zh": "早餐"
+  },
+  "cat_halal": {
+    "en": "Halal",
+    "zh": "清真"
+  },
+  "cat_drinks": {
+    "en": "Drinks",
+    "zh": "饮品"
+  },
+  "categoriesHeading": {
+    "en": "What are<br />you after?",
+    "zh": "你想吃<br />什么？"
+  },
+  "categoriesText": {
+    "en": "Pick a category to see stalls that have been checked in person and tagged for it.",
+    "zh": "选择一个类别，查看经实地查证并标记为该类别的摊位。"
+  },
+  "heroBtnCategories": {
+    "en": "Browse by category",
+    "zh": "按类别浏览"
+  },
+  "navCategories": {
+    "en": "Categories",
+    "zh": "类别"
+  },
+  "categoryChipLabel": {
+    "en": "{label} ({n})",
+    "zh": "{label}（{n}）"
+  },
+  "categoryNone": {
+    "en": "No stalls have been checked in person yet, so every category is empty. Stalls appear here as they are logged.",
+    "zh": "目前尚无经实地查证的摊位，所以每个类别都是空的。摊位记录后会显示在这里。"
+  },
+  "categoryPick": {
+    "en": "Choose a category above.",
+    "zh": "请在上方选择一个类别。"
+  },
+  "categoryEmpty": {
+    "en": "No {label} stalls logged yet.",
+    "zh": "暂时还没有记录“{label}”摊位。"
+  },
+  "categoryShowing": {
+    "en": "Showing {n} stalls: {label}.",
+    "zh": "显示 {n} 个摊位：{label}。"
+  },
+  "categoryNoteHalal": {
+    "en": "Only stalls with a MUIS halal certificate number on record are listed here.",
+    "zh": "这里只列出已记录 MUIS 清真认证编号的摊位。"
+  },
+  "categoryNoteCheap": {
+    "en": "Cheap eats means at least one dish priced at ${max} or less.",
+    "zh": "平价美食指至少有一道菜的价格在 ${max} 或以下。"
   }
 };
