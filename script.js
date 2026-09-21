@@ -109,54 +109,54 @@ const hawkerCentres = [
       id: 'chinatown', name: 'Chinatown Complex', lat: 1.2823, lng: 103.8428802,
       address: '335 Smith Street, Singapore 050335', stallCount: 226,
       stalls: [
-        { name: 'Golden Ladle Wanton Mee', cuisine: 'Noodles', rating: 4.5, dlat: 0.00035, dlng: -0.00030 },
-        { name: 'Silver Bowl Porridge', cuisine: 'Porridge', rating: 4.2, dlat: -0.00020, dlng: 0.00025 },
-        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', rating: 4.6, dlat: 0.00020, dlng: 0.00040 },
+        { name: 'Golden Ladle Wanton Mee', cuisine: 'Noodles', dlat: 0.00035, dlng: -0.00030 },
+        { name: 'Silver Bowl Porridge', cuisine: 'Porridge', dlat: -0.00020, dlng: 0.00025 },
+        { name: 'Riverside Fried Kway Teow', cuisine: 'Fried Kway Teow', dlat: 0.00020, dlng: 0.00040 },
       ],
     },
     {
       id: 'tiongbahru', name: 'Tiong Bahru Market', lat: 1.28468299, lng: 103.832428,
       address: '30 Seng Poh Road, Singapore 168898', stallCount: 83,
       stalls: [
-        { name: 'Teochew Corner Shui Kueh', cuisine: 'Teochew', rating: 4.4, dlat: 0.00025, dlng: -0.00020 },
-        { name: 'Market Wok Hokkien Mee', cuisine: 'Hokkien Mee', rating: 4.3, dlat: -0.00030, dlng: 0.00015 },
-        { name: 'Lor Mee Corner', cuisine: 'Lor Mee', rating: 4.1, dlat: 0.00010, dlng: 0.00035 },
+        { name: 'Teochew Corner Shui Kueh', cuisine: 'Teochew', dlat: 0.00025, dlng: -0.00020 },
+        { name: 'Market Wok Hokkien Mee', cuisine: 'Hokkien Mee', dlat: -0.00030, dlng: 0.00015 },
+        { name: 'Lor Mee Corner', cuisine: 'Lor Mee', dlat: 0.00010, dlng: 0.00035 },
       ],
     },
     {
       id: 'maxwell', name: 'Maxwell Food Centre', lat: 1.28055096, lng: 103.8444595,
       address: '1 Kadayanallur Street, Singapore 069184', stallCount: 103,
       stalls: [
-        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', rating: 4.5, dlat: 0.00020, dlng: -0.00025 },
-        { name: 'Harbour Fuzhou Oyster Cake', cuisine: 'Snacks', rating: 4.0, dlat: -0.00025, dlng: 0.00020 },
-        { name: 'Northern Style La Mian & Xiao Long Bao', cuisine: 'Noodles', rating: 4.3, dlat: 0.00030, dlng: 0.00030 },
+        { name: 'Sunny Isle Chicken Rice', cuisine: 'Chicken Rice', dlat: 0.00020, dlng: -0.00025 },
+        { name: 'Harbour Fuzhou Oyster Cake', cuisine: 'Snacks', dlat: -0.00025, dlng: 0.00020 },
+        { name: 'Northern Style La Mian & Xiao Long Bao', cuisine: 'Noodles', dlat: 0.00030, dlng: 0.00030 },
       ],
     },
     {
       id: 'geylang', name: 'Geylang Serai Market', lat: 1.31688809, lng: 103.8974075,
       address: '1 Geylang Serai, Singapore 402001', stallCount: 63,
       stalls: [
-        { name: "Uncle Kok's Frog Leg Bee Hoon", cuisine: 'Bee Hoon', rating: 4.8, dlat: 0.00030, dlng: -0.00020 },
-        { name: 'Kampung Flavours Nasi Padang', cuisine: 'Malay', rating: 4.4, dlat: -0.00020, dlng: 0.00030 },
-        { name: 'Sweet Steam Putu Piring', cuisine: 'Dessert', rating: 4.2, dlat: 0.00015, dlng: 0.00035 },
+        { name: "Uncle Kok's Frog Leg Bee Hoon", cuisine: 'Bee Hoon', dlat: 0.00030, dlng: -0.00020 },
+        { name: 'Kampung Flavours Nasi Padang', cuisine: 'Malay', dlat: -0.00020, dlng: 0.00030 },
+        { name: 'Sweet Steam Putu Piring', cuisine: 'Dessert', dlat: 0.00015, dlng: 0.00035 },
       ],
     },
     {
       id: 'oldairport', name: '51 Old Airport Road Food Centre', lat: 1.30827999, lng: 103.8858414,
       address: 'Blk 51, Old Airport Road, Singapore 390051', stallCount: 168,
       stalls: [
-        { name: 'Golden Wok Rou Cuo Mian', cuisine: 'Mee Pok', rating: 4.6, dlat: 0.00025, dlng: -0.00030 },
-        { name: 'Harbourfront Hokkien Fried Mee', cuisine: 'Hokkien Mee', rating: 4.7, dlat: -0.00020, dlng: 0.00025 },
-        { name: 'Fruit Rojak Corner', cuisine: 'Snacks', rating: 4.1, dlat: 0.00030, dlng: 0.00020 },
+        { name: 'Golden Wok Rou Cuo Mian', cuisine: 'Mee Pok', dlat: 0.00025, dlng: -0.00030 },
+        { name: 'Harbourfront Hokkien Fried Mee', cuisine: 'Hokkien Mee', dlat: -0.00020, dlng: 0.00025 },
+        { name: 'Fruit Rojak Corner', cuisine: 'Snacks', dlat: 0.00030, dlng: 0.00020 },
       ],
     },
     {
       id: 'newton', name: 'Newton Food Centre', lat: 1.3122250, lng: 103.8397293,
       address: '500 Clemenceau Avenue North, Singapore 229495', stallCount: 83,
       stalls: [
-        { name: 'Circus Lights BBQ Seafood', cuisine: 'Seafood', rating: 4.3, dlat: 0.00025, dlng: -0.00025 },
-        { name: 'Charcoal Trail Satay', cuisine: 'Satay', rating: 4.5, dlat: -0.00030, dlng: 0.00015 },
-        { name: 'Golden Pan Fried Oyster Omelette', cuisine: 'Local', rating: 4.2, dlat: 0.00015, dlng: 0.00030 },
+        { name: 'Circus Lights BBQ Seafood', cuisine: 'Seafood', dlat: 0.00025, dlng: -0.00025 },
+        { name: 'Charcoal Trail Satay', cuisine: 'Satay', dlat: -0.00030, dlng: 0.00015 },
+        { name: 'Golden Pan Fried Oyster Omelette', cuisine: 'Local', dlat: 0.00015, dlng: 0.00030 },
       ],
     },
 ];
@@ -189,7 +189,7 @@ function renderStallDetail() {
 
   document.title = `${stall.name} — ${hc.name}｜Makan Trail`;
   const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) metaDesc.content = `${stall.name} reviewed by Makan Trail — taste tested, filmed, and rated.`;
+  if (metaDesc) metaDesc.content = `${stall.name} reviewed by Makan Trail — taste tested by our team.`;
 
   const breadcrumbName = document.getElementById('stallBreadcrumbName');
   if (breadcrumbName) breadcrumbName.textContent = stall.name;
@@ -209,13 +209,6 @@ function renderStallDetail() {
     addressEl.textContent = `📍 ${hc.address}`;
   }
 
-  const starsEl = document.getElementById('stallStars');
-  if (starsEl) {
-    const ratingNum = Math.round(stall.rating);
-    starsEl.textContent = '★'.repeat(ratingNum) + '☆'.repeat(5 - ratingNum);
-    starsEl.setAttribute('aria-label', `${stall.rating} out of 5 stars`);
-  }
-
   const cuisineValueEl = document.getElementById('stallCuisineValueDynamic');
   if (cuisineValueEl) {
     cuisineValueEl.removeAttribute('data-i18n');
@@ -228,8 +221,6 @@ function renderStallDetail() {
       galleryMain.style.background = `url('${stall.photo}') center/cover`;
       galleryMain.classList.remove('photo-a');
     }
-    // No real video exists for these demo stalls, so don't claim there is one.
-    document.getElementById('stallVideoBadge')?.remove();
   }
 }
 
@@ -421,7 +412,6 @@ if (mapEl && window.L) {
 
   function showStallPreview(hc, stall) {
     if (!stallPanel) return;
-    const ratingNum = Math.round(stall.rating);
     const photoHtml = stall.photo
       ? `<img class="stall-panel-photo" src="${stall.photo}" alt="${stall.name}" />`
       : '';
@@ -430,7 +420,6 @@ if (mapEl && window.L) {
       ${photoHtml}
       <p class="tag">${stall.cuisine}</p>
       <h3>${stall.name}</h3>
-      <div class="stars small" aria-label="${stall.rating} out of 5 stars">${'★'.repeat(ratingNum)}${'☆'.repeat(5 - ratingNum)}</div>
       <a class="popup-btn" href="${detailUrl}">View full review →</a>
     `;
   }
@@ -611,7 +600,7 @@ const I18N = {
   mapCredit: { en: 'Hawker centre locations: NEA, data.gov.sg (Open Data Licence). Map data © OneMap, SLA. Centres still under construction aren’t plotted yet.', zh: '小贩中心位置数据来源：国家环境局 NEA, data.gov.sg（开放数据许可）。地图数据 © OneMap, SLA。仍在施工中的中心尚未标出。' },
   heroTicket: { en: 'QUEUE No. 001', zh: '排队号 001' },
   heroTitle: { en: 'Singapore,<br />one stall at a time.', zh: '新加坡，<br />一个摊位一个故事。' },
-  heroText: { en: "We queue, we taste, we film — then we tell you straight whether it's worth the walk. Hawker stalls, food courts, and kopitiams, reviewed by our team and rated by yours.", zh: '我们排队、试吃、拍摄——然后直接告诉你值不值得跑一趟。小贩摊位、美食广场与咖啡店，由我们团队评测，也欢迎你来评分。' },
+  heroText: { en: "We queue, we taste, we film — then we tell you straight whether it's worth the walk. Hawker stalls, food courts, and kopitiams, reviewed by our team.", zh: '我们排队、试吃、拍摄——然后直接告诉你值不值得跑一趟。小贩摊位、美食广场与咖啡店，由我们团队评测。' },
   heroBtnReviews: { en: 'See the latest tastings', zh: '查看最新试吃' },
   heroBtnBrowse: { en: 'Browse by neighbourhood', zh: '按地区浏览' },
   browseHeading: { en: 'Find your next<br />makan.', zh: '找到你的<br />下一餐。' },
@@ -641,7 +630,7 @@ const I18N = {
   processStep1Title: { en: 'We queue and taste', zh: '排队试吃' },
   processStep1Text: { en: 'Same as any other customer — full price, no heads-up to the stall, no free samples.', zh: '和普通顾客一样——全额付费，不事先通知摊主，不接受免费试吃。' },
   processStep2Title: { en: 'We film and photograph', zh: '拍摄记录' },
-  processStep2Text: { en: 'Every dish is shot on site. Video for the ones worth watching someone cook.', zh: '每道菜都在现场拍摄，值得一看的烹饪过程会录成视频。' },
+  processStep2Text: { en: 'Every dish is shot on site. Photos of every dish.', zh: '每道菜都在现场拍摄，并附上照片。' },
   processStep3Title: { en: 'We publish it straight', zh: '如实发布' },
   processStep3Text: { en: 'The good, the average, and the "don\'t bother" — all get a review, not just the wins.', zh: '好的、普通的、不推荐的——都会写评价，不只报道好的一面。' },
   communityHeading: { en: 'What readers<br />are saying.', zh: '读者<br />怎么说。' },
