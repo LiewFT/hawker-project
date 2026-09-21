@@ -25,6 +25,7 @@
       <span class="brand-word">MAKAN TRAIL</span>
     </a>
     <nav class="main-nav" id="mainNav">
+      <a href="#categories" data-i18n="navCategories">Categories</a>
       <a href="#browse" data-i18n="navBrowse">Browse</a>
       <a href="about.html" data-i18n="navAbout">About</a>
       <button type="button" class="lang-toggle" aria-label="Switch to Chinese">中文</button>
@@ -61,10 +62,21 @@
         <h1 data-i18n="heroTitle">Every hawker centre<br />in Singapore.</h1>
         <p class="hero-text" data-i18n="heroText">Each record shows the date it was last checked, and anything not re-checked in time is marked as stale. No ratings and no reader reviews — just what is there, and when it was last looked at.</p>
         <div class="button-row">
-          <a class="button button-primary" href="#browse" data-i18n="heroBtnBrowse">Browse all venues</a>
-          <a class="button button-quiet" href="about.html" data-i18n="heroBtnAbout">How it works</a>
+          <a class="button button-primary" href="#categories" data-i18n="heroBtnCategories">Browse by category</a>
+          <a class="button button-quiet" href="#browse" data-i18n="heroBtnBrowse">All venues</a>
+          
         </div>
       </div>
+    </section>
+
+    <section id="categories" class="browse-section">
+      <div class="section-heading">
+        <h2 id="categoriesHeading" data-i18n="categoriesHeading">What are<br />you after?</h2>
+        <p data-i18n="categoriesText">Pick a category to see stalls that have been checked in person and tagged for it.</p>
+      </div>
+      <div class="chip-row" id="categoryChips" role="group" aria-labelledby="categoriesHeading"></div>
+      <p class="visually-hidden" id="categoryStatus" aria-live="polite"></p>
+      <div id="categoryResults"></div>
     </section>
 
     <section id="browse" class="browse-section">

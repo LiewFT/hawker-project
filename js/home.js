@@ -2,8 +2,9 @@
 // All venue facts come from data/venues.json.
 import './common.js';
 import { t, getLang } from './i18n.js';
+import { stallCard } from './stalls.js';
 import {
-  STALE_DAYS, loadVenues, venueUrl, googleMapsUrl, daysSince, formatDate, summarize, el,
+  STALE_DAYS, CATEGORIES, CHEAP_MAX_SGD, loadVenues, loadAllStalls, venueUrl, googleMapsUrl, daysSince, formatDate, summarize, el,
 } from './data.js';
 
 const SG_CENTER = [1.3226, 103.8636];
@@ -24,6 +25,8 @@ let map;
 let selected = null;
 const markers = new Map(); // slug -> circleMarker
 let statusFilter = 'all';
+let allStalls = []; // { venue, stall } for every stall that has been collected
+let category = null;
 
 const COLORS = { open: '#2A6660', under_construction: '#B8AE96', closed: '#B8AE96', selected: '#C23B22' };
 
@@ -198,11 +201,61 @@ document.querySelectorAll('[data-status-filter]').forEach((chip) => {
   });
 });
 
+// ---------- categories ----------
+function stallsIn(cat) {
+  return allStalls.filter(({ stall }) => (stall.tags || []).includes(cat));
+}
+
+function renderCategories() {
+  const chips = document.getElementById('categoryChips');
+  const results = document.getElementById('categoryResults');
+  const status = document.getElementById('categoryStatus');
+  chips.replaceChildren(...CATEGORIES.map((cat) => {
+    const chip = el('button', {
+      type: 'button',
+      class: cat === category ? 'chip chip-active' : 'chip',
+      'aria-pressed': String(cat === category),
+      text: t('categoryChipLabel', { label: t('cat_' + cat), n: stallsIn(cat).length }),
+    });
+    chip.addEventListener('click', () => {
+      category = category === cat ? null : cat;
+      renderCategories();
+    });
+    return chip;
+  }));
+
+  results.replaceChildren();
+  if (!allStalls.length) {
+    results.append(el('p', { class: 'filter-empty', text: t('categoryNone') }));
+    status.textContent = '';
+    return;
+  }
+  if (!category) {
+    results.append(el('p', { class: 'filter-empty', text: t('categoryPick') }));
+    status.textContent = '';
+    return;
+  }
+  const label = t('cat_' + category);
+  const notes = { halal: t('categoryNoteHalal'), 'cheap-eats': t('categoryNoteCheap', { max: CHEAP_MAX_SGD }) };
+  if (notes[category]) results.append(el('p', { class: 'popup-meta', text: notes[category] }));
+  const found = stallsIn(category).sort((a, b) =>
+    (b.stall.editorial === 'pick') - (a.stall.editorial === 'pick')
+    || a.venue.name.localeCompare(b.venue.name) || a.stall.unit.localeCompare(b.stall.unit));
+  if (!found.length) {
+    results.append(el('p', { class: 'filter-empty', text: t('categoryEmpty', { label }) }));
+    status.textContent = t('categoryEmpty', { label });
+    return;
+  }
+  results.append(el('ul', { class: 'stall-list stall-list-wide' }, found.map(({ venue, stall }) => stallCard(stall, venue))));
+  status.textContent = t('categoryShowing', { n: found.length, label });
+}
+
 // ---------- boot ----------
 function rerender() {
   renderStats();
   renderPanel();
   renderList();
+  renderCategories();
   if (!selected) document.getElementById('mapTitle').textContent = t('mapTitleDefault');
 }
 
@@ -210,6 +263,7 @@ document.addEventListener('langchange', () => { if (venues.length) rerender(); }
 
 try {
   venues = await loadVenues();
+  allStalls = await loadAllStalls(venues);
   initMap();
   rerender();
 } catch (err) {

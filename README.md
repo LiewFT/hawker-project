@@ -14,7 +14,7 @@ The site is static (GitHub Pages) and currently `noindex` until launch.
 
 ## Code layout
 - `js/data.js` — loads and derives everything from `data/`; no invented values
-- `js/home.js`, `js/venue.js` — page logic
+- `js/home.js`, `js/venue.js` — page logic; `js/stalls.js` — stall card shared by both
 - `js/i18n.js`, `js/dictionary.js` — EN / 中文 toggle (every string in the dictionary)
 - `js/common.js` — language toggle and mobile menu, on every page
 
@@ -24,6 +24,7 @@ The site is static (GitHub Pages) and currently `noindex` until launch.
 - `data/venues/<slug>.json` — stalls for one venue, added only after being checked
   in person. Absent for every venue today. Until a venue has at least 30% of its
   stalls logged, its page shows the coverage line but no stall list.
+- Categories (Must try, Cheap eats, Breakfast, Halal, Drinks) come from stall `tags`, so they are empty until stalls are collected. A tag needs its evidence or CI fails: `halal` needs `halal: true` and a `muis_cert` number; `cheap-eats` needs a dish at or under $5 (`CHEAP_MAX_SGD`, in `scripts/validate-data.js` and `js/data.js`).
 - `npm run validate-data` runs the same check CI runs.
 - `pipeline/SETUP.md` — Google Form → Sheet → nightly PR pipeline (needs a Google account).
 

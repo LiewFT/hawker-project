@@ -18,8 +18,9 @@ One submission per stall. Fields, in tap order (matches the plan exactly):
 | unit | Short answer | e.g. `01-23` |
 | name | Short answer | Required unless status is closed/unknown |
 | status | Dropdown | `open`, `closed`, `unknown` |
-| cuisine | Dropdown (allow multiple) | Controlled list — start with: local, chinese, malay, indian, teochew, hokkien, halal, drinks, dessert |
-| tags | Checkboxes | `must-try`, `cheap-eats`, `breakfast`, `halal`, `drinks` |
+| cuisine | Dropdown (allow multiple) | Controlled list — start with: local, chinese, malay, indian, teochew, hokkien, drinks, dessert |
+| tags | Checkboxes | `must-try`, `cheap-eats`, `breakfast`, `halal`, `drinks`. The site's category filters come from these. `halal` needs the MUIS number below; `cheap-eats` needs a dish at or under $5 (change the threshold in `scripts/validate-data.js`). CI rejects a record that breaks either rule. |
+| muis_cert | Short answer | MUIS halal certificate number as seen on the stall. Leave blank if there is none — never tick halal without it |
 | hours_today | Short answer | e.g. `11:00-19:30` — the sync script only fills in the day it was collected on; leave other days for a return visit |
 | payment | Checkboxes | `cash`, `paynow`, `card`, `nets` |
 | signature_dish | Short answer | Optional |

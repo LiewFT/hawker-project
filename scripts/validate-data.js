@@ -17,6 +17,9 @@ const stallSchema = JSON.parse(fs.readFileSync(path.join(root, 'schema', 'stall.
 const validateVenue = ajv.compile(venueSchema);
 const validateStall = ajv.compile(stallSchema);
 
+// Category rules. A tag is a claim, so the record must carry the evidence.
+const CHEAP_MAX_SGD = 5; // cheap-eats: at least one dish at or under this price
+
 let failures = 0;
 
 function fail(file, index, errors) {
@@ -67,6 +70,13 @@ if (fs.existsSync(venuesDir)) {
       if (!validateStall(stall)) fail(`data/venues/${file}`, i, validateStall.errors);
       if (stall.status === 'open' && !stall.name) {
         fail(`data/venues/${file}`, i, [{ instancePath: '/name', message: 'is required when status is "open"' }]);
+      }
+      const isHalal = stall.halal === true || (stall.tags || []).includes('halal');
+      if (isHalal && !(stall.halal === true && stall.muis_cert)) {
+        fail(`data/venues/${file}`, i, [{ instancePath: '/halal', message: 'halal (or the halal tag) needs halal: true and a muis_cert number' }]);
+      }
+      if ((stall.tags || []).includes('cheap-eats') && !(stall.dishes || []).some((d) => d.price_sgd != null && d.price_sgd <= CHEAP_MAX_SGD)) {
+        fail(`data/venues/${file}`, i, [{ instancePath: '/tags', message: `cheap-eats needs at least one dish priced at or under ${CHEAP_MAX_SGD}` }]);
       }
       if (seenUnits.has(stall.unit)) {
         fail(`data/venues/${file}`, i, [{ instancePath: '/unit', message: `duplicate unit "${stall.unit}" in this venue` }]);
