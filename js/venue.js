@@ -58,7 +58,7 @@ function render() {
       el('p', { class: 'hero-text' }, el('a', { class: 'text-link', href: 'index.html', text: t('backToMap') })));
     return;
   }
-  document.title = `${venue.name}｜Makan Trail`;
+  document.title = `${venue.name}｜Must Go To Eat`;
   const tooOld = daysSince(venue.verified) > STALE_DAYS.venue;
 
   root.append(
@@ -88,7 +88,7 @@ function render() {
 
   document.getElementById('shareBtn').addEventListener('click', async (event) => {
     const button = event.currentTarget;
-    const data = { title: `${venue.name}｜Makan Trail`, url: location.href };
+    const data = { title: `${venue.name}｜Must Go To Eat`, url: location.href };
     try {
       if (navigator.share) await navigator.share(data);
       else {

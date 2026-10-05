@@ -2,7 +2,7 @@
   "name": "mustgotoeat",
   "version": "0.1.0",
   "private": true,
-  "description": "Singapore hawker/food court/cafe venue and stall data, validated in CI. Frontend is currently the plain static Makan Trail demo site; the /data model here is the Week 1 foundation for the real MustGoToEat build.",
+  "description": "Singapore hawker/food court/cafe venue and stall data, validated in CI. Frontend is the static Must Go To Eat site.",
   "scripts": {
     "validate-data": "node scripts/validate-data.js",
     "sync-sheet": "node scripts/sync-sheet-to-json.js"

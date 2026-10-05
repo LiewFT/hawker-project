@@ -75,7 +75,7 @@ const shareBtn = document.getElementById('shareBtn');
 shareBtn?.addEventListener('click', async () => {
   const shareData = {
     title: document.title,
-    text: 'Check out this review on Makan Trail',
+    text: 'Check out this review on Must Go To Eat',
     url: window.location.href,
   };
   try {
@@ -187,9 +187,9 @@ function renderStallDetail() {
   const { hc, stall } = match;
   const isZh = window.__makanTrailLang === 'zh';
 
-  document.title = `${stall.name} — ${hc.name}｜Makan Trail`;
+  document.title = `${stall.name} — ${hc.name}｜Must Go To Eat`;
   const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) metaDesc.content = `${stall.name} reviewed by Makan Trail — taste tested by our team.`;
+  if (metaDesc) metaDesc.content = `${stall.name} reviewed by Must Go To Eat — taste tested by our team.`;
 
   const breadcrumbName = document.getElementById('stallBreadcrumbName');
   if (breadcrumbName) breadcrumbName.textContent = stall.name;
@@ -501,6 +501,10 @@ if (mapEl && window.L) {
 // Covers site chrome (nav, hero, section headings, buttons, map UI,
 // footer) so non-English-speaking users can navigate and understand the
 // core flows; long-form editorial review text stays English-only for now.
+// The site's name in the 中文 version. The client hasn't chosen a Chinese name yet,
+// so it uses the English name until then.
+const BRAND_ZH = 'Must Go To Eat';
+
 const I18N = {
   checked: {"en":"Checked {date}","zh":"查证于 {date}"},
   staleChecked: {"en":"Last checked {date} — may be out of date","zh":"上次查证于 {date} — 可能已过时"},
@@ -589,10 +593,10 @@ const I18N = {
   chipBigGroup: { en: 'Big group', zh: '多人聚餐' },
   filterEmpty: { en: "No reviews match that filter yet — check back soon.", zh: '暂无符合该分类的评价，请稍后再看。' },
   reviewsHeading: { en: 'Latest<br />tastings.', zh: '最新<br />试吃。' },
-  reviewsText: { en: 'Filmed and reviewed by the Makan Trail team this month.', zh: '本月由 Makan Trail 团队拍摄评测。' },
+  reviewsText: { en: 'Filmed and reviewed by the Must Go To Eat team this month.', zh: `本月由 ${BRAND_ZH} 团队拍摄评测。` },
   loadMore: { en: 'Load more reviews', zh: '加载更多评价' },
   processHeading: { en: 'How we<br />review.', zh: '我们的<br />评测方式。' },
-  processText: { en: 'Every stall on Makan Trail goes through the same three steps before it’s published.', zh: '每个摊位在发布前都会经过相同的三个步骤。' },
+  processText: { en: 'Every stall on Must Go To Eat goes through the same three steps before it’s published.', zh: '每个摊位在发布前都会经过相同的三个步骤。' },
   processStep1Title: { en: 'We queue and taste', zh: '排队试吃' },
   processStep1Text: { en: 'Same as any other customer — full price, no heads-up to the stall, no free samples.', zh: '和普通顾客一样——全额付费，不事先通知摊主，不接受免费试吃。' },
   processStep2Title: { en: 'We film and photograph', zh: '拍摄记录' },
@@ -605,7 +609,7 @@ const I18N = {
   reviewCtaText: { en: 'Read reader reviews and leave your own rating →', zh: '查看读者评价，也可以留下你的评分 →' },
   footerPrivacy: { en: 'Privacy Policy', zh: '隐私政策' },
   footerContact: { en: 'Contact', zh: '联系我们' },
-  footerNote: { en: '© 2026 Makan Trail. Draft concept — placeholder content and images.', zh: '© 2026 Makan Trail。草稿概念——内容与图片均为占位。' },
+  footerNote: { en: '© 2026 Must Go To Eat. Draft concept — placeholder content and images.', zh: `© 2026 ${BRAND_ZH}。草稿概念——内容与图片均为占位。` },
 
   // --- stall.html ---
   stallBreadcrumbHome: { en: 'Home', zh: '首页' },
@@ -615,7 +619,7 @@ const I18N = {
   stallPrice: { en: '💵 $4–$6 per pax', zh: '💵 每人 $4–$6' },
   stallRatingSummary: { en: '4.5 editorial score', zh: '编辑评分 4.5' },
   stallWatchTasting: { en: '▶ Watch the tasting', zh: '▶ 观看试吃视频' },
-  stallByline: { en: 'Reviewed by the Makan Trail team · Published 3 Sept 2026 · Taste-tested in person, full price', zh: '由 Makan Trail 团队评测 · 2026年9月3日发布 · 亲自试吃，全额付费' },
+  stallByline: { en: 'Reviewed by the Must Go To Eat team · Published 3 Sept 2026 · Taste-tested in person, full price', zh: `由 ${BRAND_ZH} 团队评测 · 2026年9月3日发布 · 亲自试吃，全额付费` },
   stallFictionalNote: { en: 'This is a fictional demo stall used to preview the review layout — not a real business.', zh: '这是一个虚构的示例摊位，用于预览评价页面排版——并非真实商家。' },
   stallPara1: { en: "Forty years in, and the queue outside Golden Ladle still snakes past the neighbouring stalls by 11:30am on a weekday. We joined it anyway, curious whether the hype still holds up against Chinatown's newer noodle stalls.", zh: '开业四十年，工作日上午11点半，Golden Ladle门前的队伍依然蜿蜒过隔壁摊位。我们还是加入了排队，想看看在牛车水新兴面食摊位的冲击下，这份口碑是否依然名不虚传。' },
   stallPara2: { en: "It does. The noodles are springy without being tough, tossed in a dark sauce that isn't overly sweet — a common fault at stalls chasing a younger crowd. The chilli, made fresh each morning, has real heat and a lingering smokiness from what tastes like charred dried chillies rather than the usual shortcut of chilli sauce out of a bottle. The char siew is grilled to order over charcoal, which explains both the char and the ten-minute wait once you place your order.", zh: '确实名不虚传。面条弹牙不硬，拌入的黑酱油不会过甜——这是许多迎合年轻顾客口味的摊位常犯的毛病。每天早上现制的辣椒酱够辣，还带着烘干辣椒的烟熏香，而不是瓶装辣椒酱的敷衍味道。叉烧是现点现烤的炭烤叉烧，这解释了叉烧的炭香，也解释了点餐后要等上十分钟的原因。' },
@@ -635,8 +639,8 @@ const I18N = {
   stallNearestMrtValue: { en: 'Chinatown (5 min walk)', zh: '牛车水站（步行5分钟）' },
 
   // --- about.html ---
-  aboutTitle: { en: 'About<br />Makan Trail.', zh: '关于<br />Makan Trail。' },
-  aboutPara1: { en: 'Makan Trail started with a simple frustration: most food recommendations online are either paid placements dressed up as reviews, or crowd ratings that swing wildly depending on who happened to post that week.', zh: 'Makan Trail 的起点很简单：网络上大多数美食推荐，不是包装成评价的广告置入，就是随发帖人心情剧烈波动的大众评分。' },
+  aboutTitle: { en: 'About<br />Must Go To Eat.', zh: `关于<br />${BRAND_ZH}。` },
+  aboutPara1: { en: 'Must Go To Eat started with a simple frustration: most food recommendations online are either paid placements dressed up as reviews, or crowd ratings that swing wildly depending on who happened to post that week.', zh: `${BRAND_ZH} 的起点很简单：网络上大多数美食推荐，不是包装成评价的广告置入，就是随发帖人心情剧烈波动的大众评分。` },
   aboutPara2: { en: "We wanted something closer to what a well-fed friend would tell you — someone who's actually queued at the stall, paid full price, and will tell you honestly if it's not worth the wait.", zh: '我们想要的，更像一位吃饱喝足的朋友会告诉你的话——一个真的去排过队、自己付了钱，并且会老实告诉你值不值得等的人。' },
   aboutWhatWeDoTitle: { en: 'What we do', zh: '我们做什么' },
   aboutWhatWeDoText: { en: "Our team visits hawker stalls, food courts, and kopitiams across Singapore, orders like any other customer, photographs and films the food on site, and writes up an honest verdict — good, average, or skip it. Every review carries a byline and a publish date, so you always know it's current and who stands behind it.", zh: '我们的团队走访新加坡各地的小贩摊位、美食广场和咖啡店，像普通顾客一样点餐，在现场拍照拍摄，并写下诚实的结论——好、一般，或不推荐。每篇评价都标注作者与发布日期，让你随时知道内容是否最新，以及是谁把关的。' },
@@ -679,7 +683,7 @@ const I18N = {
   notFoundTitle: { en: "This stall's<br />moved on.", zh: '这个摊位<br />已经搬走了。' },
   notFoundText: { en: "The page you're looking for doesn't exist, or the listing may have closed. Let's get you back on the trail.", zh: '你要找的页面不存在，或该摊位可能已经歇业。我们带你回到主页吧。' },
   notFoundButton: { en: 'Back to homepage', zh: '返回首页' },
-  notFoundFooterNote: { en: '© 2026 Makan Trail.', zh: '© 2026 Makan Trail。' },
+  notFoundFooterNote: { en: '© 2026 Must Go To Eat.', zh: `© 2026 ${BRAND_ZH}。` },
 };
 
 const LANG_KEY = 'makanTrailLang';
