@@ -1,4 +1,4 @@
-# Makan Trail
+# Must Go To Eat
 
 A map of every hawker centre in Singapore, plus a demo layer of sample stalls.
 
