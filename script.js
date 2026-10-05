@@ -609,7 +609,13 @@ const I18N = {
   reviewCtaText: { en: 'Read reader reviews and leave your own rating →', zh: '查看读者评价，也可以留下你的评分 →' },
   footerPrivacy: { en: 'Privacy Policy', zh: '隐私政策' },
   footerContact: { en: 'Contact', zh: '联系我们' },
-  footerNote: { en: '© 2026 Must Go To Eat. Draft concept — placeholder content and images.', zh: `© 2026 ${BRAND_ZH}。草稿概念——内容与图片均为占位。` },
+  footerTagline: { en: 'Singapore’s hawker centres, one stall at a time.', zh: '新加坡小贩中心，一个摊位一个故事。' },
+  footerExplore: { en: 'Explore', zh: '探索' },
+  footerAboutHeading: { en: 'About', zh: '关于' },
+  footerAboutUs: { en: 'About us', zh: '关于我们' },
+  footerFollow: { en: 'Follow us', zh: '关注我们' },
+  footerCopyright: { en: '© 2026 Must Go To Eat. All rights reserved.', zh: `© 2026 ${BRAND_ZH}。保留所有权利。` },
+  footerData: { en: 'Hawker centre data from NEA via data.gov.sg. Stalls marked Demo are samples.', zh: '小贩中心数据来自国家环境局（NEA），经 data.gov.sg 提供。标有“示例”的摊位为样本。' },
 
   // --- stall.html ---
   stallBreadcrumbHome: { en: 'Home', zh: '首页' },
@@ -683,7 +689,6 @@ const I18N = {
   notFoundTitle: { en: "This stall's<br />moved on.", zh: '这个摊位<br />已经搬走了。' },
   notFoundText: { en: "The page you're looking for doesn't exist, or the listing may have closed. Let's get you back on the trail.", zh: '你要找的页面不存在，或该摊位可能已经歇业。我们带你回到主页吧。' },
   notFoundButton: { en: 'Back to homepage', zh: '返回首页' },
-  notFoundFooterNote: { en: '© 2026 Must Go To Eat.', zh: `© 2026 ${BRAND_ZH}。` },
 };
 
 const LANG_KEY = 'makanTrailLang';
