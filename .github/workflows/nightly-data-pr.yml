@@ -13,18 +13,30 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      # Secrets can't be read in `if:` directly, so record whether both exist.
+      SHEET_CONNECTED: ${{ secrets.SHEET_ID != '' && secrets.GOOGLE_SERVICE_ACCOUNT_KEY != '' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # Until the Sheet is connected, skip quietly instead of failing every night.
+      - if: env.SHEET_CONNECTED != 'true'
+        run: echo "::notice::No Sheet connected yet (SHEET_ID / GOOGLE_SERVICE_ACCOUNT_KEY secrets missing), so there is nothing to sync. See pipeline/SETUP.md."
+      - if: env.SHEET_CONNECTED == 'true'
+        uses: actions/checkout@v4
+      - if: env.SHEET_CONNECTED == 'true'
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm ci
-      - run: node scripts/sync-sheet-to-json.js
+      - if: env.SHEET_CONNECTED == 'true'
+        run: npm ci
+      - if: env.SHEET_CONNECTED == 'true'
+        run: node scripts/sync-sheet-to-json.js
         env:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           SHEET_ID: ${{ secrets.SHEET_ID }}
-      - run: npm run validate-data
-      - uses: peter-evans/create-pull-request@v6
+      - if: env.SHEET_CONNECTED == 'true'
+        run: npm run validate-data
+      - if: env.SHEET_CONNECTED == 'true'
+        uses: peter-evans/create-pull-request@v6
         with:
           commit-message: 'Sync stall data from Form responses'
           title: 'Nightly stall data sync'

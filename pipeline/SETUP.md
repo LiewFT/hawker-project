@@ -86,6 +86,7 @@ every night. The script:
 5. Opens a PR with the diff, if there is one, for a teammate to review —
    nothing merges automatically
 
-Until the secrets above exist, the workflow will simply fail at the
-"authenticate" step — that's expected and safe; it does not touch `main`
-until someone approves the PR it opens anyway.
+Until both secrets above exist, the nightly run skips itself with a notice
+("No Sheet connected yet") instead of failing. Once they are added it starts
+syncing on the next run; it never touches `main` until someone approves the
+PR it opens.
