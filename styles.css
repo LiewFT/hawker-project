@@ -216,6 +216,7 @@ h3{font-size:22px;letter-spacing:.015em}
 .footer-tagline{margin:12px 0 0;font-size:14px;color:var(--ink-soft);max-width:30ch}
 .footer-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .footer-col{display:flex;flex-direction:column;align-items:flex-start;gap:9px;font-size:14px}
+.footer-col[hidden]{display:none}
 .footer-heading{font-size:19px;letter-spacing:.06em;margin-bottom:3px}
 .footer-col a{color:var(--ink-soft)}
 .footer-col a:hover{color:var(--chilli)}
